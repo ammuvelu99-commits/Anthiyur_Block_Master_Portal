@@ -132,12 +132,20 @@
         }
         .zoom-btn:hover { background: rgba(59, 130, 246, 0.8); color: #ffffff; transform: scale(1.15); border-color: rgba(96, 165, 250, 0.5); }
 
-        /* Custom Scrollbar for Notes */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
 
+        /* Content Editable Area Styling */
+        .rich-editor {
+            min-height: 80px; width: 100%; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; padding: 12px; color: #fff; font-size: 14px; outline: none; margin-top: 8px;
+        }
+        .rich-editor:focus { border-color: #f43f5e; box-shadow: 0 0 10px rgba(244, 63, 94, 0.3); }
+
+        /* The Magic Hover Logic */
         @media (min-width: 768px) {
             .hover-reveal-bottom { opacity: 0; transform: translateY(15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
             .hover-reveal-bottom::before { content: ''; position: absolute; top: -60px; left: -60px; right: -60px; bottom: -60px; z-index: -1; }
@@ -160,8 +168,6 @@
     <div id="mainUI">
         <header class="macos-header text-white py-4 px-6 sticky top-0 z-40 shadow-2xl">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
-                
-                <!-- Left: Beautiful UI Created PHC Hospital Icon instead of external logos -->
                 <div class="flex items-center gap-4">
                     <div ondblclick="promptSecretAdmin()" title="Double Click for Admin Mode" class="w-12 h-12 bg-gradient-to-tr from-teal-500 to-blue-600 rounded-2xl flex justify-center items-center shadow-lg border border-white/20 cursor-pointer hover:scale-105 transition shrink-0">
                         <i class="fas fa-hospital text-white text-2xl"></i>
@@ -171,15 +177,12 @@
                         <p class="text-xs text-teal-300 font-semibold tracking-widest uppercase mt-0.5">Health Department</p>
                     </div>
                 </div>
-
-                <!-- Right: Secret Admin Lock Trigger Only -->
                 <div class="flex items-center gap-2">
                     <div onclick="promptSecretAdmin()" title="Admin Lock Access" class="flex items-center gap-1.5 bg-white/10 hover:bg-white/25 px-3 py-1.5 rounded-xl border border-white/20 cursor-pointer transition select-none">
                         <i class="fas fa-lock text-amber-400 text-xs"></i>
                         <span class="text-xs font-bold text-slate-200 hidden md:inline">Admin</span>
                     </div>
                 </div>
-
             </div>
         </header>
 
@@ -194,8 +197,8 @@
                     <span class="w-10 h-10 rounded-full bg-white/10 flex justify-center items-center"><i id="bmo-icon" class="fas fa-chevron-down text-indigo-400 arrow-icon"></i></span>
                 </button>
                 <div id="bmo-section" class="accordion-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 px-1">
-                    <a href="https://picme3.tn.gov.in/reports/login/" target="_blank" class="macos-card"><div class="icon-box bg-bmo-icon"><i class="fas fa-chart-line"></i></div><div class="card-content"><h3>PICME 3.0 Dashboard</h3><p>BMO Login Dashboard</p></div></a>
-                    <a href="https://picme3.tn.gov.in/" target="_blank" class="macos-card"><div class="icon-box bg-bmo-icon"><i class="fas fa-globe"></i></div><div class="card-content"><h3>PICME 3.0 Portal</h3><p>Main Portal Link</p></div></a>
+                    <a href="https://picme3.tn.gov.in/reports/login/" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-bmo-icon"><i class="fas fa-chart-line"></i></div><div class="card-content"><h3>PICME 3.0 Dashboard</h3><p>BMO Login Dashboard</p></div></a>
+                    <a href="https://picme3.tn.gov.in/" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-bmo-icon"><i class="fas fa-globe"></i></div><div class="card-content"><h3>PICME 3.0 Portal</h3><p>Main Portal Link</p></div></a>
                     <a onclick="openModal('mtmModal')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-file-medical-alt"></i></div><div class="card-content"><h3>MTM Reports</h3><p>Click to open options</p></div></a>
                     <a onclick="openSheetOverlay('delivery')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-baby"></i></div><div class="card-content"><h3>Delivery Reports</h3><p>Current, Previous & Upto Month</p></div></a>
                     <a onclick="openModal('feverModal')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-virus-covid"></i></div><div class="card-content"><h3>Fever & Dengue Report</h3><p>Click to open options</p></div></a>
@@ -203,7 +206,9 @@
                     
                     <a onclick="openModal('dashboardModal')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-chart-pie"></i></div><div class="card-content"><h3>Analytics Dashboards</h3><p>Auto-generated Charts</p></div></a>
                     <a onclick="openModal('notesModal')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-edit"></i></div><div class="card-content"><h3>Quick Notes</h3><p>Draft & Copy Text easily</p></div></a>
-                    <a onclick="openModal('ancModal')" class="macos-card cursor-pointer ring-2 ring-rose-500/50"><div class="icon-box bg-pass-icon"><i class="fas fa-heart-crack"></i></div><div class="card-content"><h3 class="text-rose-300">ANC Heart Disease</h3><p>Mother Notes & Report</p></div></a>
+                    
+                    <a onclick="openModal('ancModal')" class="macos-card cursor-pointer ring-2 ring-rose-500/50"><div class="icon-box bg-pass-icon"><i class="fas fa-heart-crack"></i></div><div class="card-content"><h3 class="text-rose-300">ANC Heart Disease</h3><p>Mother Notes System</p></div></a>
+                    <!-- Cancer Patient Notes removed from here to MTM Modal -->
                 </div>
             </div>
 
@@ -223,12 +228,12 @@
                         <span class="w-10 h-10 rounded-full bg-white/10 flex justify-center items-center"><i id="deo-icon" class="fas fa-chevron-down text-sky-400 arrow-icon"></i></span>
                     </button>
                     <div id="deo-section" class="accordion-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 px-1">
-                        <a href="உங்களுடைய_GOOGLE_SHEET_LINK_இங்கே" target="_blank" class="macos-card ring-2 ring-amber-500/50"><div class="icon-box bg-pass-icon"><i class="fas fa-key"></i></div><div class="card-content"><h3 class="text-red-400">Usernames & Passwords</h3></div></a>
-                        <a href="https://uwinvaccinator.mohfw.gov.in/" target="_blank" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-shield-halved"></i></div><div class="card-content"><h3>U-Win Admin</h3></div></a>
-                        <a href="https://uwinvaccinator.mohfw.gov.in/" target="_blank" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-syringe"></i></div><div class="card-content"><h3>U-Win Vaccinator</h3></div></a>
-                        <a href="https://uwinvaccinator.mohfw.gov.in/" target="_blank" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-truck-medical"></i></div><div class="card-content"><h3>Delivery Point</h3></div></a>
-                        <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-file-waveform"></i></div><div class="card-content"><h3>HMIS 3.0 (OP Entry)</h3></div></a>
-                        <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-server"></i></div><div class="card-content"><h3>IHIP Portal</h3></div></a>
+                        <a href="உங்களுடைய_GOOGLE_SHEET_LINK_இங்கே" target="_blank" rel="noopener noreferrer" class="macos-card ring-2 ring-amber-500/50"><div class="icon-box bg-pass-icon"><i class="fas fa-key"></i></div><div class="card-content"><h3 class="text-red-400">Usernames & Passwords</h3></div></a>
+                        <a href="https://uwinvaccinator.mohfw.gov.in/" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-shield-halved"></i></div><div class="card-content"><h3>U-Win Admin</h3></div></a>
+                        <a href="https://uwinvaccinator.mohfw.gov.in/" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-syringe"></i></div><div class="card-content"><h3>U-Win Vaccinator</h3></div></a>
+                        <a href="https://uwinvaccinator.mohfw.gov.in/" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-truck-medical"></i></div><div class="card-content"><h3>Delivery Point</h3></div></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-file-waveform"></i></div><div class="card-content"><h3>HMIS 3.0 (OP Entry)</h3></div></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-server"></i></div><div class="card-content"><h3>IHIP Portal</h3></div></a>
                     </div>
                 </div>
 
@@ -242,16 +247,16 @@
                     </button>
                     <div id="other-section" class="accordion-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 px-1">
                         <a onclick="openSheetOverlay('cancer')" class="macos-card cursor-pointer"><div class="icon-box bg-other-icon"><i class="fas fa-ribbon"></i></div><div class="card-content"><h3>Cancer Screening</h3></div></a>
-                        <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-other-icon"><i class="fas fa-children"></i></div><div class="card-content"><h3>Adolescent Report</h3></div></a>
-                        <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-other-icon"><i class="fas fa-stethoscope"></i></div><div class="card-content"><h3>NCD Data Report</h3></div></a>
-                        <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-other-icon"><i class="fas fa-syringe"></i></div><div class="card-content"><h3>Immunization Log</h3></div></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-other-icon"><i class="fas fa-children"></i></div><div class="card-content"><h3>Adolescent Report</h3></div></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-other-icon"><i class="fas fa-stethoscope"></i></div><div class="card-content"><h3>NCD Data Report</h3></div></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-other-icon"><i class="fas fa-syringe"></i></div><div class="card-content"><h3>Immunization Log</h3></div></a>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- MTM POPUP MODAL -->
+    <!-- MTM POPUP MODAL (WITH CANCER NOTES BUTTON ADDED) -->
     <div id="mtmModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
         <div class="macos-modal-window rounded-3xl w-11/12 md:w-96 overflow-hidden">
             <div class="bg-gradient-to-r from-indigo-600/80 to-purple-600/80 p-5 flex justify-between items-center text-white border-b border-white/10">
@@ -266,6 +271,11 @@
                 <a onclick="openSheetOverlay('cancer')" class="flex items-center gap-4 p-4 rounded-2xl jiggle-btn cursor-pointer">
                     <div class="w-12 h-12 rounded-xl bg-pink-500/20 text-pink-400 flex justify-center items-center text-xl"><i class="fas fa-ribbon"></i></div>
                     <div><h4 class="font-bold text-white">cancer report</h4><p class="text-xs text-slate-400">View Sheets & Download</p></div>
+                </a>
+                <!-- Moved Cancer Patient Notes here -->
+                <a onclick="closeModalInstant('mtmModal'); openModal('cancerNotesModal')" class="flex items-center gap-4 p-4 rounded-2xl jiggle-btn cursor-pointer border border-pink-500/30 bg-pink-500/5 hover:bg-pink-500/10">
+                    <div class="w-12 h-12 rounded-xl bg-pink-500/20 text-pink-400 flex justify-center items-center text-xl"><i class="fas fa-user-injured"></i></div>
+                    <div><h4 class="font-bold text-pink-200">Cancer Patient Notes</h4><p class="text-xs text-slate-400">Tracking & Details System</p></div>
                 </a>
             </div>
             <div class="bg-black/20 p-3 text-center border-t border-white/10">
@@ -314,13 +324,13 @@
         </div>
     </div>
 
-    <!-- NEW: DASHBOARD MODAL -->
+    <!-- DASHBOARD MODAL -->
     <div id="dashboardModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
         <div class="macos-modal-window rounded-3xl w-11/12 md:w-[600px] overflow-hidden">
             <div class="bg-gradient-to-r from-blue-600/80 to-purple-600/80 p-5 flex justify-between items-center text-white border-b border-white/10">
                 <div>
                     <h3 class="text-xl font-bold"><i class="fas fa-chart-pie mr-2"></i> Analytics Dashboards</h3>
-                    <p class="text-[10px] text-blue-200 mt-1">Note: Create Charts directly in Google Sheets & link GIDs below.</p>
+                    <p class="text-[10px] text-blue-200 mt-1">Note: Link your Google Sheet Chart GIDs here.</p>
                 </div>
                 <button onclick="closeModalWithAnimation('dashboardModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
             </div>
@@ -334,48 +344,93 @@
         </div>
     </div>
 
-    <!-- NEW: QUICK NOTES MODAL -->
+    <!-- QUICK NOTES MODAL -->
     <div id="notesModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
-        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[500px] overflow-hidden">
+        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[550px] overflow-hidden">
             <div class="bg-gradient-to-r from-slate-600/80 to-slate-800/80 p-5 flex justify-between items-center text-white border-b border-white/10">
                 <h3 class="text-xl font-bold"><i class="fas fa-edit mr-2"></i> Quick Notes</h3>
                 <button onclick="closeModalWithAnimation('notesModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
             </div>
             <div class="p-6">
-                <textarea id="bmoNoteText" onkeyup="saveSimpleNote()" class="w-full h-48 bg-white/5 border border-white/20 rounded-xl p-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type your notes here... It auto-saves!"></textarea>
-                <div class="mt-4 flex justify-end gap-3">
-                    <button onclick="clearSimpleNote()" class="px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg text-sm font-bold transition">Clear</button>
+                <textarea id="bmoNoteText" onkeyup="saveSimpleNote()" class="w-full h-48 bg-white/5 border border-white/20 rounded-xl p-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type or paste your notes here... It saves automatically!"></textarea>
+                <div class="mt-4 flex flex-wrap justify-end gap-3">
+                    <button onclick="clearSimpleNote()" class="px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg text-sm font-bold transition">Clear All</button>
+                    <button onclick="pasteSimpleNote()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-bold transition shadow-lg"><i class="fas fa-paste mr-1"></i> Paste Text</button>
                     <button onclick="copySimpleNote()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-bold transition shadow-lg"><i class="fas fa-copy mr-1"></i> Copy Text</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- NEW: ANC HEART DISEASE MOTHER NOTES MODAL -->
+    <!-- ANC HEART DISEASE MOTHER NOTES MODAL -->
     <div id="ancModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
-        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[600px] overflow-hidden flex flex-col max-h-[85vh]">
+        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[700px] overflow-hidden flex flex-col max-h-[85vh]">
             <div class="bg-gradient-to-r from-rose-600/80 to-red-700/80 p-5 flex justify-between items-center text-white border-b border-white/10 shrink-0">
-                <h3 class="text-xl font-bold"><i class="fas fa-heart-crack mr-2"></i> ANC Heart Disease Mother Notes</h3>
+                <h3 class="text-xl font-bold"><i class="fas fa-heart-crack mr-2"></i> ANC Mother Notes Data</h3>
                 <button onclick="closeModalWithAnimation('ancModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
             </div>
-            <div class="p-5 bg-white/5 shrink-0 border-b border-white/10">
-                <div class="flex gap-2">
-                    <input type="text" id="ancInput" class="flex-1 bg-black/30 border border-white/20 rounded-xl p-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Enter mother's details/report...">
-                    <button onclick="addAncNote()" class="px-5 py-3 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold transition shadow-lg"><i class="fas fa-plus"></i></button>
+            
+            <div class="p-4 bg-white/5 shrink-0 border-b border-white/10">
+                <div class="relative mb-4">
+                    <i class="fas fa-search absolute left-4 top-3.5 text-slate-400"></i>
+                    <input type="text" id="ancSearch" onkeyup="renderAncNotes()" class="w-full bg-black/40 border border-white/20 rounded-xl pl-10 pr-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Search Mother's Name or PICME ID...">
+                </div>
+                
+                <div class="bg-black/20 p-3 rounded-xl border border-white/10">
+                    <h4 class="text-xs font-bold text-rose-300 uppercase tracking-widest mb-2"><i class="fas fa-plus-circle mr-1"></i> Register New Mother</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                        <input type="text" id="ancNewName" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-rose-500" placeholder="Mother Name *">
+                        <input type="text" id="ancRchId" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-rose-500" placeholder="RCH / PICME ID">
+                        <input type="text" id="ancPhc" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-rose-500" placeholder="PHC / HSC / Village">
+                    </div>
+                    <button onclick="addAncMother()" class="w-full py-2.5 bg-rose-500 hover:bg-rose-600 text-white rounded-lg text-sm font-bold transition shadow-lg">Add to List</button>
                 </div>
             </div>
-            <div class="p-5 overflow-y-auto flex-1 space-y-3" id="ancNotesList"></div>
+            
+            <div class="p-4 overflow-y-auto flex-1 space-y-3" id="ancNotesList"></div>
+            
             <div class="bg-black/20 p-3 text-center border-t border-white/10 shrink-0">
-                <button onclick="openSheetOverlay('anc_report')" class="px-4 py-2 bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-300 rounded-lg text-sm font-bold transition mr-2"><i class="fas fa-table mr-1"></i> View ANC Sheet Report</button>
-                <button onclick="closeModalWithAnimation('ancModal')" class="text-sm font-semibold text-slate-300 hover:text-white ml-2">Close</button>
+                <button onclick="closeModalWithAnimation('ancModal')" class="text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CANCER PATIENT NOTES MODAL -->
+    <div id="cancerNotesModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
+        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[700px] overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="bg-gradient-to-r from-pink-600/80 to-purple-700/80 p-5 flex justify-between items-center text-white border-b border-white/10 shrink-0">
+                <h3 class="text-xl font-bold"><i class="fas fa-ribbon mr-2"></i> Cancer Patient Notes Data</h3>
+                <button onclick="closeModalWithAnimation('cancerNotesModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+            
+            <div class="p-4 bg-white/5 shrink-0 border-b border-white/10">
+                <div class="relative mb-4">
+                    <i class="fas fa-search absolute left-4 top-3.5 text-slate-400"></i>
+                    <input type="text" id="cancerSearch" onkeyup="renderCancerNotes()" class="w-full bg-black/40 border border-white/20 rounded-xl pl-10 pr-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="Search Patient Name or Cancer Type...">
+                </div>
+                
+                <div class="bg-black/20 p-3 rounded-xl border border-white/10">
+                    <h4 class="text-xs font-bold text-pink-300 uppercase tracking-widest mb-2"><i class="fas fa-plus-circle mr-1"></i> Register New Patient</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                        <input type="text" id="cancerNewName" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-pink-500" placeholder="Patient Name *">
+                        <input type="text" id="cancerType" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-pink-500" placeholder="Cancer Type (e.g. Oral)">
+                        <input type="text" id="cancerPhc" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-pink-500" placeholder="PHC / HSC / Village">
+                    </div>
+                    <button onclick="addCancerPatient()" class="w-full py-2.5 bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-sm font-bold transition shadow-lg">Add to List</button>
+                </div>
+            </div>
+            
+            <div class="p-4 overflow-y-auto flex-1 space-y-3" id="cancerNotesList"></div>
+            
+            <div class="bg-black/20 p-3 text-center border-t border-white/10 shrink-0 flex justify-center gap-4">
+                <button onclick="openSheetOverlay('cancer')" class="text-sm font-bold text-pink-300 hover:text-pink-100 bg-pink-500/20 hover:bg-pink-500/40 px-4 py-2 rounded-lg transition"><i class="fas fa-table mr-1"></i> View Cancer Sheet</button>
+                <button onclick="closeModalWithAnimation('cancerNotesModal')" class="text-sm font-semibold text-slate-300 hover:text-white px-4 py-2"><i class="fas fa-home mr-1"></i> Home</button>
             </div>
         </div>
     </div>
 
     <!-- GOOGLE SHEET FULL SCREEN OVERLAY -->
     <div id="sheetOverlay">
-        
-        <!-- ZOOM CONTROLS (Top Right, Small, Hover Reveal) -->
         <div class="zoom-controls hover-reveal-side" id="zoomControls" style="display: none;">
             <button onclick="changeZoom(0.1)" class="zoom-btn" title="Zoom In"><i class="fas fa-plus"></i></button>
             <button onclick="resetZoom()" class="zoom-btn" title="Reset Zoom"><i class="fas fa-expand"></i></button>
@@ -383,17 +438,12 @@
         </div>
 
         <div class="iframe-container">
-            <div id="sheetZoomWrapper">
-                <iframe id="sheetIframe" src=""></iframe>
-            </div>
+            <div id="sheetZoomWrapper"><iframe id="sheetIframe" src=""></iframe></div>
         </div>
         
-        <!-- Floating Tabs (Bottom Left, Hover Reveal) -->
         <div class="floating-tabs-container hover-reveal-bottom" id="tabsContainer"></div>
-
-        <!-- Floating Actions (Bottom Right, Hover Reveal) -->
         <div class="floating-action-btns hover-reveal-bottom">
-            <button onclick="goBackToMenu()" class="btn-float btn-back"><i class="fas fa-home mr-1"></i> Back to Home</button>
+            <button onclick="goBackToMenu()" class="btn-float btn-back"><i class="fas fa-home mr-1"></i> Back to Menu</button>
             <button onclick="downloadA3PDF()" class="btn-float btn-download"><i class="fas fa-file-image mr-1"></i> A3 Format</button>
         </div>
     </div>
@@ -401,11 +451,10 @@
     <script>
         const feverBaseID = '2PACX-1vQMGSgOe5uqsD2ZvLrYD7GpHB__igzb829w1p53ewmma-ImH031OyGKR8XvCZwm0RxRXwIrWwrOyfmX';
         const nksBaseID = '2PACX-1vQDv1q69_x5OV-lVwRRFJRlaDoZWnSqHbQVMpI8WNF_cViKuQ_lgyS3er4Bn52gsWS9XYlb4HYkuJrn';
-        const ancBaseID = 'YOUR_ANC_SHEET_ID_HERE'; 
 
         const sheetConfigs = {
             'mtm': { baseID: '2PACX-1vSUeSBN-8JNGkvXdIuIKFH2poaqfoNWvC01MOQD18pXO5dPw6n0vImYxkb78eRjZmnKfLm4OgOeexPK', parentModal: 'mtmModal', tabs: [{ name: 'HT Report', gid: '0' }, { name: 'DM Report', gid: '1346772331' }, { name: 'HT & DM Report', gid: '2007453515' }] },
-            'cancer': { baseID: '2PACX-1vQieDAV7oRruNAvY5x8VjrVVTnY-fuRSjMJ0VxwlDKRAuTwR4Rf1lKgV9qfWFPShM9qU9GPv9k2o5Sk', parentModal: 'mtmModal', tabs: [{ name: 'Oral', gid: '2056331833' }, { name: 'Breast', gid: '454152815' }, { name: 'Cervix', gid: '1215917176' }] },
+            'cancer': { baseID: '2PACX-1vQieDAV7oRruNAvY5x8VjrVVTnY-fuRSjMJ0VxwlDKRAuTwR4Rf1lKgV9qfWFPShM9qU9GPv9k2o5Sk', parentModal: 'cancerNotesModal', tabs: [{ name: 'Oral', gid: '2056331833' }, { name: 'Breast', gid: '454152815' }, { name: 'Cervix', gid: '1215917176' }] },
             'delivery': { baseID: '2PACX-1vQjfIgSogvl_U49pX6ZXVG0Kg4YXd6grE06xOX5aqtXyhka04iB9uuUs2nPpWPI7kJG6Jsj_JelouBe', parentModal: null, tabs: [{ name: 'Current Month', gid: '2036942363' }, { name: 'Previous Month', gid: '370926509' }, { name: 'Upto the Month', gid: '1867654531' }] },
             
             'fever': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Fever Line List', gid: '1266655650' }] },
@@ -417,7 +466,7 @@
             'abstract_2026': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Abstract 2026', gid: '0' }] },
             'tank': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Tank Report', gid: '2073814740' }] },
             'fogging': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Fogging Machine Report', gid: '1419408448' }] },
-            'abstract_3years': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: '3 Years Abstract', gid: '1764709859' }] },
+            'abstract_3years': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: '3 Years Abstract (2024-2026)', gid: '1764709859' }] },
             
             'nks_aug_25': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '30.08.2025 Abstract', gid: '971980116' }] },
             'nks_dec_25': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '20.12.2025 Abstract', gid: '1671682279' }] },
@@ -427,9 +476,7 @@
             'dash_mtm': { baseID: 'YOUR_MTM_DASHBOARD_SHEET_ID', parentModal: 'dashboardModal', tabs: [{ name: 'MTM Dashboard', gid: '0' }] },
             'dash_cancer': { baseID: 'YOUR_CANCER_DASHBOARD_SHEET_ID', parentModal: 'dashboardModal', tabs: [{ name: 'Cancer Dashboard', gid: '0' }] },
             'dash_fever': { baseID: 'YOUR_FEVER_DASHBOARD_SHEET_ID', parentModal: 'dashboardModal', tabs: [{ name: 'Fever Dashboard', gid: '0' }] },
-            'dash_anc': { baseID: 'YOUR_ANC_DASHBOARD_SHEET_ID', parentModal: 'dashboardModal', tabs: [{ name: 'ANC Dashboard', gid: '0' }] },
-            
-            'anc_report': { baseID: ancBaseID, parentModal: 'ancModal', tabs: [{ name: 'ANC Mother Report', gid: '0' }] }
+            'dash_anc': { baseID: 'YOUR_ANC_DASHBOARD_SHEET_ID', parentModal: 'dashboardModal', tabs: [{ name: 'ANC Dashboard', gid: '0' }] }
         };
 
         let currentActiveReport = 'mtm';
@@ -442,11 +489,25 @@
             else { section.classList.add('hidden-section'); icon.classList.add('rotate-icon'); }
         }
 
+        // Keep Admin open if session is set
+        function initNotes() {
+            document.getElementById('bmoNoteText').value = localStorage.getItem('bmoSimpleNote') || '';
+            renderAncNotes();
+            renderCancerNotes();
+            if (sessionStorage.getItem('adminUnlocked') === 'true') {
+                document.getElementById('deoWrapper').classList.remove('hidden');
+            }
+        }
+
         function promptSecretAdmin() {
+            if (!document.getElementById('deoWrapper').classList.contains('hidden')) {
+                alert('Admin Mode is already unlocked!'); return;
+            }
             const pwd = prompt("🔒 Enter Admin Password to Access Restricted Sections:");
             if (pwd === "admin123") {
                 const wrapper = document.getElementById('deoWrapper');
                 wrapper.classList.remove('hidden');
+                sessionStorage.setItem('adminUnlocked', 'true');
                 alert('🔓 Secret Admin Mode Unlocked!');
                 window.scrollTo({ top: wrapper.offsetTop - 50, behavior: 'smooth' });
             } else if (pwd !== null) { alert('❌ Incorrect Password!'); }
@@ -454,6 +515,7 @@
 
         function lockSecretDeo() {
             document.getElementById('deoWrapper').classList.add('hidden');
+            sessionStorage.removeItem('adminUnlocked');
             alert('🔒 Admin Mode Locked.'); window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -470,7 +532,7 @@
 
         function openSheetOverlay(reportType) {
             currentActiveReport = reportType;
-            ['mtmModal', 'feverModal', 'nksModal', 'dashboardModal', 'ancModal'].forEach(id => closeModalInstant(id));
+            ['mtmModal', 'feverModal', 'nksModal', 'dashboardModal', 'ancModal', 'cancerNotesModal', 'notesModal'].forEach(id => closeModalInstant(id));
             
             document.getElementById('mainUI').style.display = 'none';
             document.getElementById('sheetOverlay').classList.add('active');
@@ -481,21 +543,22 @@
             tabsContainer.innerHTML = ''; 
             const config = sheetConfigs[reportType];
             
-            tabsContainer.style.display = 'flex';
-            config.tabs.forEach((tab, index) => {
-                const btn = document.createElement('button');
-                btn.className = `tab-float-btn ${index === 0 ? 'active' : ''}`;
-                btn.innerText = tab.name;
-                btn.onclick = function() {
-                    document.querySelectorAll('.tab-float-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    loadSheet(config.baseID, tab.gid);
-                    resetZoom();
-                };
-                tabsContainer.appendChild(btn);
-            });
-
-            loadSheet(config.baseID, config.tabs[0].gid);
+            if(config) {
+                tabsContainer.style.display = 'flex';
+                config.tabs.forEach((tab, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = `tab-float-btn ${index === 0 ? 'active' : ''}`;
+                    btn.innerText = tab.name;
+                    btn.onclick = function() {
+                        document.querySelectorAll('.tab-float-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        loadSheet(config.baseID, tab.gid);
+                        resetZoom();
+                    };
+                    tabsContainer.appendChild(btn);
+                });
+                loadSheet(config.baseID, config.tabs[0].gid);
+            }
         }
 
         function loadSheet(baseID, gid) {
@@ -509,7 +572,6 @@
             if (currentZoom > 3.0) currentZoom = 3.0;
             document.getElementById('sheetZoomWrapper').style.zoom = currentZoom;
         }
-
         function resetZoom() { currentZoom = 1; document.getElementById('sheetZoomWrapper').style.zoom = 1; }
 
         function goBackToMenu() {
@@ -517,13 +579,15 @@
             overlay.classList.add('closing');
             document.getElementById('zoomControls').style.display = 'none';
             
+            document.getElementById('mainUI').style.display = 'block'; 
+            
             setTimeout(() => {
                 overlay.classList.remove('active');
                 overlay.classList.remove('closing');
                 document.getElementById('sheetIframe').src = ""; 
+                
                 const config = sheetConfigs[currentActiveReport];
-                if (config.parentModal) { openModal(config.parentModal); } 
-                else { document.getElementById('mainUI').style.display = 'block'; }
+                if (config && config.parentModal) { openModal(config.parentModal); } 
             }, 500);
         }
 
@@ -533,13 +597,9 @@
         }
 
         // ==================== QUICK NOTES LOGIC ====================
-        function initNotes() {
-            document.getElementById('bmoNoteText').value = localStorage.getItem('bmoSimpleNote') || '';
-            renderAncNotes();
-        }
         function saveSimpleNote() { localStorage.setItem('bmoSimpleNote', document.getElementById('bmoNoteText').value); }
         function clearSimpleNote() { 
-            if(confirm("Are you sure you want to clear notes?")) {
+            if(confirm("Are you sure you want to clear all notes?")) {
                 document.getElementById('bmoNoteText').value = ''; localStorage.removeItem('bmoSimpleNote');
             }
         }
@@ -548,47 +608,190 @@
             text.select(); text.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(text.value).then(() => alert("Notes Copied to Clipboard!"));
         }
-
-        // ==================== ANC MOTHER NOTES LOGIC ====================
-        function addAncNote() {
-            const input = document.getElementById('ancInput');
-            const val = input.value.trim();
-            if (!val) return;
-            
-            let notes = JSON.parse(localStorage.getItem('ancNotesList')) || [];
-            const dateStr = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-            notes.unshift({ text: val, date: dateStr, id: Date.now() }); 
-            localStorage.setItem('ancNotesList', JSON.stringify(notes));
-            input.value = ''; renderAncNotes();
+        async function pasteSimpleNote() {
+            try {
+                const text = await navigator.clipboard.readText();
+                const textarea = document.getElementById('bmoNoteText');
+                textarea.value += (textarea.value ? '\n' : '') + text;
+                saveSimpleNote();
+            } catch (err) { alert('Paste failed! Please press Ctrl+V or Long-press to paste manually.'); }
         }
-        
-        function deleteAncNote(id) {
-            let notes = JSON.parse(localStorage.getItem('ancNotesList')) || [];
-            notes = notes.filter(n => n.id !== id);
-            localStorage.setItem('ancNotesList', JSON.stringify(notes));
+
+        // ==================== ANC MOTHER NOTES SYSTEM ====================
+        function addAncMother() {
+            const name = document.getElementById('ancNewName').value.trim();
+            const rch = document.getElementById('ancRchId').value.trim();
+            const phc = document.getElementById('ancPhc').value.trim();
+            
+            if (!name) { alert("Mother Name is required!"); return; }
+            
+            let mothers = JSON.parse(localStorage.getItem('ancMothersDB')) || [];
+            mothers.unshift({ id: Date.now(), name: name, rch: rch, phc: phc, notes: "Type notes or paste images here..." }); 
+            localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
+            
+            document.getElementById('ancNewName').value = ''; 
+            document.getElementById('ancRchId').value = ''; 
+            document.getElementById('ancPhc').value = ''; 
             renderAncNotes();
         }
 
+        function deleteAncMother(id) {
+            if(confirm("Delete this mother's record?")) {
+                let mothers = JSON.parse(localStorage.getItem('ancMothersDB')) || [];
+                mothers = mothers.filter(m => m.id !== id);
+                localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
+                renderAncNotes();
+            }
+        }
+
+        function toggleAncNoteBody(id) {
+            const body = document.getElementById('note_body_' + id);
+            const icon = document.getElementById('note_icon_' + id);
+            if(body.classList.contains('hidden')) {
+                body.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down'); icon.classList.add('fa-chevron-up');
+            } else {
+                body.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up'); icon.classList.add('fa-chevron-down');
+            }
+        }
+
+        function saveAncNoteData(id) {
+            const editor = document.getElementById('note_edit_' + id);
+            let mothers = JSON.parse(localStorage.getItem('ancMothersDB')) || [];
+            let index = mothers.findIndex(m => m.id === id);
+            if(index > -1) {
+                mothers[index].notes = editor.innerHTML;
+                localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
+            }
+        }
+
         function renderAncNotes() {
+            const search = document.getElementById('ancSearch').value.toLowerCase();
             const list = document.getElementById('ancNotesList');
-            let notes = JSON.parse(localStorage.getItem('ancNotesList')) || [];
+            let mothers = JSON.parse(localStorage.getItem('ancMothersDB')) || [];
             list.innerHTML = '';
             
-            if (notes.length === 0) {
-                list.innerHTML = '<p class="text-slate-400 text-center text-sm mt-4 italic">No records found. Add a note above.</p>';
-                return;
-            }
+            if (mothers.length === 0) { list.innerHTML = '<p class="text-slate-400 text-center text-sm mt-4 italic">No mothers found. Add a name above to start taking notes.</p>'; return; }
 
-            notes.forEach(note => {
-                const div = document.createElement('div');
-                div.className = "bg-black/30 border border-white/10 rounded-xl p-4 relative group";
-                div.innerHTML = `
-                    <p class="text-white text-sm pr-6 leading-relaxed">${note.text}</p>
-                    <span class="text-[10px] text-rose-300 font-semibold mt-2 block"><i class="fas fa-clock mr-1"></i> ${note.date}</span>
-                    <button onclick="deleteAncNote(${note.id})" class="absolute top-3 right-3 text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash"></i></button>
-                `;
-                list.appendChild(div);
+            let found = 0;
+            mothers.forEach(m => {
+                if(m.name.toLowerCase().includes(search) || (m.rch && m.rch.toLowerCase().includes(search))) {
+                    found++;
+                    
+                    let phcHtml = m.phc ? `<span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded text-[10px] uppercase tracking-wider"><i class="fas fa-hospital-alt mr-1"></i>${m.phc}</span>` : '';
+                    let rchHtml = m.rch ? `<a href="https://picme3.tn.gov.in/reports/login/" target="_blank" onclick="event.stopPropagation()" class="bg-blue-500/20 hover:bg-blue-500/40 text-blue-300 hover:text-white px-2 py-0.5 rounded text-[10px] uppercase tracking-wider transition tooltip" title="Open PICME 3.0 Login"><i class="fas fa-id-card mr-1"></i>${m.rch} <i class="fas fa-external-link-alt ml-0.5 text-[8px]"></i></a>` : '';
+
+                    const div = document.createElement('div');
+                    div.className = "bg-black/30 border border-white/10 rounded-xl overflow-hidden";
+                    div.innerHTML = `
+                        <div class="p-4 flex justify-between items-start cursor-pointer hover:bg-white/5 transition" onclick="toggleAncNoteBody(${m.id})">
+                            <div>
+                                <h4 class="font-bold text-rose-200 text-lg mb-1"><i class="fas fa-user-nurse mr-2"></i>${m.name}</h4>
+                                <div class="flex flex-wrap gap-2 mt-1">${rchHtml}${phcHtml}</div>
+                            </div>
+                            <div class="flex items-center gap-4 mt-1">
+                                <button onclick="event.stopPropagation(); deleteAncMother(${m.id})" class="text-slate-500 hover:text-red-400 transition" title="Delete Mother"><i class="fas fa-trash"></i></button>
+                                <i id="note_icon_${m.id}" class="fas fa-chevron-down text-slate-400"></i>
+                            </div>
+                        </div>
+                        <div id="note_body_${m.id}" class="hidden p-4 border-t border-white/10 bg-black/50">
+                            <p class="text-[10px] text-slate-400 mb-2">📝 Click inside the box below to edit. You can type text or paste images directly.</p>
+                            <div id="note_edit_${m.id}" contenteditable="true" onblur="saveAncNoteData(${m.id})" class="rich-editor">${m.notes}</div>
+                        </div>
+                    `;
+                    list.appendChild(div);
+                }
             });
+            if(found === 0) list.innerHTML = '<p class="text-slate-400 text-center text-sm mt-4 italic">No matching records found.</p>';
+        }
+
+        // ==================== CANCER PATIENT NOTES SYSTEM ====================
+        function addCancerPatient() {
+            const name = document.getElementById('cancerNewName').value.trim();
+            const ctype = document.getElementById('cancerType').value.trim();
+            const phc = document.getElementById('cancerPhc').value.trim();
+            
+            if (!name) { alert("Patient Name is required!"); return; }
+            
+            let patients = JSON.parse(localStorage.getItem('cancerPatientsDB')) || [];
+            patients.unshift({ id: Date.now(), name: name, type: ctype, phc: phc, notes: "When and where was it diagnosed? Enter notes here..." }); 
+            localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
+            
+            document.getElementById('cancerNewName').value = ''; 
+            document.getElementById('cancerType').value = ''; 
+            document.getElementById('cancerPhc').value = ''; 
+            renderCancerNotes();
+        }
+
+        function deleteCancerPatient(id) {
+            if(confirm("Delete this patient's record?")) {
+                let patients = JSON.parse(localStorage.getItem('cancerPatientsDB')) || [];
+                patients = patients.filter(p => p.id !== id);
+                localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
+                renderCancerNotes();
+            }
+        }
+
+        function toggleCancerNoteBody(id) {
+            const body = document.getElementById('cancer_note_body_' + id);
+            const icon = document.getElementById('cancer_note_icon_' + id);
+            if(body.classList.contains('hidden')) {
+                body.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down'); icon.classList.add('fa-chevron-up');
+            } else {
+                body.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up'); icon.classList.add('fa-chevron-down');
+            }
+        }
+
+        function saveCancerNoteData(id) {
+            const editor = document.getElementById('cancer_note_edit_' + id);
+            let patients = JSON.parse(localStorage.getItem('cancerPatientsDB')) || [];
+            let index = patients.findIndex(p => p.id === id);
+            if(index > -1) {
+                patients[index].notes = editor.innerHTML;
+                localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
+            }
+        }
+
+        function renderCancerNotes() {
+            const search = document.getElementById('cancerSearch').value.toLowerCase();
+            const list = document.getElementById('cancerNotesList');
+            let patients = JSON.parse(localStorage.getItem('cancerPatientsDB')) || [];
+            list.innerHTML = '';
+            
+            if (patients.length === 0) { list.innerHTML = '<p class="text-slate-400 text-center text-sm mt-4 italic">No patients found. Add a name above to start taking notes.</p>'; return; }
+
+            let found = 0;
+            patients.forEach(p => {
+                if(p.name.toLowerCase().includes(search) || (p.type && p.type.toLowerCase().includes(search))) {
+                    found++;
+                    let phcHtml = p.phc ? `<span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded text-[10px] uppercase tracking-wider"><i class="fas fa-hospital-alt mr-1"></i>${p.phc}</span>` : '';
+                    let typeHtml = p.type ? `<span class="bg-pink-500/20 text-pink-300 px-2 py-0.5 rounded text-[10px] uppercase tracking-wider"><i class="fas fa-viruses mr-1"></i>${p.type}</span>` : '';
+
+                    const div = document.createElement('div');
+                    div.className = "bg-black/30 border border-white/10 rounded-xl overflow-hidden";
+                    div.innerHTML = `
+                        <div class="p-4 flex justify-between items-start cursor-pointer hover:bg-white/5 transition" onclick="toggleCancerNoteBody(${p.id})">
+                            <div>
+                                <h4 class="font-bold text-pink-200 text-lg mb-1"><i class="fas fa-user-injured mr-2"></i>${p.name}</h4>
+                                <div class="flex flex-wrap gap-2 mt-1">${typeHtml}${phcHtml}</div>
+                            </div>
+                            <div class="flex items-center gap-4 mt-1">
+                                <button onclick="event.stopPropagation(); deleteCancerPatient(${p.id})" class="text-slate-500 hover:text-red-400 transition" title="Delete Patient"><i class="fas fa-trash"></i></button>
+                                <i id="cancer_note_icon_${p.id}" class="fas fa-chevron-down text-slate-400"></i>
+                            </div>
+                        </div>
+                        <div id="cancer_note_body_${p.id}" class="hidden p-4 border-t border-white/10 bg-black/50">
+                            <p class="text-[10px] text-slate-400 mb-2">📝 Click inside the box below to edit. You can type text or paste images directly.</p>
+                            <div id="cancer_note_edit_${p.id}" contenteditable="true" onblur="saveCancerNoteData(${p.id})" class="rich-editor">${p.notes}</div>
+                        </div>
+                    `;
+                    list.appendChild(div);
+                }
+            });
+            if(found === 0) list.innerHTML = '<p class="text-slate-400 text-center text-sm mt-4 italic">No matching records found.</p>';
         }
     </script>
 </body>
