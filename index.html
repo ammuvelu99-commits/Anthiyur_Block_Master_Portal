@@ -176,7 +176,7 @@
         <header class="macos-header text-white py-4 px-6 sticky top-0 z-40 shadow-2xl">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
                 
-                <!-- Left: Clean Medical Icon as placeholder -->
+                <!-- Left: Clean Medical Icon without External Logos -->
                 <div class="flex items-center gap-3">
                     <div ondblclick="promptSecretAdmin()" title="Double Click for Admin Mode" class="w-12 h-12 bg-gradient-to-tr from-teal-500 to-blue-600 rounded-2xl flex justify-center items-center shadow-lg border border-white/20 cursor-pointer hover:scale-105 transition">
                         <i class="fas fa-hospital-user text-white text-2xl"></i>
@@ -214,6 +214,8 @@
                     <a onclick="openModal('mtmModal')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-file-medical-alt"></i></div><div class="card-content"><h3>MTM Reports</h3><p>Click to open options</p></div></a>
                     <a onclick="openSheetOverlay('delivery')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-baby"></i></div><div class="card-content"><h3>Delivery Reports</h3><p>Current, Previous & Upto Month</p></div></a>
                     <a onclick="openModal('feverModal')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-virus-covid"></i></div><div class="card-content"><h3>Fever & Dengue Report</h3><p>Click to open options</p></div></a>
+                    <!-- NKS Camp Report Trigger -->
+                    <a onclick="openModal('nksModal')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-campground"></i></div><div class="card-content"><h3>NKS Camp Report</h3><p>Click to open options</p></div></a>
                 </div>
             </div>
 
@@ -345,6 +347,37 @@
         </div>
     </div>
 
+    <!-- NEW: NKS CAMP POPUP MODAL -->
+    <div id="nksModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
+        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[580px] overflow-hidden" id="nksModalBox">
+            <div class="bg-gradient-to-r from-teal-600/80 to-emerald-600/80 p-5 flex justify-between items-center text-white border-b border-white/10">
+                <h3 class="text-xl font-bold"><i class="fas fa-campground mr-2"></i> NKS Camp Reports</h3>
+                <button onclick="closeModalWithAnimation('nksModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+            <div class="p-6 grid grid-cols-2 gap-3 max-h-[70vh] overflow-y-auto">
+                <a onclick="openSheetOverlay('nks_aug_25')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-teal-500/20 text-teal-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-day"></i></div>
+                    <h4 class="font-bold text-white text-sm">30.08.2025 Abstract</h4>
+                </a>
+                <a onclick="openSheetOverlay('nks_dec_25')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-emerald-500/20 text-emerald-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-day"></i></div>
+                    <h4 class="font-bold text-white text-sm">20.12.2025 Abstract</h4>
+                </a>
+                <a onclick="openSheetOverlay('nks_feb_26')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-cyan-500/20 text-cyan-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-check"></i></div>
+                    <h4 class="font-bold text-white text-sm">14.02.2026 Abstract</h4>
+                </a>
+                <a onclick="openSheetOverlay('nks_3_camp')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
+                    <div class="w-10 h-10 mx-auto rounded-xl bg-indigo-500/20 text-indigo-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-list-alt"></i></div>
+                    <h4 class="font-bold text-white text-sm">3 Camp Abstract Total</h4>
+                </a>
+            </div>
+            <div class="bg-black/20 p-3 text-center border-t border-white/10">
+                <button onclick="closeModalWithAnimation('nksModal')" class="text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button>
+            </div>
+        </div>
+    </div>
+
     <!-- GOOGLE SHEET FULL SCREEN OVERLAY -->
     <div id="sheetOverlay">
         <div class="iframe-container">
@@ -361,6 +394,7 @@
 
     <script>
         const feverBaseID = '2PACX-1vQMGSgOe5uqsD2ZvLrYD7GpHB__igzb829w1p53ewmma-ImH031OyGKR8XvCZwm0RxRXwIrWwrOyfmX';
+        const nksBaseID = '2PACX-1vQDv1q69_x5OV-lVwRRFJRlaDoZWnSqHbQVMpI8WNF_cViKuQ_lgyS3er4Bn52gsWS9XYlb4HYkuJrn';
 
         const sheetConfigs = {
             'mtm': {
@@ -399,7 +433,13 @@
             'abstract_2026': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Abstract 2026', gid: '0' }] },
             'tank': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Tank Report', gid: '2073814740' }] },
             'fogging': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Fogging Machine Report', gid: '1419408448' }] },
-            'abstract_3years': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: '3 Years Abstract (2024-2026)', gid: '1764709859' }] }
+            'abstract_3years': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: '3 Years Abstract (2024-2026)', gid: '1764709859' }] },
+            
+            // NKS CAMP CONFIGURATIONS 
+            'nks_aug_25': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '30.08.2025 Abstract', gid: '971980116' }] },
+            'nks_dec_25': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '20.12.2025 Abstract', gid: '1671682279' }] },
+            'nks_feb_26': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '14.02.2026 Abstract', gid: '2033884952' }] },
+            'nks_3_camp': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '3 Camp Abstract Total', gid: '1381238626' }] }
         };
 
         let currentActiveReport = 'mtm';
@@ -411,10 +451,9 @@
             else { section.classList.add('hidden-section'); icon.classList.add('rotate-icon'); }
         }
 
-        // Secret Admin Prompt with Password (admin123)
         function promptSecretAdmin() {
             const pwd = prompt("🔒 Enter Admin Password to Access Restricted Sections:");
-            if (pwd === "admin123") { // <-- இந்த பாஸ்வேர்டை நீங்கள் மாற்றி அமைத்துக் கொள்ளலாம்
+            if (pwd === "admin123") {
                 const wrapper = document.getElementById('deoWrapper');
                 wrapper.classList.remove('hidden');
                 alert('🔓 Secret Admin Mode Unlocked: DEO Operations & Other Reports are now visible to you!');
@@ -445,10 +484,16 @@
             }, 400);
         }
 
+        function closeModalInstant(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('hidden');
+        }
+
         function openSheetOverlay(reportType) {
             currentActiveReport = reportType;
-            closeModalWithAnimation('mtmModal');
-            closeModalWithAnimation('feverModal');
+            closeModalInstant('mtmModal');
+            closeModalInstant('feverModal');
+            closeModalInstant('nksModal');
             document.getElementById('mainUI').style.display = 'none';
             document.getElementById('sheetOverlay').classList.add('active');
 
@@ -477,7 +522,7 @@
             iframe.src = `https://docs.google.com/spreadsheets/d/e/${baseID}/pubhtml?gid=${gid}&single=true&widget=false&headers=false&chrome=false`;
         }
 
-        // Mac Genie Animation for Back to Home / Menu
+        // Mac Genie Animation for Back to Menu
         function goBackToMenu() {
             const overlay = document.getElementById('sheetOverlay');
             overlay.classList.add('closing');
