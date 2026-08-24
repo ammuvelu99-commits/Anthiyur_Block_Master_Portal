@@ -15,52 +15,34 @@
             background: linear-gradient(135deg, #090d16 0%, #17153b 50%, #290835 100%);
             background-attachment: fixed; 
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            min-height: 100vh; 
-            margin: 0; 
-            color: #f8fafc;
+            min-height: 100vh; margin: 0; color: #f8fafc;
         }
         
         .macos-header { 
-            background: rgba(15, 23, 42, 0.85); 
-            backdrop-filter: blur(25px); 
-            -webkit-backdrop-filter: blur(25px);
+            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.12); 
         }
 
         .macos-section-btn { 
-            background: rgba(255, 255, 255, 0.07); 
-            backdrop-filter: blur(16px); 
-            border-radius: 18px; 
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); 
-            border: 1px solid rgba(255, 255, 255, 0.12); 
+            background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(16px); border-radius: 18px; 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); border: 1px solid rgba(255, 255, 255, 0.12); 
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); 
         }
-        .macos-section-btn:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.25);
-        }
+        .macos-section-btn:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.25); }
 
         .macos-card { 
-            background: rgba(255, 255, 255, 0.06); 
-            backdrop-filter: blur(20px); 
-            border-radius: 20px; 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.25); 
-            transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1); 
-            display: flex; align-items: center; padding: 20px; cursor: pointer; 
+            background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(20px); border-radius: 20px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.25); 
+            transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1); display: flex; align-items: center; padding: 20px; cursor: pointer; 
         }
         .macos-card:hover { 
-            transform: translateY(-6px) scale(1.02); 
-            background: rgba(255, 255, 255, 0.12); 
-            border-color: rgba(99, 102, 241, 0.6);
-            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.3); 
+            transform: translateY(-6px) scale(1.02); background: rgba(255, 255, 255, 0.12); 
+            border-color: rgba(99, 102, 241, 0.6); box-shadow: 0 20px 50px rgba(99, 102, 241, 0.3); 
         }
 
         .icon-box { 
-            width: 58px; height: 58px; border-radius: 16px; 
-            display: flex; justify-content: center; align-items: center; 
-            font-size: 26px; margin-right: 18px; flex-shrink: 0; color: white; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            width: 58px; height: 58px; border-radius: 16px; display: flex; justify-content: center; align-items: center; 
+            font-size: 26px; margin-right: 18px; flex-shrink: 0; color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
         .card-content h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; color: #f8fafc; letter-spacing: -0.01em; }
         .card-content p { font-size: 0.85rem; color: #94a3b8; font-weight: 400; }
@@ -70,12 +52,12 @@
         .bg-pass-icon { background: linear-gradient(135deg, #ef4444, #dc2626); } 
         .bg-other-icon { background: linear-gradient(135deg, #10b981, #059669); } 
         
-        .accordion-content { max-height: 2000px; overflow: hidden; transition: max-height 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
+        .accordion-content { max-height: 2500px; overflow: hidden; transition: max-height 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
         .hidden-section { max-height: 0; opacity: 0; margin-top: 0; padding-top: 0; padding-bottom: 0; }
         .arrow-icon { transition: transform 0.3s ease; }
         .rotate-icon { transform: rotate(-90deg); }
 
-        /* ==================== MAC SLOW GENIE & MORPH PHYSICS ANIMATION ==================== */
+        /* MAC SLOW GENIE & MORPH PHYSICS */
         @keyframes macSlowOpen {
             0% { opacity: 0; transform: scale(0.4) translateY(120px) skewX(15deg); filter: blur(15px); }
             100% { opacity: 1; transform: scale(1) translateY(0) skewX(0); filter: blur(0); }
@@ -86,31 +68,20 @@
         }
 
         .macos-modal-window {
-            background: rgba(30, 41, 59, 0.9); backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 35px 80px rgba(0, 0, 0, 0.8);
-            animation: macSlowOpen 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            transform-origin: bottom center;
+            background: rgba(30, 41, 59, 0.9); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.18); box-shadow: 0 35px 80px rgba(0, 0, 0, 0.8);
+            animation: macSlowOpen 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: bottom center;
         }
         .macos-modal-window.closing {
-            animation: macSlowClose 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
-            transform-origin: bottom center;
+            animation: macSlowClose 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards !important; transform-origin: bottom center;
         }
 
-        /* Sheet Overlay with Mac Genie Morph Physics */
         #sheetOverlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background: #0f172a; z-index: 9999; display: none;
-            opacity: 0; transform: scale(0.4) translateY(150px) skewX(-10deg);
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            transform-origin: bottom center;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0f172a; z-index: 9999; display: none;
+            opacity: 0; transform: scale(0.4) translateY(150px) skewX(-10deg); transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: bottom center;
         }
-        #sheetOverlay.active { 
-            display: block; opacity: 1; transform: scale(1) translateY(0) skewX(0); 
-        }
-        #sheetOverlay.closing {
-            opacity: 0 !important; transform: scale(0.4) translateY(150px) skewX(15deg) !important;
-        }
+        #sheetOverlay.active { display: block; opacity: 1; transform: scale(1) translateY(0) skewX(0); }
+        #sheetOverlay.closing { opacity: 0 !important; transform: scale(0.4) translateY(150px) skewX(15deg) !important; }
 
         @keyframes macJiggle {
             0% { transform: rotate(0deg) scale(1); }
@@ -120,40 +91,32 @@
             100% { transform: rotate(0deg) scale(1.03); }
         }
         .jiggle-btn {
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12);
         }
         .jiggle-btn:hover {
-            animation: macJiggle 0.4s ease infinite alternate;
-            background: rgba(255, 255, 255, 0.18); border-color: rgba(251, 146, 60, 0.8);
-            box-shadow: 0 10px 30px rgba(251, 146, 60, 0.3); color: #ffffff;
+            animation: macJiggle 0.4s ease infinite alternate; background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(251, 146, 60, 0.8); box-shadow: 0 10px 30px rgba(251, 146, 60, 0.3); color: #ffffff;
         }
 
         .iframe-container { width: 100%; height: 100%; -webkit-overflow-scrolling: touch; overflow: auto; background: #fff;}
         #sheetZoomWrapper { width: 100%; height: 100%; transition: zoom 0.3s ease; }
         #sheetOverlay iframe { width: 100%; height: 100%; min-width: 100vw; min-height: 100vh; border: none; display: block; }
 
-        /* ==================== HOVER-TO-REVEAL PHYSICS (மறைந்திருந்து தோன்றும் அனிமேஷன்) ==================== */
-        /* TAB BUTTONS (BOTTOM LEFT) - Smaller Size */
         .floating-tabs-container {
-            position: fixed; bottom: 20px; left: 20px;
-            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(15px);
+            position: fixed; bottom: 20px; left: 20px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(15px);
             padding: 6px; border-radius: 40px; display: flex; gap: 4px; flex-wrap: wrap; max-width: 60vw;
             box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); z-index: 10000;
         }
         .tab-float-btn {
-            padding: 6px 14px; border-radius: 30px; font-weight: 800; font-size: 11px; /* Much smaller */
+            padding: 6px 14px; border-radius: 30px; font-weight: 800; font-size: 11px;
             color: #cbd5e1; background: transparent; cursor: pointer; transition: all 0.3s ease; border: none; outline: none;
         }
         .tab-float-btn:hover { color: #ffffff; background: rgba(255,255,255,0.1); }
         .tab-float-btn.active { background: #3b82f6; color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.5); }
 
-        /* ACTION BUTTONS (BOTTOM RIGHT) - Smaller Size */
-        .floating-action-btns { 
-            position: fixed; bottom: 20px; right: 20px; z-index: 10000; display: flex; gap: 10px; 
-        }
+        .floating-action-btns { position: fixed; bottom: 20px; right: 20px; z-index: 10000; display: flex; gap: 10px; }
         .btn-float {
-            padding: 10px 18px; border-radius: 40px; font-family: inherit; font-weight: 800; font-size: 12px; /* Much smaller */
+            padding: 10px 18px; border-radius: 40px; font-family: inherit; font-weight: 800; font-size: 12px;
             cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); transition: all 0.25s; outline: none;
         }
         .btn-back { background: rgba(51, 65, 85, 0.9); color: #fff; backdrop-filter: blur(10px); }
@@ -161,77 +124,57 @@
         .btn-download { background: rgba(234, 179, 8, 0.9); color: #000; backdrop-filter: blur(10px); }
         .btn-download:hover { background: #facc15; transform: scale(1.06); }
 
-        /* ZOOM CONTROLS (TOP RIGHT) - Transparent & Small */
-        .zoom-controls {
-            position: fixed; top: 15%; right: 15px; z-index: 10001;
-            display: flex; flex-direction: column; gap: 8px; 
-        }
+        .zoom-controls { position: fixed; top: 15%; right: 15px; z-index: 10001; display: flex; flex-direction: column; gap: 8px; }
         .zoom-btn {
-            width: 32px; height: 32px; border-radius: 50%; /* Very small */
-            background: rgba(30, 41, 59, 0.5); color: rgba(255, 255, 255, 0.85); 
+            width: 32px; height: 32px; border-radius: 50%; background: rgba(30, 41, 59, 0.5); color: rgba(255, 255, 255, 0.85); 
             border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            display: flex; justify-content: center; align-items: center;
-            font-size: 13px; cursor: pointer; transition: all 0.25s; backdrop-filter: blur(5px);
+            display: flex; justify-content: center; align-items: center; font-size: 13px; cursor: pointer; transition: all 0.25s; backdrop-filter: blur(5px);
         }
-        .zoom-btn:hover { 
-            background: rgba(59, 130, 246, 0.8); color: #ffffff;
-            transform: scale(1.15); border-color: rgba(96, 165, 250, 0.5); 
-        }
+        .zoom-btn:hover { background: rgba(59, 130, 246, 0.8); color: #ffffff; transform: scale(1.15); border-color: rgba(96, 165, 250, 0.5); }
 
-        /* The Magic Hover Logic (மவுஸ் சென்றால் மட்டுமே தெரியும்) */
+        /* Custom Scrollbar for Notes */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+
         @media (min-width: 768px) {
-            .hover-reveal-bottom {
-                opacity: 0; transform: translateY(15px);
-                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            }
-            .hover-reveal-bottom::before {
-                content: ''; position: absolute; top: -60px; left: -60px; right: -60px; bottom: -60px; z-index: -1;
-            }
-            .hover-reveal-bottom:hover {
-                opacity: 1; transform: translateY(0);
-            }
+            .hover-reveal-bottom { opacity: 0; transform: translateY(15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+            .hover-reveal-bottom::before { content: ''; position: absolute; top: -60px; left: -60px; right: -60px; bottom: -60px; z-index: -1; }
+            .hover-reveal-bottom:hover { opacity: 1; transform: translateY(0); }
 
-            .hover-reveal-side {
-                opacity: 0; transform: translateX(15px);
-                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            }
-            .hover-reveal-side::before {
-                content: ''; position: absolute; top: -60px; left: -60px; right: -60px; bottom: -60px; z-index: -1;
-            }
-            .hover-reveal-side:hover {
-                opacity: 1; transform: translateX(0);
-            }
+            .hover-reveal-side { opacity: 0; transform: translateX(15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+            .hover-reveal-side::before { content: ''; position: absolute; top: -60px; left: -60px; right: -60px; bottom: -60px; z-index: -1; }
+            .hover-reveal-side:hover { opacity: 1; transform: translateX(0); }
         }
 
         @media (max-width: 768px) {
             .floating-tabs-container { bottom: 80px; left: 50%; transform: translateX(-50%); width: max-content; max-width: 90vw; }
             .floating-action-btns { bottom: 15px; left: 50%; transform: translateX(-50%); width: max-content; right: auto; }
-            /* On mobile, keep them slightly visible since there is no mouse hover */
-            .hover-reveal-bottom { opacity: 0.85; }
-            .hover-reveal-side { opacity: 0.85; }
+            .hover-reveal-bottom { opacity: 0.85; } .hover-reveal-side { opacity: 0.85; }
         }
     </style>
 </head>
-<body class="text-slate-100 pb-16">
+<body class="text-slate-100 pb-16" onload="initNotes()">
 
     <div id="mainUI">
         <header class="macos-header text-white py-4 px-6 sticky top-0 z-40 shadow-2xl">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
                 
+                <!-- Left: Beautiful UI Created PHC Hospital Icon instead of external logos -->
                 <div class="flex items-center gap-4">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/81/TamilNadu_Logo.svg" alt="TN Govt" class="w-11 h-11 object-contain drop-shadow-md">
+                    <div ondblclick="promptSecretAdmin()" title="Double Click for Admin Mode" class="w-12 h-12 bg-gradient-to-tr from-teal-500 to-blue-600 rounded-2xl flex justify-center items-center shadow-lg border border-white/20 cursor-pointer hover:scale-105 transition shrink-0">
+                        <i class="fas fa-hospital text-white text-2xl"></i>
+                    </div>
                     <div>
                         <h1 class="text-xl md:text-2xl font-black tracking-wide drop-shadow-md">Anthiyur Block Master Portal</h1>
-                        <p class="text-xs text-teal-300 font-semibold tracking-widest uppercase mt-0.5">Health Department • Government of Tamil Nadu</p>
+                        <p class="text-xs text-teal-300 font-semibold tracking-widest uppercase mt-0.5">Health Department</p>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-3">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Coat_of_arms_of_India.svg" alt="DPH" class="w-9 h-9 object-contain drop-shadow hidden sm:block">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/Logo_of_National_Health_Mission_%28NHM%29_India.svg" alt="NHM" class="w-10 h-10 object-contain drop-shadow rounded-full bg-white p-0.5">
-                    
-                    <!-- Secret Admin Trigger -->
-                    <div onclick="promptSecretAdmin()" title="Admin Lock Access" class="flex items-center gap-1.5 bg-white/10 hover:bg-white/25 px-3 py-1.5 rounded-xl border border-white/20 cursor-pointer transition select-none ml-2">
+                <!-- Right: Secret Admin Lock Trigger Only -->
+                <div class="flex items-center gap-2">
+                    <div onclick="promptSecretAdmin()" title="Admin Lock Access" class="flex items-center gap-1.5 bg-white/10 hover:bg-white/25 px-3 py-1.5 rounded-xl border border-white/20 cursor-pointer transition select-none">
                         <i class="fas fa-lock text-amber-400 text-xs"></i>
                         <span class="text-xs font-bold text-slate-200 hidden md:inline">Admin</span>
                     </div>
@@ -257,6 +200,10 @@
                     <a onclick="openSheetOverlay('delivery')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-baby"></i></div><div class="card-content"><h3>Delivery Reports</h3><p>Current, Previous & Upto Month</p></div></a>
                     <a onclick="openModal('feverModal')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-virus-covid"></i></div><div class="card-content"><h3>Fever & Dengue Report</h3><p>Click to open options</p></div></a>
                     <a onclick="openModal('nksModal')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-campground"></i></div><div class="card-content"><h3>NKS Camp Report</h3><p>Click to open options</p></div></a>
+                    
+                    <a onclick="openModal('dashboardModal')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-chart-pie"></i></div><div class="card-content"><h3>Analytics Dashboards</h3><p>Auto-generated Charts</p></div></a>
+                    <a onclick="openModal('notesModal')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-edit"></i></div><div class="card-content"><h3>Quick Notes</h3><p>Draft & Copy Text easily</p></div></a>
+                    <a onclick="openModal('ancModal')" class="macos-card cursor-pointer ring-2 ring-rose-500/50"><div class="icon-box bg-pass-icon"><i class="fas fa-heart-crack"></i></div><div class="card-content"><h3 class="text-rose-300">ANC Heart Disease</h3><p>Mother Notes & Report</p></div></a>
                 </div>
             </div>
 
@@ -282,8 +229,6 @@
                         <a href="https://uwinvaccinator.mohfw.gov.in/" target="_blank" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-truck-medical"></i></div><div class="card-content"><h3>Delivery Point</h3></div></a>
                         <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-file-waveform"></i></div><div class="card-content"><h3>HMIS 3.0 (OP Entry)</h3></div></a>
                         <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-server"></i></div><div class="card-content"><h3>IHIP Portal</h3></div></a>
-                        <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-people-roof"></i></div><div class="card-content"><h3>Family Welfare Portal</h3></div></a>
-                        <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-building-columns"></i></div><div class="card-content"><h3>HMIS (MoHFW)</h3></div></a>
                     </div>
                 </div>
 
@@ -300,8 +245,6 @@
                         <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-other-icon"><i class="fas fa-children"></i></div><div class="card-content"><h3>Adolescent Report</h3></div></a>
                         <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-other-icon"><i class="fas fa-stethoscope"></i></div><div class="card-content"><h3>NCD Data Report</h3></div></a>
                         <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-other-icon"><i class="fas fa-syringe"></i></div><div class="card-content"><h3>Immunization Log</h3></div></a>
-                        <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-other-icon"><i class="fas fa-notes-medical"></i></div><div class="card-content"><h3>Monthly OP Report</h3></div></a>
-                        <a href="#" target="_blank" class="macos-card"><div class="icon-box bg-other-icon"><i class="fas fa-pills"></i></div><div class="card-content"><h3>Pharmacy Stock</h3></div></a>
                     </div>
                 </div>
             </div>
@@ -310,7 +253,7 @@
 
     <!-- MTM POPUP MODAL -->
     <div id="mtmModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
-        <div class="macos-modal-window rounded-3xl w-11/12 md:w-96 overflow-hidden" id="mtmModalBox">
+        <div class="macos-modal-window rounded-3xl w-11/12 md:w-96 overflow-hidden">
             <div class="bg-gradient-to-r from-indigo-600/80 to-purple-600/80 p-5 flex justify-between items-center text-white border-b border-white/10">
                 <h3 class="text-xl font-bold"><i class="fas fa-notes-medical"></i> Reports Options</h3>
                 <button onclick="closeModalWithAnimation('mtmModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
@@ -333,86 +276,98 @@
 
     <!-- FEVER & DENGUE POPUP MODAL -->
     <div id="feverModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
-        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[580px] overflow-hidden" id="feverModalBox">
+        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[580px] overflow-hidden">
             <div class="bg-gradient-to-r from-orange-600/80 to-amber-600/80 p-5 flex justify-between items-center text-white border-b border-white/10">
                 <h3 class="text-xl font-bold"><i class="fas fa-virus-covid mr-2"></i> Fever & Dengue Reports</h3>
                 <button onclick="closeModalWithAnimation('feverModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
             </div>
             <div class="p-6 grid grid-cols-2 gap-3 max-h-[70vh] overflow-y-auto">
-                <a onclick="openSheetOverlay('fever')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-orange-500/20 text-orange-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-thermometer-half"></i></div>
-                    <h4 class="font-bold text-white text-sm">Fever Line List</h4>
-                </a>
-                <a onclick="openSheetOverlay('dengue')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-amber-500/20 text-amber-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-mosquito"></i></div>
-                    <h4 class="font-bold text-white text-sm">Dengue Line List</h4>
-                </a>
-                <a onclick="openSheetOverlay('fever_village')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-orange-500/20 text-orange-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-home"></i></div>
-                    <h4 class="font-bold text-white text-sm">Village-wise Fever</h4>
-                </a>
-                <a onclick="openSheetOverlay('dengue_village')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-amber-500/20 text-amber-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-map-marked-alt"></i></div>
-                    <h4 class="font-bold text-white text-sm">Village-wise Dengue</h4>
-                </a>
-                <a onclick="openSheetOverlay('fever_abstract')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-orange-500/20 text-orange-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-chart-pie"></i></div>
-                    <h4 class="font-bold text-white text-sm">Fever Abstract 2026</h4>
-                </a>
-                <a onclick="openSheetOverlay('dengue_abstract')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-amber-500/20 text-amber-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-chart-bar"></i></div>
-                    <h4 class="font-bold text-white text-sm">Dengue Abstract 2026</h4>
-                </a>
-                <a onclick="openSheetOverlay('abstract_2026')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-rose-500/20 text-rose-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-check"></i></div>
-                    <h4 class="font-bold text-white text-sm">Abstract 2026</h4>
-                </a>
-                <a onclick="openSheetOverlay('tank')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-teal-500/20 text-teal-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-water"></i></div>
-                    <h4 class="font-bold text-white text-sm">Tank Report</h4>
-                </a>
-                <a onclick="openSheetOverlay('fogging')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group col-span-2">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-cyan-500/20 text-cyan-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-smog"></i></div>
-                    <h4 class="font-bold text-white text-sm">Fogging Machine Report</h4>
-                </a>
-                <a onclick="openSheetOverlay('abstract_3years')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group col-span-2">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-indigo-500/20 text-indigo-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-alt"></i></div>
-                    <h4 class="font-bold text-white text-sm">3 Years Abstract (2024, 2025, 2026)</h4>
-                </a>
+                <a onclick="openSheetOverlay('fever')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-orange-500/20 text-orange-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-thermometer-half"></i></div><h4 class="font-bold text-white text-sm">Fever Line List</h4></a>
+                <a onclick="openSheetOverlay('dengue')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-amber-500/20 text-amber-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-mosquito"></i></div><h4 class="font-bold text-white text-sm">Dengue Line List</h4></a>
+                <a onclick="openSheetOverlay('fever_village')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-orange-500/20 text-orange-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-home"></i></div><h4 class="font-bold text-white text-sm">Village-wise Fever</h4></a>
+                <a onclick="openSheetOverlay('dengue_village')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-amber-500/20 text-amber-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-map-marked-alt"></i></div><h4 class="font-bold text-white text-sm">Village-wise Dengue</h4></a>
+                <a onclick="openSheetOverlay('fever_abstract')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-orange-500/20 text-orange-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-chart-pie"></i></div><h4 class="font-bold text-white text-sm">Fever Abstract 2026</h4></a>
+                <a onclick="openSheetOverlay('dengue_abstract')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-amber-500/20 text-amber-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-chart-bar"></i></div><h4 class="font-bold text-white text-sm">Dengue Abstract 2026</h4></a>
+                <a onclick="openSheetOverlay('abstract_2026')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-rose-500/20 text-rose-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-check"></i></div><h4 class="font-bold text-white text-sm">Abstract 2026</h4></a>
+                <a onclick="openSheetOverlay('tank')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-teal-500/20 text-teal-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-water"></i></div><h4 class="font-bold text-white text-sm">Tank Report</h4></a>
+                <a onclick="openSheetOverlay('fogging')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group col-span-2"><div class="w-10 h-10 mx-auto rounded-xl bg-cyan-500/20 text-cyan-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-smog"></i></div><h4 class="font-bold text-white text-sm">Fogging Machine Report</h4></a>
+                <a onclick="openSheetOverlay('abstract_3years')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group col-span-2"><div class="w-10 h-10 mx-auto rounded-xl bg-indigo-500/20 text-indigo-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-alt"></i></div><h4 class="font-bold text-white text-sm">3 Years Abstract (2024, 2025, 2026)</h4></a>
             </div>
-            <div class="bg-black/20 p-3 text-center border-t border-white/10">
-                <button onclick="closeModalWithAnimation('feverModal')" class="text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button>
-            </div>
+            <div class="bg-black/20 p-3 text-center border-t border-white/10"><button onclick="closeModalWithAnimation('feverModal')" class="text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button></div>
         </div>
     </div>
 
     <!-- NKS CAMP POPUP MODAL -->
     <div id="nksModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
-        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[580px] overflow-hidden" id="nksModalBox">
+        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[580px] overflow-hidden">
             <div class="bg-gradient-to-r from-teal-600/80 to-emerald-600/80 p-5 flex justify-between items-center text-white border-b border-white/10">
                 <h3 class="text-xl font-bold"><i class="fas fa-campground mr-2"></i> NKS Camp Reports</h3>
                 <button onclick="closeModalWithAnimation('nksModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
             </div>
             <div class="p-6 grid grid-cols-2 gap-3 max-h-[70vh] overflow-y-auto">
-                <a onclick="openSheetOverlay('nks_aug_25')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-teal-500/20 text-teal-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-day"></i></div>
-                    <h4 class="font-bold text-white text-sm">30.08.2025 Abstract</h4>
-                </a>
-                <a onclick="openSheetOverlay('nks_dec_25')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-emerald-500/20 text-emerald-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-day"></i></div>
-                    <h4 class="font-bold text-white text-sm">20.12.2025 Abstract</h4>
-                </a>
-                <a onclick="openSheetOverlay('nks_feb_26')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-cyan-500/20 text-cyan-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-check"></i></div>
-                    <h4 class="font-bold text-white text-sm">14.02.2026 Abstract</h4>
-                </a>
-                <a onclick="openSheetOverlay('nks_3_camp')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group">
-                    <div class="w-10 h-10 mx-auto rounded-xl bg-indigo-500/20 text-indigo-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-list-alt"></i></div>
-                    <h4 class="font-bold text-white text-sm">3 Camp Abstract Total</h4>
-                </a>
+                <a onclick="openSheetOverlay('nks_aug_25')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-teal-500/20 text-teal-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-day"></i></div><h4 class="font-bold text-white text-sm">30.08.2025 Abstract</h4></a>
+                <a onclick="openSheetOverlay('nks_dec_25')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-emerald-500/20 text-emerald-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-day"></i></div><h4 class="font-bold text-white text-sm">20.12.2025 Abstract</h4></a>
+                <a onclick="openSheetOverlay('nks_feb_26')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-cyan-500/20 text-cyan-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-check"></i></div><h4 class="font-bold text-white text-sm">14.02.2026 Abstract</h4></a>
+                <a onclick="openSheetOverlay('nks_3_camp')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-indigo-500/20 text-indigo-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-list-alt"></i></div><h4 class="font-bold text-white text-sm">3 Camp Abstract Total</h4></a>
             </div>
-            <div class="bg-black/20 p-3 text-center border-t border-white/10">
-                <button onclick="closeModalWithAnimation('nksModal')" class="text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button>
+            <div class="bg-black/20 p-3 text-center border-t border-white/10"><button onclick="closeModalWithAnimation('nksModal')" class="text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button></div>
+        </div>
+    </div>
+
+    <!-- NEW: DASHBOARD MODAL -->
+    <div id="dashboardModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
+        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[600px] overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-600/80 to-purple-600/80 p-5 flex justify-between items-center text-white border-b border-white/10">
+                <div>
+                    <h3 class="text-xl font-bold"><i class="fas fa-chart-pie mr-2"></i> Analytics Dashboards</h3>
+                    <p class="text-[10px] text-blue-200 mt-1">Note: Create Charts directly in Google Sheets & link GIDs below.</p>
+                </div>
+                <button onclick="closeModalWithAnimation('dashboardModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+            <div class="p-6 grid grid-cols-2 gap-3 max-h-[70vh] overflow-y-auto">
+                <a onclick="openSheetOverlay('dash_mtm')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-indigo-500/20 text-indigo-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-chart-line"></i></div><h4 class="font-bold text-white text-sm">MTM Dashboard</h4></a>
+                <a onclick="openSheetOverlay('dash_cancer')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-pink-500/20 text-pink-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-chart-area"></i></div><h4 class="font-bold text-white text-sm">Cancer Dashboard</h4></a>
+                <a onclick="openSheetOverlay('dash_fever')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-orange-500/20 text-orange-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-chart-column"></i></div><h4 class="font-bold text-white text-sm">Fever Dashboard</h4></a>
+                <a onclick="openSheetOverlay('dash_anc')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-rose-500/20 text-rose-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-heart-pulse"></i></div><h4 class="font-bold text-white text-sm">ANC Dashboard</h4></a>
+            </div>
+            <div class="bg-black/20 p-3 text-center border-t border-white/10"><button onclick="closeModalWithAnimation('dashboardModal')" class="text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button></div>
+        </div>
+    </div>
+
+    <!-- NEW: QUICK NOTES MODAL -->
+    <div id="notesModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
+        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[500px] overflow-hidden">
+            <div class="bg-gradient-to-r from-slate-600/80 to-slate-800/80 p-5 flex justify-between items-center text-white border-b border-white/10">
+                <h3 class="text-xl font-bold"><i class="fas fa-edit mr-2"></i> Quick Notes</h3>
+                <button onclick="closeModalWithAnimation('notesModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+            <div class="p-6">
+                <textarea id="bmoNoteText" onkeyup="saveSimpleNote()" class="w-full h-48 bg-white/5 border border-white/20 rounded-xl p-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type your notes here... It auto-saves!"></textarea>
+                <div class="mt-4 flex justify-end gap-3">
+                    <button onclick="clearSimpleNote()" class="px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg text-sm font-bold transition">Clear</button>
+                    <button onclick="copySimpleNote()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-bold transition shadow-lg"><i class="fas fa-copy mr-1"></i> Copy Text</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: ANC HEART DISEASE MOTHER NOTES MODAL -->
+    <div id="ancModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
+        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[600px] overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="bg-gradient-to-r from-rose-600/80 to-red-700/80 p-5 flex justify-between items-center text-white border-b border-white/10 shrink-0">
+                <h3 class="text-xl font-bold"><i class="fas fa-heart-crack mr-2"></i> ANC Heart Disease Mother Notes</h3>
+                <button onclick="closeModalWithAnimation('ancModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+            <div class="p-5 bg-white/5 shrink-0 border-b border-white/10">
+                <div class="flex gap-2">
+                    <input type="text" id="ancInput" class="flex-1 bg-black/30 border border-white/20 rounded-xl p-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Enter mother's details/report...">
+                    <button onclick="addAncNote()" class="px-5 py-3 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold transition shadow-lg"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            <div class="p-5 overflow-y-auto flex-1 space-y-3" id="ancNotesList"></div>
+            <div class="bg-black/20 p-3 text-center border-t border-white/10 shrink-0">
+                <button onclick="openSheetOverlay('anc_report')" class="px-4 py-2 bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-300 rounded-lg text-sm font-bold transition mr-2"><i class="fas fa-table mr-1"></i> View ANC Sheet Report</button>
+                <button onclick="closeModalWithAnimation('ancModal')" class="text-sm font-semibold text-slate-300 hover:text-white ml-2">Close</button>
             </div>
         </div>
     </div>
@@ -446,35 +401,13 @@
     <script>
         const feverBaseID = '2PACX-1vQMGSgOe5uqsD2ZvLrYD7GpHB__igzb829w1p53ewmma-ImH031OyGKR8XvCZwm0RxRXwIrWwrOyfmX';
         const nksBaseID = '2PACX-1vQDv1q69_x5OV-lVwRRFJRlaDoZWnSqHbQVMpI8WNF_cViKuQ_lgyS3er4Bn52gsWS9XYlb4HYkuJrn';
+        const ancBaseID = 'YOUR_ANC_SHEET_ID_HERE'; 
 
         const sheetConfigs = {
-            'mtm': {
-                baseID: '2PACX-1vSUeSBN-8JNGkvXdIuIKFH2poaqfoNWvC01MOQD18pXO5dPw6n0vImYxkb78eRjZmnKfLm4OgOeexPK',
-                parentModal: 'mtmModal',
-                tabs: [
-                    { name: 'HT Report', gid: '0' },
-                    { name: 'DM Report', gid: '1346772331' },
-                    { name: 'HT & DM Report', gid: '2007453515' }
-                ]
-            },
-            'cancer': {
-                baseID: '2PACX-1vQieDAV7oRruNAvY5x8VjrVVTnY-fuRSjMJ0VxwlDKRAuTwR4Rf1lKgV9qfWFPShM9qU9GPv9k2o5Sk',
-                parentModal: 'mtmModal',
-                tabs: [
-                    { name: 'Oral', gid: '2056331833' },
-                    { name: 'Breast', gid: '454152815' },          
-                    { name: 'Cervix', gid: '1215917176' }           
-                ]
-            },
-            'delivery': {
-                baseID: '2PACX-1vQjfIgSogvl_U49pX6ZXVG0Kg4YXd6grE06xOX5aqtXyhka04iB9uuUs2nPpWPI7kJG6Jsj_JelouBe',
-                parentModal: null, 
-                tabs: [
-                    { name: 'Current Month', gid: '2036942363' },
-                    { name: 'Previous Month', gid: '370926509' },
-                    { name: 'Upto the Month', gid: '1867654531' }
-                ]
-            },
+            'mtm': { baseID: '2PACX-1vSUeSBN-8JNGkvXdIuIKFH2poaqfoNWvC01MOQD18pXO5dPw6n0vImYxkb78eRjZmnKfLm4OgOeexPK', parentModal: 'mtmModal', tabs: [{ name: 'HT Report', gid: '0' }, { name: 'DM Report', gid: '1346772331' }, { name: 'HT & DM Report', gid: '2007453515' }] },
+            'cancer': { baseID: '2PACX-1vQieDAV7oRruNAvY5x8VjrVVTnY-fuRSjMJ0VxwlDKRAuTwR4Rf1lKgV9qfWFPShM9qU9GPv9k2o5Sk', parentModal: 'mtmModal', tabs: [{ name: 'Oral', gid: '2056331833' }, { name: 'Breast', gid: '454152815' }, { name: 'Cervix', gid: '1215917176' }] },
+            'delivery': { baseID: '2PACX-1vQjfIgSogvl_U49pX6ZXVG0Kg4YXd6grE06xOX5aqtXyhka04iB9uuUs2nPpWPI7kJG6Jsj_JelouBe', parentModal: null, tabs: [{ name: 'Current Month', gid: '2036942363' }, { name: 'Previous Month', gid: '370926509' }, { name: 'Upto the Month', gid: '1867654531' }] },
+            
             'fever': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Fever Line List', gid: '1266655650' }] },
             'dengue': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Dengue Line List', gid: '952129824' }] },
             'fever_village': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Village-wise Fever', gid: '646408484' }] },
@@ -484,12 +417,19 @@
             'abstract_2026': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Abstract 2026', gid: '0' }] },
             'tank': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Tank Report', gid: '2073814740' }] },
             'fogging': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Fogging Machine Report', gid: '1419408448' }] },
-            'abstract_3years': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: '3 Years Abstract (2024-2026)', gid: '1764709859' }] },
+            'abstract_3years': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: '3 Years Abstract', gid: '1764709859' }] },
             
             'nks_aug_25': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '30.08.2025 Abstract', gid: '971980116' }] },
             'nks_dec_25': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '20.12.2025 Abstract', gid: '1671682279' }] },
             'nks_feb_26': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '14.02.2026 Abstract', gid: '2033884952' }] },
-            'nks_3_camp': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '3 Camp Abstract Total', gid: '1381238626' }] }
+            'nks_3_camp': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '3 Camp Abstract Total', gid: '1381238626' }] },
+
+            'dash_mtm': { baseID: 'YOUR_MTM_DASHBOARD_SHEET_ID', parentModal: 'dashboardModal', tabs: [{ name: 'MTM Dashboard', gid: '0' }] },
+            'dash_cancer': { baseID: 'YOUR_CANCER_DASHBOARD_SHEET_ID', parentModal: 'dashboardModal', tabs: [{ name: 'Cancer Dashboard', gid: '0' }] },
+            'dash_fever': { baseID: 'YOUR_FEVER_DASHBOARD_SHEET_ID', parentModal: 'dashboardModal', tabs: [{ name: 'Fever Dashboard', gid: '0' }] },
+            'dash_anc': { baseID: 'YOUR_ANC_DASHBOARD_SHEET_ID', parentModal: 'dashboardModal', tabs: [{ name: 'ANC Dashboard', gid: '0' }] },
+            
+            'anc_report': { baseID: ancBaseID, parentModal: 'ancModal', tabs: [{ name: 'ANC Mother Report', gid: '0' }] }
         };
 
         let currentActiveReport = 'mtm';
@@ -507,47 +447,33 @@
             if (pwd === "admin123") {
                 const wrapper = document.getElementById('deoWrapper');
                 wrapper.classList.remove('hidden');
-                alert('🔓 Secret Admin Mode Unlocked: DEO Operations & Other Reports are now visible to you!');
+                alert('🔓 Secret Admin Mode Unlocked!');
                 window.scrollTo({ top: wrapper.offsetTop - 50, behavior: 'smooth' });
-            } else if (pwd !== null) {
-                alert('❌ Incorrect Password! Access Denied.');
-            }
+            } else if (pwd !== null) { alert('❌ Incorrect Password!'); }
         }
 
         function lockSecretDeo() {
             document.getElementById('deoWrapper').classList.add('hidden');
-            alert('🔒 Admin Mode Locked Successfully.');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            alert('🔒 Admin Mode Locked.'); window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function openModal(modalId) { 
-            const modal = document.getElementById(modalId);
-            modal.classList.remove('hidden'); 
-        }
-
+        function openModal(modalId) { document.getElementById(modalId).classList.remove('hidden'); }
+        
         function closeModalWithAnimation(modalId) {
             const modal = document.getElementById(modalId);
             const win = modal.querySelector('.macos-modal-window');
             win.classList.add('closing');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                win.classList.remove('closing'); 
-            }, 400);
+            setTimeout(() => { modal.classList.add('hidden'); win.classList.remove('closing'); }, 400);
         }
 
-        function closeModalInstant(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.add('hidden');
-        }
+        function closeModalInstant(modalId) { document.getElementById(modalId).classList.add('hidden'); }
 
         function openSheetOverlay(reportType) {
             currentActiveReport = reportType;
-            closeModalInstant('mtmModal');
-            closeModalInstant('feverModal');
-            closeModalInstant('nksModal');
+            ['mtmModal', 'feverModal', 'nksModal', 'dashboardModal', 'ancModal'].forEach(id => closeModalInstant(id));
+            
             document.getElementById('mainUI').style.display = 'none';
             document.getElementById('sheetOverlay').classList.add('active');
-            
             document.getElementById('zoomControls').style.display = 'flex';
             resetZoom();
 
@@ -555,13 +481,11 @@
             tabsContainer.innerHTML = ''; 
             const config = sheetConfigs[reportType];
             
-            // SHOW tabs ALWAYS (Even if it is single, as requested by user to bring them back)
             tabsContainer.style.display = 'flex';
             config.tabs.forEach((tab, index) => {
                 const btn = document.createElement('button');
                 btn.className = `tab-float-btn ${index === 0 ? 'active' : ''}`;
                 btn.innerText = tab.name;
-                
                 btn.onclick = function() {
                     document.querySelectorAll('.tab-float-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
@@ -586,10 +510,7 @@
             document.getElementById('sheetZoomWrapper').style.zoom = currentZoom;
         }
 
-        function resetZoom() {
-            currentZoom = 1;
-            document.getElementById('sheetZoomWrapper').style.zoom = 1;
-        }
+        function resetZoom() { currentZoom = 1; document.getElementById('sheetZoomWrapper').style.zoom = 1; }
 
         function goBackToMenu() {
             const overlay = document.getElementById('sheetOverlay');
@@ -600,20 +521,74 @@
                 overlay.classList.remove('active');
                 overlay.classList.remove('closing');
                 document.getElementById('sheetIframe').src = ""; 
-                
                 const config = sheetConfigs[currentActiveReport];
-                if (config.parentModal) {
-                    openModal(config.parentModal); 
-                } else {
-                    document.getElementById('mainUI').style.display = 'block'; 
-                }
+                if (config.parentModal) { openModal(config.parentModal); } 
+                else { document.getElementById('mainUI').style.display = 'block'; }
             }, 500);
         }
 
         function downloadA3PDF() {
             const baseID = sheetConfigs[currentActiveReport].baseID;
-            const downloadUrl = `https://docs.google.com/spreadsheets/d/e/${baseID}/pub?output=pdf&format=pdf&size=A3&portrait=false&gridlines=false`;
-            window.open(downloadUrl, '_blank');
+            window.open(`https://docs.google.com/spreadsheets/d/e/${baseID}/pub?output=pdf&format=pdf&size=A3&portrait=false&gridlines=false`, '_blank');
+        }
+
+        // ==================== QUICK NOTES LOGIC ====================
+        function initNotes() {
+            document.getElementById('bmoNoteText').value = localStorage.getItem('bmoSimpleNote') || '';
+            renderAncNotes();
+        }
+        function saveSimpleNote() { localStorage.setItem('bmoSimpleNote', document.getElementById('bmoNoteText').value); }
+        function clearSimpleNote() { 
+            if(confirm("Are you sure you want to clear notes?")) {
+                document.getElementById('bmoNoteText').value = ''; localStorage.removeItem('bmoSimpleNote');
+            }
+        }
+        function copySimpleNote() {
+            const text = document.getElementById('bmoNoteText');
+            text.select(); text.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(text.value).then(() => alert("Notes Copied to Clipboard!"));
+        }
+
+        // ==================== ANC MOTHER NOTES LOGIC ====================
+        function addAncNote() {
+            const input = document.getElementById('ancInput');
+            const val = input.value.trim();
+            if (!val) return;
+            
+            let notes = JSON.parse(localStorage.getItem('ancNotesList')) || [];
+            const dateStr = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+            notes.unshift({ text: val, date: dateStr, id: Date.now() }); 
+            localStorage.setItem('ancNotesList', JSON.stringify(notes));
+            input.value = ''; renderAncNotes();
+        }
+        
+        function deleteAncNote(id) {
+            let notes = JSON.parse(localStorage.getItem('ancNotesList')) || [];
+            notes = notes.filter(n => n.id !== id);
+            localStorage.setItem('ancNotesList', JSON.stringify(notes));
+            renderAncNotes();
+        }
+
+        function renderAncNotes() {
+            const list = document.getElementById('ancNotesList');
+            let notes = JSON.parse(localStorage.getItem('ancNotesList')) || [];
+            list.innerHTML = '';
+            
+            if (notes.length === 0) {
+                list.innerHTML = '<p class="text-slate-400 text-center text-sm mt-4 italic">No records found. Add a note above.</p>';
+                return;
+            }
+
+            notes.forEach(note => {
+                const div = document.createElement('div');
+                div.className = "bg-black/30 border border-white/10 rounded-xl p-4 relative group";
+                div.innerHTML = `
+                    <p class="text-white text-sm pr-6 leading-relaxed">${note.text}</p>
+                    <span class="text-[10px] text-rose-300 font-semibold mt-2 block"><i class="fas fa-clock mr-1"></i> ${note.date}</span>
+                    <button onclick="deleteAncNote(${note.id})" class="absolute top-3 right-3 text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash"></i></button>
+                `;
+                list.appendChild(div);
+            });
         }
     </script>
 </body>
