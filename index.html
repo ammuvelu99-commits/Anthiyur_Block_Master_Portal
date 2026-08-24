@@ -2,7 +2,7 @@
 <html lang="ta">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Anthiyur Block Master Portal - Health Department</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,6 +16,7 @@
             background-attachment: fixed; 
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
             min-height: 100vh; margin: 0; color: #f8fafc;
+            -webkit-tap-highlight-color: transparent; 
         }
         
         .macos-header { 
@@ -33,19 +34,23 @@
         .macos-card { 
             background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(20px); border-radius: 20px; 
             border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.25); 
-            transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1); display: flex; align-items: center; padding: 20px; cursor: pointer; 
+            transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1); display: flex; align-items: center; padding: 16px; cursor: pointer; 
         }
+        @media(min-width: 768px) { .macos-card { padding: 20px; } }
         .macos-card:hover { 
             transform: translateY(-6px) scale(1.02); background: rgba(255, 255, 255, 0.12); 
             border-color: rgba(99, 102, 241, 0.6); box-shadow: 0 20px 50px rgba(99, 102, 241, 0.3); 
         }
 
         .icon-box { 
-            width: 58px; height: 58px; border-radius: 16px; display: flex; justify-content: center; align-items: center; 
-            font-size: 26px; margin-right: 18px; flex-shrink: 0; color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            width: 50px; height: 50px; border-radius: 14px; display: flex; justify-content: center; align-items: center; 
+            font-size: 22px; margin-right: 14px; flex-shrink: 0; color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
-        .card-content h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; color: #f8fafc; letter-spacing: -0.01em; }
-        .card-content p { font-size: 0.85rem; color: #94a3b8; font-weight: 400; }
+        @media(min-width: 768px) { .icon-box { width: 58px; height: 58px; font-size: 26px; margin-right: 18px; border-radius: 16px;} }
+        
+        .card-content h3 { font-size: 1rem; font-weight: 700; margin-bottom: 2px; color: #f8fafc; letter-spacing: -0.01em; line-height: 1.2; }
+        .card-content p { font-size: 0.8rem; color: #94a3b8; font-weight: 400; line-height: 1.2; }
+        @media(min-width: 768px) { .card-content h3 { font-size: 1.1rem; margin-bottom: 4px; } .card-content p { font-size: 0.85rem; } }
         
         .bg-bmo-icon { background: linear-gradient(135deg, #6366f1, #4f46e5); } 
         .bg-deo-icon { background: linear-gradient(135deg, #0ea5e9, #0284c7); } 
@@ -68,17 +73,17 @@
         }
 
         .macos-modal-window {
-            background: rgba(30, 41, 59, 0.9); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+            background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
             border: 1px solid rgba(255, 255, 255, 0.18); box-shadow: 0 35px 80px rgba(0, 0, 0, 0.8);
-            animation: macSlowOpen 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: bottom center;
+            animation: macSlowOpen 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform-origin: bottom center;
         }
         .macos-modal-window.closing {
-            animation: macSlowClose 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards !important; transform-origin: bottom center;
+            animation: macSlowClose 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards !important; transform-origin: bottom center;
         }
 
         #sheetOverlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0f172a; z-index: 9999; display: none;
-            opacity: 0; transform: scale(0.4) translateY(150px) skewX(-10deg); transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: bottom center;
+            opacity: 0; transform: scale(0.4) translateY(150px) skewX(-10deg); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: bottom center;
         }
         #sheetOverlay.active { display: block; opacity: 1; transform: scale(1) translateY(0) skewX(0); }
         #sheetOverlay.closing { opacity: 0 !important; transform: scale(0.4) translateY(150px) skewX(15deg) !important; }
@@ -133,70 +138,71 @@
         .zoom-btn:hover { background: rgba(59, 130, 246, 0.8); color: #ffffff; transform: scale(1.15); border-color: rgba(96, 165, 250, 0.5); }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
 
-        /* Content Editable Area Styling */
+        /* ================= MOBILE RESPONSIVE RICH EDITOR ================= */
         .rich-editor {
-            min-height: 80px; width: 100%; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px; padding: 12px; color: #fff; font-size: 14px; outline: none; margin-top: 8px;
+            min-height: 100px; 
+            max-height: 40vh; 
+            overflow-y: auto; 
+            width: 100%; 
+            background: rgba(0, 0, 0, 0.5); 
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px; 
+            padding: 14px; 
+            color: #fff; 
+            font-size: 15px; 
+            outline: none; 
+            margin-top: 8px;
+            line-height: 1.5;
         }
-        .rich-editor:focus { border-color: #f43f5e; box-shadow: 0 0 10px rgba(244, 63, 94, 0.3); }
-
-        /* Hover Reveal Logic */
-        @media (min-width: 768px) {
-            .hover-reveal-bottom { opacity: 0; transform: translateY(15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-            .hover-reveal-bottom::before { content: ''; position: absolute; top: -60px; left: -60px; right: -60px; bottom: -60px; z-index: -1; }
-            .hover-reveal-bottom:hover { opacity: 1; transform: translateY(0); }
-
-            .hover-reveal-side { opacity: 0; transform: translateX(15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-            .hover-reveal-side::before { content: ''; position: absolute; top: -60px; left: -60px; right: -60px; bottom: -60px; z-index: -1; }
-            .hover-reveal-side:hover { opacity: 1; transform: translateX(0); }
-        }
+        .rich-editor:focus { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); background: rgba(0, 0, 0, 0.7); }
+        .rich-editor:empty:before { content: attr(placeholder); color: #64748b; font-style: italic; }
 
         @media (max-width: 768px) {
-            .floating-tabs-container { bottom: 80px; left: 50%; transform: translateX(-50%); width: max-content; max-width: 90vw; }
-            .floating-action-btns { bottom: 15px; left: 50%; transform: translateX(-50%); width: max-content; right: auto; }
-            .hover-reveal-bottom { opacity: 0.85; } .hover-reveal-side { opacity: 0.85; }
+            .floating-tabs-container { bottom: 80px; left: 50%; transform: translateX(-50%); width: max-content; max-width: 90vw; justify-content: center;}
+            .floating-action-btns { bottom: 15px; left: 50%; transform: translateX(-50%); width: max-content; right: auto; flex-wrap: wrap; justify-content: center;}
+            .macos-modal-window { width: 98% !important; max-height: 95vh !important; }
+            input[type="text"] { font-size: 16px; }
         }
     </style>
 </head>
 <body class="text-slate-100 pb-16" onload="initAllData()">
 
     <div id="mainUI">
-        <header class="macos-header text-white py-4 px-6 sticky top-0 z-40 shadow-2xl">
+        <header class="macos-header text-white py-3 md:py-4 px-4 md:px-6 sticky top-0 z-40 shadow-2xl">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div ondblclick="promptSecretAdmin()" title="Double Click for Admin Mode" class="w-12 h-12 bg-gradient-to-tr from-teal-500 to-blue-600 rounded-2xl flex justify-center items-center shadow-lg border border-white/20 cursor-pointer hover:scale-105 transition shrink-0">
-                        <i class="fas fa-hospital text-white text-2xl"></i>
+                <div class="flex items-center gap-3 md:gap-4">
+                    <div ondblclick="promptSecretAdmin()" title="Double Click for Admin Mode" class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-tr from-teal-500 to-blue-600 rounded-xl md:rounded-2xl flex justify-center items-center shadow-lg border border-white/20 cursor-pointer shrink-0">
+                        <i class="fas fa-hospital text-white text-xl md:text-2xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-xl md:text-2xl font-black tracking-wide drop-shadow-md">Anthiyur Block Master Portal</h1>
-                        <p class="text-xs text-teal-300 font-semibold tracking-widest uppercase mt-0.5">Health Department</p>
+                        <h1 class="text-lg md:text-2xl font-black tracking-wide drop-shadow-md leading-tight">Anthiyur Block Portal</h1>
+                        <p class="text-[10px] md:text-xs text-teal-300 font-bold tracking-widest uppercase">Health Department</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <div onclick="promptSecretAdmin()" title="Admin Lock Access" class="flex items-center gap-1.5 bg-white/10 hover:bg-white/25 px-3 py-1.5 rounded-xl border border-white/20 cursor-pointer transition select-none">
+                    <div onclick="promptSecretAdmin()" class="flex items-center gap-1.5 bg-white/10 hover:bg-white/25 px-2.5 py-1.5 rounded-lg md:rounded-xl border border-white/20 cursor-pointer transition">
                         <i class="fas fa-lock text-amber-400 text-xs"></i>
-                        <span class="text-xs font-bold text-slate-200 hidden md:inline">Admin</span>
                     </div>
                 </div>
             </div>
         </header>
 
-        <main class="max-w-7xl mx-auto px-4 mt-10">
+        <main class="max-w-7xl mx-auto px-3 md:px-4 mt-6 md:mt-10">
             <!-- BMO SECTION -->
             <div class="mb-8">
-                <button onclick="toggleSection('bmo-section', 'bmo-icon')" class="macos-section-btn w-full flex justify-between items-center p-5 cursor-pointer relative overflow-hidden">
-                    <div class="flex items-center gap-4 relative z-10">
-                        <span class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex justify-center items-center text-2xl border border-indigo-500/30"><i class="fas fa-user-shield"></i></span>
-                        <div class="text-left"><h2 class="text-2xl font-black text-white">BMO Used Reports</h2></div>
+                <button onclick="toggleSection('bmo-section', 'bmo-icon')" class="macos-section-btn w-full flex justify-between items-center p-4 md:p-5 cursor-pointer relative overflow-hidden">
+                    <div class="flex items-center gap-3 md:gap-4 relative z-10">
+                        <span class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex justify-center items-center text-xl md:text-2xl border border-indigo-500/30"><i class="fas fa-user-shield"></i></span>
+                        <div class="text-left"><h2 class="text-xl md:text-2xl font-black text-white">BMO Reports</h2></div>
                     </div>
-                    <span class="w-10 h-10 rounded-full bg-white/10 flex justify-center items-center"><i id="bmo-icon" class="fas fa-chevron-down text-indigo-400 arrow-icon"></i></span>
+                    <span class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex justify-center items-center"><i id="bmo-icon" class="fas fa-chevron-down text-indigo-400 arrow-icon"></i></span>
                 </button>
-                <div id="bmo-section" class="accordion-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 px-1">
+                <div id="bmo-section" class="accordion-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mt-4 md:mt-6 px-1">
                     <a href="https://picme3.tn.gov.in/reports/login/" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-bmo-icon"><i class="fas fa-chart-line"></i></div><div class="card-content"><h3>PICME 3.0 Dashboard</h3><p>BMO Login Dashboard</p></div></a>
                     <a href="https://picme3.tn.gov.in/" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-bmo-icon"><i class="fas fa-globe"></i></div><div class="card-content"><h3>PICME 3.0 Portal</h3><p>Main Portal Link</p></div></a>
                     <a onclick="openModal('mtmModal')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-file-medical-alt"></i></div><div class="card-content"><h3>MTM Reports</h3><p>Click to open options</p></div></a>
@@ -213,20 +219,20 @@
 
             <!-- SECRET ADMIN WRAPPER -->
             <div id="deoWrapper" class="hidden">
-                <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 mb-6 flex justify-between items-center shadow-lg">
-                    <span class="text-xs font-bold text-amber-400 uppercase tracking-widest"><i class="fas fa-user-secret mr-1"></i> Restricted Admin Area Unlocked (DEO & Other Reports)</span>
-                    <button onclick="lockSecretDeo()" class="text-xs bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 font-bold px-3 py-1.5 rounded-lg transition">Lock Admin Mode</button>
+                <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 md:p-4 mb-6 flex justify-between items-center shadow-lg">
+                    <span class="text-[10px] md:text-xs font-bold text-amber-400 uppercase tracking-widest leading-tight"><i class="fas fa-user-secret mr-1"></i> Admin Area Unlocked</span>
+                    <button onclick="lockSecretDeo()" class="text-xs bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 font-bold px-3 py-1.5 rounded-lg transition shrink-0 ml-2">Lock Mode</button>
                 </div>
 
                 <div class="mb-8">
-                    <button onclick="toggleSection('deo-section', 'deo-icon')" class="macos-section-btn w-full flex justify-between items-center p-5 cursor-pointer relative overflow-hidden ring-2 ring-amber-500/40">
-                        <div class="flex items-center gap-4 relative z-10">
-                            <span class="w-12 h-12 rounded-xl bg-sky-500/20 text-sky-400 flex justify-center items-center text-2xl border border-sky-500/30"><i class="fas fa-computer"></i></span>
-                            <div class="text-left"><h2 class="text-2xl font-black text-amber-300">DEO Operations</h2></div>
+                    <button onclick="toggleSection('deo-section', 'deo-icon')" class="macos-section-btn w-full flex justify-between items-center p-4 md:p-5 cursor-pointer relative overflow-hidden ring-2 ring-amber-500/40">
+                        <div class="flex items-center gap-3 md:gap-4 relative z-10">
+                            <span class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-sky-500/20 text-sky-400 flex justify-center items-center text-xl md:text-2xl border border-sky-500/30"><i class="fas fa-computer"></i></span>
+                            <div class="text-left"><h2 class="text-xl md:text-2xl font-black text-amber-300">DEO Operations</h2></div>
                         </div>
-                        <span class="w-10 h-10 rounded-full bg-white/10 flex justify-center items-center"><i id="deo-icon" class="fas fa-chevron-down text-sky-400 arrow-icon"></i></span>
+                        <span class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex justify-center items-center"><i id="deo-icon" class="fas fa-chevron-down text-sky-400 arrow-icon"></i></span>
                     </button>
-                    <div id="deo-section" class="accordion-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 px-1">
+                    <div id="deo-section" class="accordion-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mt-4 md:mt-6 px-1">
                         <a href="உங்களுடைய_GOOGLE_SHEET_LINK_இங்கே" target="_blank" rel="noopener noreferrer" class="macos-card ring-2 ring-amber-500/50"><div class="icon-box bg-pass-icon"><i class="fas fa-key"></i></div><div class="card-content"><h3 class="text-red-400">Usernames & Passwords</h3></div></a>
                         <a href="https://uwinvaccinator.mohfw.gov.in/" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-shield-halved"></i></div><div class="card-content"><h3>U-Win Admin</h3></div></a>
                         <a href="https://uwinvaccinator.mohfw.gov.in/" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-deo-icon"><i class="fas fa-syringe"></i></div><div class="card-content"><h3>U-Win Vaccinator</h3></div></a>
@@ -237,14 +243,14 @@
                 </div>
 
                 <div class="mb-8">
-                    <button onclick="toggleSection('other-section', 'other-icon')" class="macos-section-btn w-full flex justify-between items-center p-5 cursor-pointer relative overflow-hidden ring-2 ring-emerald-500/40">
-                        <div class="flex items-center gap-4 relative z-10">
-                            <span class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex justify-center items-center text-2xl border border-emerald-500/30"><i class="fas fa-layer-group"></i></span>
-                            <div class="text-left"><h2 class="text-2xl font-black text-emerald-300">Other Reports (Admin Only)</h2></div>
+                    <button onclick="toggleSection('other-section', 'other-icon')" class="macos-section-btn w-full flex justify-between items-center p-4 md:p-5 cursor-pointer relative overflow-hidden ring-2 ring-emerald-500/40">
+                        <div class="flex items-center gap-3 md:gap-4 relative z-10">
+                            <span class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex justify-center items-center text-xl md:text-2xl border border-emerald-500/30"><i class="fas fa-layer-group"></i></span>
+                            <div class="text-left"><h2 class="text-xl md:text-2xl font-black text-emerald-300">Other Reports (Admin)</h2></div>
                         </div>
-                        <span class="w-10 h-10 rounded-full bg-white/10 flex justify-center items-center"><i id="other-icon" class="fas fa-chevron-down text-emerald-400 arrow-icon"></i></span>
+                        <span class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex justify-center items-center"><i id="other-icon" class="fas fa-chevron-down text-emerald-400 arrow-icon"></i></span>
                     </button>
-                    <div id="other-section" class="accordion-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 px-1">
+                    <div id="other-section" class="accordion-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mt-4 md:mt-6 px-1">
                         <a onclick="openSheetOverlay('cancer')" class="macos-card cursor-pointer"><div class="icon-box bg-other-icon"><i class="fas fa-ribbon"></i></div><div class="card-content"><h3>Cancer Screening</h3></div></a>
                         <a href="#" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-other-icon"><i class="fas fa-children"></i></div><div class="card-content"><h3>Adolescent Report</h3></div></a>
                         <a href="#" target="_blank" rel="noopener noreferrer" class="macos-card"><div class="icon-box bg-other-icon"><i class="fas fa-stethoscope"></i></div><div class="card-content"><h3>NCD Data Report</h3></div></a>
@@ -257,51 +263,51 @@
 
     <!-- MTM POPUP MODAL -->
     <div id="mtmModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
-        <div class="macos-modal-window rounded-3xl w-11/12 md:w-96 overflow-hidden">
-            <div class="bg-gradient-to-r from-indigo-600/80 to-purple-600/80 p-5 flex justify-between items-center text-white border-b border-white/10">
-                <h3 class="text-xl font-bold"><i class="fas fa-notes-medical"></i> Reports Options</h3>
+        <div class="macos-modal-window rounded-2xl md:rounded-3xl w-[92%] md:w-96 overflow-hidden">
+            <div class="bg-gradient-to-r from-indigo-600/80 to-purple-600/80 p-4 md:p-5 flex justify-between items-center text-white border-b border-white/10">
+                <h3 class="text-lg md:text-xl font-bold"><i class="fas fa-notes-medical"></i> Reports Options</h3>
                 <button onclick="closeModalWithAnimation('mtmModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
             </div>
-            <div class="p-6 space-y-4">
-                <a onclick="openSheetOverlay('mtm')" class="flex items-center gap-4 p-4 rounded-2xl jiggle-btn cursor-pointer">
-                    <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex justify-center items-center text-xl"><i class="fas fa-heartbeat"></i></div>
-                    <div><h4 class="font-bold text-white">MTM HTDM BOTH report</h4><p class="text-xs text-slate-400">View Sheets & Download</p></div>
+            <div class="p-4 md:p-6 space-y-3 md:space-y-4">
+                <a onclick="openSheetOverlay('mtm')" class="flex items-center gap-4 p-3 md:p-4 rounded-xl md:rounded-2xl jiggle-btn cursor-pointer">
+                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-indigo-500/20 text-indigo-400 flex justify-center items-center text-lg md:text-xl shrink-0"><i class="fas fa-heartbeat"></i></div>
+                    <div><h4 class="font-bold text-white text-sm md:text-base">MTM HTDM BOTH report</h4><p class="text-[10px] md:text-xs text-slate-400">View Sheets & Download</p></div>
                 </a>
-                <a onclick="openSheetOverlay('cancer')" class="flex items-center gap-4 p-4 rounded-2xl jiggle-btn cursor-pointer">
-                    <div class="w-12 h-12 rounded-xl bg-pink-500/20 text-pink-400 flex justify-center items-center text-xl"><i class="fas fa-ribbon"></i></div>
-                    <div><h4 class="font-bold text-white">cancer report</h4><p class="text-xs text-slate-400">View Sheets & Download</p></div>
+                <a onclick="openSheetOverlay('cancer')" class="flex items-center gap-4 p-3 md:p-4 rounded-xl md:rounded-2xl jiggle-btn cursor-pointer">
+                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-pink-500/20 text-pink-400 flex justify-center items-center text-lg md:text-xl shrink-0"><i class="fas fa-ribbon"></i></div>
+                    <div><h4 class="font-bold text-white text-sm md:text-base">Cancer report</h4><p class="text-[10px] md:text-xs text-slate-400">View Sheets & Download</p></div>
                 </a>
-                <a onclick="closeModalInstant('mtmModal'); openModal('cancerNotesModal')" class="flex items-center gap-4 p-4 rounded-2xl jiggle-btn cursor-pointer border border-pink-500/30 bg-pink-500/5 hover:bg-pink-500/10">
-                    <div class="w-12 h-12 rounded-xl bg-pink-500/20 text-pink-400 flex justify-center items-center text-xl"><i class="fas fa-user-injured"></i></div>
-                    <div><h4 class="font-bold text-pink-200">Cancer Patient Notes</h4><p class="text-xs text-slate-400">Tracking & Details System</p></div>
+                <a onclick="closeModalInstant('mtmModal'); openModal('cancerNotesModal')" class="flex items-center gap-4 p-3 md:p-4 rounded-xl md:rounded-2xl jiggle-btn cursor-pointer border border-pink-500/30 bg-pink-500/5 hover:bg-pink-500/10">
+                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-pink-500/20 text-pink-400 flex justify-center items-center text-lg md:text-xl shrink-0"><i class="fas fa-user-injured"></i></div>
+                    <div><h4 class="font-bold text-pink-200 text-sm md:text-base">Cancer Patient Notes</h4><p class="text-[10px] md:text-xs text-slate-400">Tracking & Details System</p></div>
                 </a>
             </div>
             <div class="bg-black/20 p-3 text-center border-t border-white/10">
-                <button onclick="closeModalWithAnimation('mtmModal')" class="text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button>
+                <button onclick="closeModalWithAnimation('mtmModal')" class="text-xs md:text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button>
             </div>
         </div>
     </div>
 
     <!-- FEVER & DENGUE POPUP MODAL -->
-    <div id="feverModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
-        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[580px] overflow-hidden">
-            <div class="bg-gradient-to-r from-orange-600/80 to-amber-600/80 p-5 flex justify-between items-center text-white border-b border-white/10">
-                <h3 class="text-xl font-bold"><i class="fas fa-virus-covid mr-2"></i> Fever & Dengue Reports</h3>
+    <div id="feverModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center p-2">
+        <div class="macos-modal-window rounded-2xl md:rounded-3xl w-full md:w-[600px] overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-gradient-to-r from-orange-600/80 to-amber-600/80 p-4 md:p-5 flex justify-between items-center text-white border-b border-white/10 shrink-0">
+                <h3 class="text-lg md:text-xl font-bold"><i class="fas fa-virus-covid mr-2"></i> Fever & Dengue Reports</h3>
                 <button onclick="closeModalWithAnimation('feverModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
             </div>
-            <div class="p-6 grid grid-cols-2 gap-3 max-h-[70vh] overflow-y-auto">
-                <a onclick="openSheetOverlay('fever')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-orange-500/20 text-orange-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-thermometer-half"></i></div><h4 class="font-bold text-white text-sm">Fever Line List</h4></a>
-                <a onclick="openSheetOverlay('dengue')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-amber-500/20 text-amber-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-mosquito"></i></div><h4 class="font-bold text-white text-sm">Dengue Line List</h4></a>
-                <a onclick="openSheetOverlay('fever_village')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-orange-500/20 text-orange-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-home"></i></div><h4 class="font-bold text-white text-sm">Village-wise Fever</h4></a>
-                <a onclick="openSheetOverlay('dengue_village')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-amber-500/20 text-amber-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-map-marked-alt"></i></div><h4 class="font-bold text-white text-sm">Village-wise Dengue</h4></a>
-                <a onclick="openSheetOverlay('fever_abstract')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-orange-500/20 text-orange-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-chart-pie"></i></div><h4 class="font-bold text-white text-sm">Fever Abstract 2026</h4></a>
-                <a onclick="openSheetOverlay('dengue_abstract')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-amber-500/20 text-amber-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-chart-bar"></i></div><h4 class="font-bold text-white text-sm">Dengue Abstract 2026</h4></a>
-                <a onclick="openSheetOverlay('abstract_2026')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-rose-500/20 text-rose-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-check"></i></div><h4 class="font-bold text-white text-sm">Abstract 2026</h4></a>
-                <a onclick="openSheetOverlay('tank')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-10 h-10 mx-auto rounded-xl bg-teal-500/20 text-teal-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-water"></i></div><h4 class="font-bold text-white text-sm">Tank Report</h4></a>
-                <a onclick="openSheetOverlay('fogging')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group col-span-2"><div class="w-10 h-10 mx-auto rounded-xl bg-cyan-500/20 text-cyan-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-smog"></i></div><h4 class="font-bold text-white text-sm">Fogging Machine Report</h4></a>
-                <a onclick="openSheetOverlay('abstract_3years')" class="p-4 rounded-2xl jiggle-btn cursor-pointer text-center group col-span-2"><div class="w-10 h-10 mx-auto rounded-xl bg-indigo-500/20 text-indigo-400 flex justify-center items-center text-lg mb-2"><i class="fas fa-calendar-alt"></i></div><h4 class="font-bold text-white text-sm">3 Years Abstract (2024, 2025, 2026)</h4></a>
+            <div class="p-4 md:p-6 grid grid-cols-2 gap-2 md:gap-3 overflow-y-auto">
+                <a onclick="openSheetOverlay('fever')" class="p-3 md:p-4 rounded-xl md:rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-8 h-8 md:w-10 md:h-10 mx-auto rounded-lg md:rounded-xl bg-orange-500/20 text-orange-400 flex justify-center items-center text-base md:text-lg mb-1.5 md:mb-2"><i class="fas fa-thermometer-half"></i></div><h4 class="font-bold text-white text-[11px] md:text-sm leading-tight">Fever Line List</h4></a>
+                <a onclick="openSheetOverlay('dengue')" class="p-3 md:p-4 rounded-xl md:rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-8 h-8 md:w-10 md:h-10 mx-auto rounded-lg md:rounded-xl bg-amber-500/20 text-amber-400 flex justify-center items-center text-base md:text-lg mb-1.5 md:mb-2"><i class="fas fa-mosquito"></i></div><h4 class="font-bold text-white text-[11px] md:text-sm leading-tight">Dengue Line List</h4></a>
+                <a onclick="openSheetOverlay('fever_village')" class="p-3 md:p-4 rounded-xl md:rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-8 h-8 md:w-10 md:h-10 mx-auto rounded-lg md:rounded-xl bg-orange-500/20 text-orange-400 flex justify-center items-center text-base md:text-lg mb-1.5 md:mb-2"><i class="fas fa-home"></i></div><h4 class="font-bold text-white text-[11px] md:text-sm leading-tight">Village-wise Fever</h4></a>
+                <a onclick="openSheetOverlay('dengue_village')" class="p-3 md:p-4 rounded-xl md:rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-8 h-8 md:w-10 md:h-10 mx-auto rounded-lg md:rounded-xl bg-amber-500/20 text-amber-400 flex justify-center items-center text-base md:text-lg mb-1.5 md:mb-2"><i class="fas fa-map-marked-alt"></i></div><h4 class="font-bold text-white text-[11px] md:text-sm leading-tight">Village-wise Dengue</h4></a>
+                <a onclick="openSheetOverlay('fever_abstract')" class="p-3 md:p-4 rounded-xl md:rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-8 h-8 md:w-10 md:h-10 mx-auto rounded-lg md:rounded-xl bg-orange-500/20 text-orange-400 flex justify-center items-center text-base md:text-lg mb-1.5 md:mb-2"><i class="fas fa-chart-pie"></i></div><h4 class="font-bold text-white text-[11px] md:text-sm leading-tight">Fever Abstract 2026</h4></a>
+                <a onclick="openSheetOverlay('dengue_abstract')" class="p-3 md:p-4 rounded-xl md:rounded-2xl jiggle-btn cursor-pointer text-center group"><div class="w-8 h-8 md:w-10 md:h-10 mx-auto rounded-lg md:rounded-xl bg-amber-500/20 text-amber-400 flex justify-center items-center text-base md:text-lg mb-1.5 md:mb-2"><i class="fas fa-chart-bar"></i></div><h4 class="font-bold text-white text-[11px] md:text-sm leading-tight">Dengue Abstract 2026</h4></a>
+                <a onclick="openSheetOverlay('abstract_2026')" class="p-3 md:p-4 rounded-xl md:rounded-2xl jiggle-btn cursor-pointer text-center group col-span-2 md:col-span-1"><div class="w-8 h-8 md:w-10 md:h-10 mx-auto rounded-lg md:rounded-xl bg-rose-500/20 text-rose-400 flex justify-center items-center text-base md:text-lg mb-1.5 md:mb-2"><i class="fas fa-calendar-check"></i></div><h4 class="font-bold text-white text-[11px] md:text-sm leading-tight">Abstract 2026</h4></a>
+                <a onclick="openSheetOverlay('tank')" class="p-3 md:p-4 rounded-xl md:rounded-2xl jiggle-btn cursor-pointer text-center group col-span-2 md:col-span-1"><div class="w-8 h-8 md:w-10 md:h-10 mx-auto rounded-lg md:rounded-xl bg-teal-500/20 text-teal-400 flex justify-center items-center text-base md:text-lg mb-1.5 md:mb-2"><i class="fas fa-water"></i></div><h4 class="font-bold text-white text-[11px] md:text-sm leading-tight">Tank Report</h4></a>
+                <a onclick="openSheetOverlay('fogging')" class="p-3 md:p-4 rounded-xl md:rounded-2xl jiggle-btn cursor-pointer text-center group col-span-2"><div class="w-8 h-8 md:w-10 md:h-10 mx-auto rounded-lg md:rounded-xl bg-cyan-500/20 text-cyan-400 flex justify-center items-center text-base md:text-lg mb-1.5 md:mb-2"><i class="fas fa-smog"></i></div><h4 class="font-bold text-white text-[11px] md:text-sm leading-tight">Fogging Machine Report</h4></a>
+                <a onclick="openSheetOverlay('abstract_3years')" class="p-3 md:p-4 rounded-xl md:rounded-2xl jiggle-btn cursor-pointer text-center group col-span-2"><div class="w-8 h-8 md:w-10 md:h-10 mx-auto rounded-lg md:rounded-xl bg-indigo-500/20 text-indigo-400 flex justify-center items-center text-base md:text-lg mb-1.5 md:mb-2"><i class="fas fa-calendar-alt"></i></div><h4 class="font-bold text-white text-[11px] md:text-sm leading-tight">3 Years Abstract (2024-26)</h4></a>
             </div>
-            <div class="bg-black/20 p-3 text-center border-t border-white/10"><button onclick="closeModalWithAnimation('feverModal')" class="text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button></div>
+            <div class="bg-black/20 p-2 md:p-3 text-center border-t border-white/10 shrink-0"><button onclick="closeModalWithAnimation('feverModal')" class="text-xs md:text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button></div>
         </div>
     </div>
 
@@ -342,17 +348,20 @@
         </div>
     </div>
 
-    <!-- QUICK NOTES MODAL (UPDATED FOR CLOUD SYNC & TITLES) -->
-    <div id="notesModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
-        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[650px] overflow-hidden flex flex-col max-h-[85vh]">
-            <div class="bg-gradient-to-r from-slate-600/80 to-slate-800/80 p-5 flex justify-between items-center text-white border-b border-white/10 shrink-0">
-                <h3 class="text-xl font-bold"><i class="fas fa-edit mr-2"></i> Quick Notes Database</h3>
-                <button onclick="closeModalWithAnimation('notesModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+    <!-- QUICK NOTES MODAL -->
+    <div id="notesModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center p-2 md:p-0">
+        <div class="macos-modal-window rounded-2xl md:rounded-3xl w-full md:w-[650px] overflow-hidden flex flex-col max-h-[95vh] md:max-h-[85vh]">
+            <div class="bg-gradient-to-r from-slate-600/80 to-slate-800/80 p-3 md:p-5 flex justify-between items-center text-white border-b border-white/10 shrink-0">
+                <h3 class="text-base md:text-xl font-bold"><i class="fas fa-edit mr-2"></i> Quick Notes Database</h3>
+                <div class="flex items-center gap-3">
+                    <button onclick="testCloudConnection('QuickNotes')" title="Check Cloud Sync" class="text-white/60 hover:text-white transition"><i class="fas fa-cloud-download-alt"></i></button>
+                    <button onclick="closeModalWithAnimation('notesModal')" class="text-white/70 hover:text-white text-xl md:text-2xl leading-none">&times;</button>
+                </div>
             </div>
             
-            <div class="p-4 bg-white/5 shrink-0 border-b border-white/10">
+            <div class="p-3 md:p-4 bg-white/5 shrink-0 border-b border-white/10">
                 <div class="bg-black/20 p-3 rounded-xl border border-white/10">
-                    <h4 class="text-xs font-bold text-blue-300 uppercase tracking-widest mb-2"><i class="fas fa-plus-circle mr-1"></i> Create New Quick Note</h4>
+                    <h4 class="text-[10px] md:text-xs font-bold text-blue-300 uppercase tracking-widest mb-2"><i class="fas fa-plus-circle mr-1"></i> Create New Quick Note</h4>
                     <div class="flex gap-2 mb-2">
                         <input type="text" id="qnTitle" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-blue-500" placeholder="Enter Note Title (e.g., Meeting Points)">
                     </div>
@@ -360,36 +369,34 @@
                 </div>
             </div>
             
-            <div class="p-4 overflow-y-auto flex-1 space-y-3" id="qnNotesList">
-                <!-- Quick Notes Appears Here -->
-            </div>
+            <div class="p-2 md:p-4 overflow-y-auto flex-1 space-y-2 md:space-y-3" id="qnNotesList"></div>
             
-            <div class="bg-black/20 p-3 text-center border-t border-white/10 shrink-0">
-                <button onclick="closeModalWithAnimation('notesModal')" class="text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button>
+            <div class="bg-black/20 p-2 md:p-3 text-center border-t border-white/10 shrink-0">
+                <button onclick="closeModalWithAnimation('notesModal')" class="text-xs md:text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button>
             </div>
         </div>
     </div>
 
     <!-- ANC HEART DISEASE MOTHER NOTES MODAL -->
-    <div id="ancModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
-        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[700px] overflow-hidden flex flex-col max-h-[85vh]">
-            <div class="bg-gradient-to-r from-rose-600/80 to-red-700/80 p-5 flex justify-between items-center text-white border-b border-white/10 shrink-0">
-                <h3 class="text-xl font-bold"><i class="fas fa-heart-crack mr-2"></i> ANC Mother Notes Data</h3>
+    <div id="ancModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center p-2 md:p-0">
+        <div class="macos-modal-window rounded-2xl md:rounded-3xl w-full md:w-[700px] overflow-hidden flex flex-col max-h-[95vh] md:max-h-[85vh]">
+            <div class="bg-gradient-to-r from-rose-600/80 to-red-700/80 p-3 md:p-5 flex justify-between items-center text-white border-b border-white/10 shrink-0">
+                <h3 class="text-base md:text-xl font-bold"><i class="fas fa-heart-crack mr-2"></i> ANC Mother Notes</h3>
                 <div class="flex items-center gap-3">
-                    <button onclick="testCloudConnection()" title="Check Cloud Sync" class="text-white/60 hover:text-white transition"><i class="fas fa-cloud-download-alt"></i></button>
-                    <button onclick="closeModalWithAnimation('ancModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+                    <button onclick="testCloudConnection('ANCMothers')" title="Check Cloud Sync" class="text-white/60 hover:text-white transition"><i class="fas fa-cloud-download-alt"></i></button>
+                    <button onclick="closeModalWithAnimation('ancModal')" class="text-white/70 hover:text-white text-xl md:text-2xl leading-none">&times;</button>
                 </div>
             </div>
             
-            <div class="p-4 bg-white/5 shrink-0 border-b border-white/10">
-                <div class="relative mb-4">
-                    <i class="fas fa-search absolute left-4 top-3.5 text-slate-400"></i>
-                    <input type="text" id="ancSearch" onkeyup="renderAncNotes()" class="w-full bg-black/40 border border-white/20 rounded-xl pl-10 pr-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Search Mother's Name or PICME ID...">
+            <div class="p-3 md:p-4 bg-white/5 shrink-0 border-b border-white/10">
+                <div class="relative mb-3">
+                    <i class="fas fa-search absolute left-3 top-3 text-slate-400"></i>
+                    <input type="text" id="ancSearch" onkeyup="renderAncNotes()" class="w-full bg-black/40 border border-white/20 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Search Mother's Name or PICME ID...">
                 </div>
                 
                 <div class="bg-black/20 p-3 rounded-xl border border-white/10">
-                    <h4 class="text-xs font-bold text-rose-300 uppercase tracking-widest mb-2"><i class="fas fa-plus-circle mr-1"></i> Register New Mother</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                    <h4 class="text-[10px] md:text-xs font-bold text-rose-300 uppercase tracking-widest mb-2"><i class="fas fa-plus-circle mr-1"></i> Register New Mother</h4>
+                    <div class="flex flex-col md:grid md:grid-cols-3 gap-2 mb-2">
                         <input type="text" id="ancNewName" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-rose-500" placeholder="Mother Name *">
                         <input type="text" id="ancRchId" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-rose-500" placeholder="RCH / PICME ID">
                         <input type="text" id="ancPhc" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-rose-500" placeholder="PHC / HSC / Village">
@@ -398,34 +405,34 @@
                 </div>
             </div>
             
-            <div class="p-4 overflow-y-auto flex-1 space-y-3" id="ancNotesList"></div>
+            <div class="p-2 md:p-4 overflow-y-auto flex-1 space-y-2 md:space-y-3" id="ancNotesList"></div>
             
-            <div class="bg-black/20 p-3 text-center border-t border-white/10 shrink-0">
-                <button onclick="closeModalWithAnimation('ancModal')" class="text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button>
+            <div class="bg-black/20 p-2 md:p-3 text-center border-t border-white/10 shrink-0">
+                <button onclick="closeModalWithAnimation('ancModal')" class="text-xs md:text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button>
             </div>
         </div>
     </div>
 
     <!-- CANCER PATIENT NOTES MODAL -->
-    <div id="cancerNotesModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
-        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[700px] overflow-hidden flex flex-col max-h-[85vh]">
-            <div class="bg-gradient-to-r from-pink-600/80 to-purple-700/80 p-5 flex justify-between items-center text-white border-b border-white/10 shrink-0">
-                <h3 class="text-xl font-bold"><i class="fas fa-ribbon mr-2"></i> Cancer Patient Notes Data</h3>
+    <div id="cancerNotesModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center p-2 md:p-0">
+        <div class="macos-modal-window rounded-2xl md:rounded-3xl w-full md:w-[700px] overflow-hidden flex flex-col max-h-[95vh] md:max-h-[85vh]">
+            <div class="bg-gradient-to-r from-pink-600/80 to-purple-700/80 p-3 md:p-5 flex justify-between items-center text-white border-b border-white/10 shrink-0">
+                <h3 class="text-base md:text-xl font-bold"><i class="fas fa-ribbon mr-2"></i> Cancer Patient Notes</h3>
                 <div class="flex items-center gap-3">
-                    <button onclick="testCloudConnection()" title="Check Cloud Sync" class="text-white/60 hover:text-white transition"><i class="fas fa-cloud-download-alt"></i></button>
-                    <button onclick="closeModalWithAnimation('cancerNotesModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+                    <button onclick="testCloudConnection('CancerPatients')" title="Check Cloud Sync" class="text-white/60 hover:text-white transition"><i class="fas fa-cloud-download-alt"></i></button>
+                    <button onclick="closeModalWithAnimation('cancerNotesModal')" class="text-white/70 hover:text-white text-xl md:text-2xl leading-none">&times;</button>
                 </div>
             </div>
             
-            <div class="p-4 bg-white/5 shrink-0 border-b border-white/10">
-                <div class="relative mb-4">
-                    <i class="fas fa-search absolute left-4 top-3.5 text-slate-400"></i>
-                    <input type="text" id="cancerSearch" onkeyup="renderCancerNotes()" class="w-full bg-black/40 border border-white/20 rounded-xl pl-10 pr-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="Search Patient Name or Cancer Type...">
+            <div class="p-3 md:p-4 bg-white/5 shrink-0 border-b border-white/10">
+                <div class="relative mb-3">
+                    <i class="fas fa-search absolute left-3 top-3 text-slate-400"></i>
+                    <input type="text" id="cancerSearch" onkeyup="renderCancerNotes()" class="w-full bg-black/40 border border-white/20 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500" placeholder="Search Patient Name or Type...">
                 </div>
                 
                 <div class="bg-black/20 p-3 rounded-xl border border-white/10">
-                    <h4 class="text-xs font-bold text-pink-300 uppercase tracking-widest mb-2"><i class="fas fa-plus-circle mr-1"></i> Register New Patient</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                    <h4 class="text-[10px] md:text-xs font-bold text-pink-300 uppercase tracking-widest mb-2"><i class="fas fa-plus-circle mr-1"></i> Register New Patient</h4>
+                    <div class="flex flex-col md:grid md:grid-cols-3 gap-2 mb-2">
                         <input type="text" id="cancerNewName" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-pink-500" placeholder="Patient Name *">
                         <input type="text" id="cancerType" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-pink-500" placeholder="Cancer Type (e.g. Oral)">
                         <input type="text" id="cancerPhc" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-pink-500" placeholder="PHC / HSC / Village">
@@ -434,11 +441,10 @@
                 </div>
             </div>
             
-            <div class="p-4 overflow-y-auto flex-1 space-y-3" id="cancerNotesList"></div>
+            <div class="p-2 md:p-4 overflow-y-auto flex-1 space-y-2 md:space-y-3" id="cancerNotesList"></div>
             
-            <div class="bg-black/20 p-3 text-center border-t border-white/10 shrink-0 flex justify-center gap-4">
-                <button onclick="openSheetOverlay('cancer')" class="text-sm font-bold text-pink-300 hover:text-pink-100 bg-pink-500/20 hover:bg-pink-500/40 px-4 py-2 rounded-lg transition"><i class="fas fa-table mr-1"></i> View Cancer Sheet</button>
-                <button onclick="closeModalWithAnimation('cancerNotesModal')" class="text-sm font-semibold text-slate-300 hover:text-white px-4 py-2"><i class="fas fa-home mr-1"></i> Home</button>
+            <div class="bg-black/20 p-2 md:p-3 text-center border-t border-white/10 shrink-0">
+                <button onclick="closeModalWithAnimation('cancerNotesModal')" class="text-xs md:text-sm font-semibold text-slate-300 hover:text-white px-3 py-2"><i class="fas fa-home mr-1"></i> Back to Home Page</button>
             </div>
         </div>
     </div>
@@ -452,13 +458,16 @@
         </div>
         <div class="iframe-container"><div id="sheetZoomWrapper"><iframe id="sheetIframe" src=""></iframe></div></div>
         <div class="floating-tabs-container hover-reveal-bottom" id="tabsContainer"></div>
+        
+        <!-- NEW TAB BUTTON ADDED HERE FOR BLANK SCREEN FIX -->
         <div class="floating-action-btns hover-reveal-bottom">
-            <button onclick="goBackToMenu()" class="btn-float btn-back"><i class="fas fa-home mr-1"></i> Back to Menu</button>
-            <button onclick="downloadA3PDF()" class="btn-float btn-download"><i class="fas fa-file-image mr-1"></i> A3 Format</button>
+            <button onclick="goBackToMenu()" class="btn-float btn-back"><i class="fas fa-home mr-1"></i> Back</button>
+            <button onclick="openCurrentSheetNewTab()" class="btn-float" style="background: rgba(59, 130, 246, 0.9); color: #fff; backdrop-filter: blur(10px);"><i class="fas fa-external-link-alt mr-1"></i> Open in New Tab</button>
+            <button onclick="downloadA3PDF()" class="btn-float btn-download"><i class="fas fa-file-pdf mr-1"></i> PDF</button>
         </div>
     </div>
 
-    <!-- ==================== CLOUD SYNC & EXPLICIT SAVE LOGIC ==================== -->
+    <!-- ==================== LOGIC SECTION ==================== -->
     <script>
         const feverBaseID = '2PACX-1vQMGSgOe5uqsD2ZvLrYD7GpHB__igzb829w1p53ewmma-ImH031OyGKR8XvCZwm0RxRXwIrWwrOyfmX';
         const nksBaseID = '2PACX-1vQDv1q69_x5OV-lVwRRFJRlaDoZWnSqHbQVMpI8WNF_cViKuQ_lgyS3er4Bn52gsWS9XYlb4HYkuJrn';
@@ -466,9 +475,8 @@
 
         const sheetConfigs = {
             'mtm': { baseID: '2PACX-1vSUeSBN-8JNGkvXdIuIKFH2poaqfoNWvC01MOQD18pXO5dPw6n0vImYxkb78eRjZmnKfLm4OgOeexPK', parentModal: 'mtmModal', tabs: [{ name: 'HT Report', gid: '0' }, { name: 'DM Report', gid: '1346772331' }, { name: 'HT & DM Report', gid: '2007453515' }] },
-            'cancer': { baseID: '2PACX-1vQieDAV7oRruNAvY5x8VjrVVTnY-fuRSjMJ0VxwlDKRAuTwR4Rf1lKgV9qfWFPShM9qU9GPv9k2o5Sk', parentModal: 'cancerNotesModal', tabs: [{ name: 'Oral', gid: '2056331833' }, { name: 'Breast', gid: '454152815' }, { name: 'Cervix', gid: '1215917176' }] },
+            'cancer': { baseID: '2PACX-1vQieDAV7oRruNAvY5x8VjrVVTnY-fuRSjMJ0VxwlDKRAuTwR4Rf1lKgV9qfWFPShM9qU9GPv9k2o5Sk', parentModal: 'mtmModal', tabs: [{ name: 'Oral', gid: '2056331833' }, { name: 'Breast', gid: '454152815' }, { name: 'Cervix', gid: '1215917176' }] },
             'delivery': { baseID: '2PACX-1vQjfIgSogvl_U49pX6ZXVG0Kg4YXd6grE06xOX5aqtXyhka04iB9uuUs2nPpWPI7kJG6Jsj_JelouBe', parentModal: null, tabs: [{ name: 'Current Month', gid: '2036942363' }, { name: 'Previous Month', gid: '370926509' }, { name: 'Upto the Month', gid: '1867654531' }] },
-            
             'fever': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Fever Line List', gid: '1266655650' }] },
             'dengue': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Dengue Line List', gid: '952129824' }] },
             'fever_village': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Village-wise Fever', gid: '646408484' }] },
@@ -479,12 +487,10 @@
             'tank': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Tank Report', gid: '2073814740' }] },
             'fogging': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: 'Fogging Machine Report', gid: '1419408448' }] },
             'abstract_3years': { baseID: feverBaseID, parentModal: 'feverModal', tabs: [{ name: '3 Years Abstract (2024-2026)', gid: '1764709859' }] },
-            
             'nks_aug_25': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '30.08.2025 Abstract', gid: '971980116' }] },
             'nks_dec_25': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '20.12.2025 Abstract', gid: '1671682279' }] },
             'nks_feb_26': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '14.02.2026 Abstract', gid: '2033884952' }] },
             'nks_3_camp': { baseID: nksBaseID, parentModal: 'nksModal', tabs: [{ name: '3 Camp Abstract Total', gid: '1381238626' }] },
-
             'dash_mtm': { baseID: 'YOUR_MTM_DASHBOARD_SHEET_ID', parentModal: 'dashboardModal', tabs: [{ name: 'MTM Dashboard', gid: '0' }] },
             'dash_cancer': { baseID: 'YOUR_CANCER_DASHBOARD_SHEET_ID', parentModal: 'dashboardModal', tabs: [{ name: 'Cancer Dashboard', gid: '0' }] },
             'dash_fever': { baseID: 'YOUR_FEVER_DASHBOARD_SHEET_ID', parentModal: 'dashboardModal', tabs: [{ name: 'Fever Dashboard', gid: '0' }] },
@@ -494,59 +500,57 @@
         let currentActiveReport = 'mtm';
         let currentZoom = 1;
 
-        // Fetch data from Cloud on startup
         function initAllData() {
-            if (sessionStorage.getItem('adminUnlocked') === 'true') {
-                document.getElementById('deoWrapper').classList.remove('hidden');
-            }
+            if (sessionStorage.getItem('adminUnlocked') === 'true') { document.getElementById('deoWrapper').classList.remove('hidden'); }
 
-            // Quick Notes (Now a list)
             fetch(CLOUD_API_URL + "?sheetName=QuickNotes").then(r=>r.json()).then(res => {
                 if(res.data && res.data.length > 1) {
                     let qnArr = [];
-                    for(let i=1; i<res.data.length; i++){
-                        qnArr.push({ id: res.data[i][0], title: res.data[i][1], notes: res.data[i][2] });
-                    }
+                    for(let i=1; i<res.data.length; i++){ qnArr.push({ id: res.data[i][0], title: res.data[i][1], notes: res.data[i][2] }); }
                     localStorage.setItem('quickNotesDB', JSON.stringify(qnArr.reverse()));
                     renderQuickNotes();
                 }
             }).catch(e => { renderQuickNotes(); });
             
-            // ANC Mothers
             fetch(CLOUD_API_URL + "?sheetName=ANCMothers").then(r=>r.json()).then(res => {
                 if(res.data && res.data.length > 1) {
                     let ancArr = [];
-                    for(let i=1; i<res.data.length; i++){
-                        ancArr.push({ id: res.data[i][0], name: res.data[i][1], rch: res.data[i][2], phc: res.data[i][3], notes: res.data[i][4] });
-                    }
+                    for(let i=1; i<res.data.length; i++){ ancArr.push({ id: res.data[i][0], name: res.data[i][1], rch: res.data[i][2], phc: res.data[i][3], notes: res.data[i][4] }); }
                     localStorage.setItem('ancMothersDB', JSON.stringify(ancArr.reverse()));
                     renderAncNotes();
                 }
             }).catch(e => { renderAncNotes(); });
 
-            // Cancer Patients
             fetch(CLOUD_API_URL + "?sheetName=CancerPatients").then(r=>r.json()).then(res => {
                 if(res.data && res.data.length > 1) {
                     let canArr = [];
-                    for(let i=1; i<res.data.length; i++){
-                        canArr.push({ id: res.data[i][0], name: res.data[i][1], type: res.data[i][2], phc: res.data[i][3], notes: res.data[i][4] });
-                    }
+                    for(let i=1; i<res.data.length; i++){ canArr.push({ id: res.data[i][0], name: res.data[i][1], type: res.data[i][2], phc: res.data[i][3], notes: res.data[i][4] }); }
                     localStorage.setItem('cancerPatientsDB', JSON.stringify(canArr.reverse()));
                     renderCancerNotes();
                 }
             }).catch(e => { renderCancerNotes(); });
         }
 
-        // Test Connection manually
-        function testCloudConnection() {
-            alert("Checking Cloud Connection... Please wait.");
-            fetch(CLOUD_API_URL + "?sheetName=QuickNotes")
+        function testCloudConnection(tabName) {
+            alert("Checking connection for " + tabName + "...");
+            fetch(CLOUD_API_URL + "?sheetName=" + tabName)
             .then(r => r.json())
             .then(res => {
-                if(res.status === 'success') alert("✅ Google Sheet Cloud Database is CONNECTED and working perfectly!");
-                else alert("⚠️ Cloud responded, but there might be an issue. Status: " + res.status);
+                if(res.status === 'success') alert("✅ Connected properly to Google Sheet Tab: " + tabName);
+                else alert("⚠️ Connected, but error occurred: " + res.message);
             })
-            .catch(e => alert("❌ Cloud Connection Failed! Please check your internet or Google Sheet URL."));
+            .catch(e => alert("❌ Cloud Connection Failed! Check internet."));
+        }
+
+        function copyAndOpenPicme(rchId) {
+            var tempInput = document.createElement("input");
+            tempInput.value = rchId;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            alert("✅ PICME ID: " + rchId + " காப்பி செய்யப்பட்டுவிட்டது!\n\nSearch பாக்ஸில் Paste (Ctrl+V) செய்யவும்.");
+            window.open("https://picme3.tn.gov.in/reports/login/", "_blank");
         }
 
         function toggleSection(sectionId, iconId) {
@@ -557,9 +561,7 @@
         }
 
         function promptSecretAdmin() {
-            if (!document.getElementById('deoWrapper').classList.contains('hidden')) {
-                alert('Admin Mode is already unlocked!'); return;
-            }
+            if (!document.getElementById('deoWrapper').classList.contains('hidden')) { alert('Admin Mode is already unlocked!'); return; }
             const pwd = prompt("🔒 Enter Admin Password to Access Restricted Sections:");
             if (pwd === "admin123") {
                 const wrapper = document.getElementById('deoWrapper');
@@ -579,11 +581,15 @@
         function openModal(modalId) { document.getElementById(modalId).classList.remove('hidden'); }
         function closeModalWithAnimation(modalId) {
             const modal = document.getElementById(modalId);
+            if(!modal) return;
             const win = modal.querySelector('.macos-modal-window');
-            win.classList.add('closing');
-            setTimeout(() => { modal.classList.add('hidden'); win.classList.remove('closing'); }, 400);
+            if(win) win.classList.add('closing');
+            setTimeout(() => { modal.classList.add('hidden'); if(win) win.classList.remove('closing'); }, 300);
         }
-        function closeModalInstant(modalId) { document.getElementById(modalId).classList.add('hidden'); }
+        function closeModalInstant(modalId) { 
+            const modal = document.getElementById(modalId);
+            if(modal) modal.classList.add('hidden'); 
+        }
 
         function openSheetOverlay(reportType) {
             currentActiveReport = reportType;
@@ -616,8 +622,18 @@
             }
         }
 
-        function loadSheet(baseID, gid) {
-            document.getElementById('sheetIframe').src = `https://docs.google.com/spreadsheets/d/e/${baseID}/pubhtml?gid=${gid}&single=true&widget=false&headers=false&chrome=false`;
+        function loadSheet(baseID, gid) { 
+            document.getElementById('sheetIframe').src = `https://docs.google.com/spreadsheets/d/e/${baseID}/pubhtml?gid=${gid}&single=true&widget=false&headers=false&chrome=false`; 
+        }
+
+        // NEW FIX: Open in New Tab if iframe is blank!
+        function openCurrentSheetNewTab() {
+            const iframe = document.getElementById('sheetIframe');
+            if(iframe && iframe.src) {
+                window.open(iframe.src, '_blank');
+            } else {
+                alert("Please wait for the sheet to load first.");
+            }
         }
 
         function changeZoom(step) {
@@ -640,15 +656,12 @@
                 document.getElementById('sheetIframe').src = ""; 
                 const config = sheetConfigs[currentActiveReport];
                 if (config && config.parentModal) { openModal(config.parentModal); } 
-            }, 500);
+            }, 400);
         }
 
-        function downloadA3PDF() {
-            const baseID = sheetConfigs[currentActiveReport].baseID;
-            window.open(`https://docs.google.com/spreadsheets/d/e/${baseID}/pub?output=pdf&format=pdf&size=A3&portrait=false&gridlines=false`, '_blank');
-        }
+        function downloadA3PDF() { window.open(`https://docs.google.com/spreadsheets/d/e/${sheetConfigs[currentActiveReport].baseID}/pub?output=pdf&format=pdf&size=A3&portrait=false&gridlines=false`, '_blank'); }
 
-        // ==================== NEW QUICK NOTES SYSTEM (LIST BASED) ====================
+        // ==================== QUICK NOTES SYSTEM ====================
         function addQuickNote() {
             const title = document.getElementById('qnTitle').value.trim();
             if (!title) { alert("Note Title is required!"); return; }
@@ -663,7 +676,6 @@
             
             document.getElementById('qnTitle').value = ''; 
             renderQuickNotes();
-
             fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "add_record", sheetName: "QuickNotes", row_data: [newId, title, defaultNote, dateStr] }) });
         }
 
@@ -673,7 +685,6 @@
                 notes = notes.filter(n => n.id !== id);
                 localStorage.setItem('quickNotesDB', JSON.stringify(notes));
                 renderQuickNotes();
-
                 fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "delete_record", sheetName: "QuickNotes", id: id }) });
             }
         }
@@ -681,9 +692,11 @@
         function toggleQnBody(id) {
             const body = document.getElementById('qn_body_' + id);
             const icon = document.getElementById('qn_icon_' + id);
+            const parentDiv = body.parentElement;
             if(body.classList.contains('hidden')) {
                 body.classList.remove('hidden');
                 icon.classList.remove('fa-chevron-down'); icon.classList.add('fa-chevron-up');
+                setTimeout(() => { parentDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 150);
             } else {
                 body.classList.add('hidden');
                 icon.classList.remove('fa-chevron-up'); icon.classList.add('fa-chevron-down');
@@ -700,28 +713,26 @@
                 localStorage.setItem('quickNotesDB', JSON.stringify(notes));
                 
                 const statusSpan = document.getElementById('qn_save_status_'+id);
-                statusSpan.innerText = "Saving to Cloud...";
+                statusSpan.innerText = "Cloud Syncing...";
                 
                 fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: "QuickNotes", id: n.id, row_data: [n.id, n.title, n.notes, new Date().toLocaleString('en-IN')] }) })
                 .then(() => {
-                    statusSpan.innerHTML = "Saved to Google Sheet <i class='fas fa-check'></i>";
+                    statusSpan.innerHTML = "Saved ✓";
                     setTimeout(() => statusSpan.innerText = "", 3000);
-                }).catch(() => {
-                    statusSpan.innerText = "Save Failed! Check internet.";
-                });
+                }).catch(() => { statusSpan.innerText = "Save Failed!"; });
             }
         }
 
         async function pasteContent(id) {
             try {
                 const text = await navigator.clipboard.readText();
-                const editor = document.getElementById('qn_edit_' + id);
+                const editor = document.getElementById(id);
                 editor.innerHTML += (editor.innerHTML ? '<br>' : '') + text;
-            } catch (err) { alert('Paste failed! Please press Ctrl+V manually inside the box.'); }
+            } catch (err) { alert('Paste failed! Please press Ctrl+V manually.'); }
         }
 
         function copyContent(id) {
-            const editor = document.getElementById('qn_edit_' + id);
+            const editor = document.getElementById(id);
             navigator.clipboard.writeText(editor.innerText).then(() => alert("Copied to Clipboard!"));
         }
 
@@ -736,21 +747,21 @@
                 const div = document.createElement('div');
                 div.className = "bg-black/30 border border-white/10 rounded-xl overflow-hidden";
                 div.innerHTML = `
-                    <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-white/5 transition" onclick="toggleQnBody(${n.id})">
-                        <h4 class="font-bold text-blue-200 text-lg"><i class="fas fa-file-alt mr-2"></i>${n.title}</h4>
-                        <div class="flex items-center gap-4">
+                    <div class="p-3 md:p-4 flex justify-between items-center cursor-pointer hover:bg-white/5 transition" onclick="toggleQnBody(${n.id})">
+                        <h4 class="font-bold text-blue-200 text-sm md:text-base"><i class="fas fa-file-alt mr-2"></i>${n.title}</h4>
+                        <div class="flex items-center gap-3">
                             <button onclick="event.stopPropagation(); deleteQuickNote(${n.id})" class="text-slate-500 hover:text-red-400 transition" title="Delete Note"><i class="fas fa-trash"></i></button>
                             <i id="qn_icon_${n.id}" class="fas fa-chevron-down text-slate-400"></i>
                         </div>
                     </div>
-                    <div id="qn_body_${n.id}" class="hidden p-4 border-t border-white/10 bg-black/50">
-                        <div id="qn_edit_${n.id}" contenteditable="true" class="rich-editor">${n.notes}</div>
-                        <div class="flex justify-between items-center mt-3">
-                            <span id="qn_save_status_${n.id}" class="text-xs text-emerald-400 font-bold"></span>
-                            <div class="flex gap-2">
-                                <button onclick="pasteContent(${n.id})" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition shadow-lg" title="Paste"><i class="fas fa-paste"></i></button>
-                                <button onclick="copyContent(${n.id})" class="px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-xs font-bold transition shadow-lg" title="Copy"><i class="fas fa-copy"></i></button>
-                                <button onclick="saveQnExplicit(${n.id})" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs font-bold transition shadow-lg"><i class="fas fa-cloud-upload-alt mr-1"></i> Save to Cloud</button>
+                    <div id="qn_body_${n.id}" class="hidden p-3 md:p-4 border-t border-white/10 bg-black/50">
+                        <div id="qn_edit_${n.id}" contenteditable="true" class="rich-editor placeholder-slate-400">${n.notes}</div>
+                        <div class="flex flex-col sm:flex-row justify-between items-center mt-3 gap-3">
+                            <span id="qn_save_status_${n.id}" class="text-xs text-emerald-400 font-bold w-full text-center sm:text-left"></span>
+                            <div class="flex gap-2 w-full sm:w-auto justify-end">
+                                <button onclick="pasteContent('qn_edit_${n.id}')" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition shadow-lg w-full sm:w-auto" title="Paste"><i class="fas fa-paste"></i></button>
+                                <button onclick="copyContent('qn_edit_${n.id}')" class="px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-xs font-bold transition shadow-lg w-full sm:w-auto" title="Copy"><i class="fas fa-copy"></i></button>
+                                <button onclick="saveQnExplicit(${n.id})" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs font-bold transition shadow-lg w-full sm:w-auto"><i class="fas fa-cloud-upload-alt mr-1"></i> Save Note</button>
                             </div>
                         </div>
                     </div>
@@ -767,8 +778,11 @@
             if (!name) { alert("Mother Name is required!"); return; }
             
             const newId = Date.now();
+            const dateStr = new Date().toLocaleString('en-IN');
+            const defaultNote = "Type notes or paste images here...";
+
             let mothers = JSON.parse(localStorage.getItem('ancMothersDB')) || [];
-            mothers.unshift({ id: newId, name: name, rch: rch, phc: phc, notes: "Type notes or paste images here..." }); 
+            mothers.unshift({ id: newId, name: name, rch: rch, phc: phc, notes: defaultNote }); 
             localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
             
             document.getElementById('ancNewName').value = ''; 
@@ -776,7 +790,7 @@
             document.getElementById('ancPhc').value = ''; 
             renderAncNotes();
 
-            fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "add_record", sheetName: "ANCMothers", row_data: [newId, name, rch, phc, "Type notes or paste images here...", new Date().toLocaleString('en-IN')] }) });
+            fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "add_record", sheetName: "ANCMothers", row_data: [newId, name, rch, phc, defaultNote, dateStr] }) });
         }
 
         function editAncMother(id) {
@@ -794,6 +808,7 @@
                 
                 localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
                 renderAncNotes();
+
                 fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: "ANCMothers", id: m.id, row_data: [m.id, m.name, m.rch, m.phc, m.notes, new Date().toLocaleString('en-IN')] }) });
             }
         }
@@ -811,9 +826,11 @@
         function toggleAncNoteBody(id) {
             const body = document.getElementById('note_body_' + id);
             const icon = document.getElementById('note_icon_' + id);
+            const parentDiv = body.parentElement;
             if(body.classList.contains('hidden')) {
                 body.classList.remove('hidden');
                 icon.classList.remove('fa-chevron-down'); icon.classList.add('fa-chevron-up');
+                setTimeout(() => { parentDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 150);
             } else {
                 body.classList.add('hidden');
                 icon.classList.remove('fa-chevron-up'); icon.classList.add('fa-chevron-down');
@@ -830,15 +847,13 @@
                 localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
                 
                 const statusSpan = document.getElementById('anc_save_status_'+id);
-                statusSpan.innerText = "Saving to Cloud...";
+                statusSpan.innerText = "Cloud Syncing...";
                 
                 fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: "ANCMothers", id: m.id, row_data: [m.id, m.name, m.rch, m.phc, m.notes, new Date().toLocaleString('en-IN')] }) })
                 .then(() => {
-                    statusSpan.innerHTML = "Saved to Google Sheet <i class='fas fa-check'></i>";
+                    statusSpan.innerHTML = "Saved ✓";
                     setTimeout(() => statusSpan.innerText = "", 3000);
-                }).catch(() => {
-                    statusSpan.innerText = "Save Failed! Check internet.";
-                });
+                }).catch(() => { statusSpan.innerText = "Save Failed!"; });
             }
         }
 
@@ -855,14 +870,14 @@
                 if(m.name.toLowerCase().includes(search) || (m.rch && m.rch.toLowerCase().includes(search))) {
                     found++;
                     let phcHtml = m.phc ? `<span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded text-[10px] uppercase tracking-wider"><i class="fas fa-hospital-alt mr-1"></i>${m.phc}</span>` : '';
-                    let rchHtml = m.rch ? `<a href="https://picme3.tn.gov.in/reports/login/" target="_blank" onclick="event.stopPropagation()" class="bg-blue-500/20 hover:bg-blue-500/40 text-blue-300 hover:text-white px-2 py-0.5 rounded text-[10px] uppercase tracking-wider transition tooltip" title="Open PICME 3.0 Login"><i class="fas fa-id-card mr-1"></i>${m.rch} <i class="fas fa-external-link-alt ml-0.5 text-[8px]"></i></a>` : '';
+                    let rchHtml = m.rch ? `<button onclick="event.stopPropagation(); copyAndOpenPicme('${m.rch}')" class="bg-blue-500/20 hover:bg-blue-500/40 text-blue-300 hover:text-white px-2 py-0.5 rounded text-[10px] uppercase tracking-wider transition tooltip" title="Copy ID & Open PICME Login"><i class="fas fa-id-card mr-1"></i>${m.rch} <i class="fas fa-external-link-alt ml-0.5 text-[8px]"></i></button>` : '';
 
                     const div = document.createElement('div');
                     div.className = "bg-black/30 border border-white/10 rounded-xl overflow-hidden";
                     div.innerHTML = `
-                        <div class="p-4 flex justify-between items-start cursor-pointer hover:bg-white/5 transition" onclick="toggleAncNoteBody(${m.id})">
+                        <div class="p-3 md:p-4 flex justify-between items-start cursor-pointer hover:bg-white/5 transition" onclick="toggleAncNoteBody(${m.id})">
                             <div>
-                                <h4 class="font-bold text-rose-200 text-lg mb-1"><i class="fas fa-user-nurse mr-2"></i>${m.name}</h4>
+                                <h4 class="font-bold text-rose-200 text-sm md:text-base mb-1"><i class="fas fa-user-nurse mr-2"></i>${m.name}</h4>
                                 <div class="flex flex-wrap gap-2 mt-1">${rchHtml}${phcHtml}</div>
                             </div>
                             <div class="flex items-center gap-3 mt-1">
@@ -871,11 +886,14 @@
                                 <i id="note_icon_${m.id}" class="fas fa-chevron-down text-slate-400"></i>
                             </div>
                         </div>
-                        <div id="note_body_${m.id}" class="hidden p-4 border-t border-white/10 bg-black/50">
-                            <div id="note_edit_${m.id}" contenteditable="true" class="rich-editor">${m.notes}</div>
-                            <div class="flex justify-between items-center mt-3">
-                                <span id="anc_save_status_${m.id}" class="text-xs text-emerald-400 font-bold"></span>
-                                <button onclick="saveAncNoteExplicit(${m.id})" class="px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-lg text-xs font-bold transition shadow-lg"><i class="fas fa-cloud-upload-alt mr-1"></i> Save Notes to Cloud</button>
+                        <div id="note_body_${m.id}" class="hidden p-3 md:p-4 border-t border-white/10 bg-black/50">
+                            <div id="note_edit_${m.id}" contenteditable="true" class="rich-editor placeholder-slate-400">${m.notes}</div>
+                            <div class="flex flex-col sm:flex-row justify-between items-center mt-3 gap-3">
+                                <span id="anc_save_status_${m.id}" class="text-xs text-emerald-400 font-bold w-full text-center sm:text-left"></span>
+                                <div class="flex gap-2 w-full sm:w-auto justify-end">
+                                    <button onclick="pasteContent('note_edit_${m.id}')" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition shadow-lg w-full sm:w-auto" title="Paste"><i class="fas fa-paste"></i></button>
+                                    <button onclick="saveAncNoteExplicit(${m.id})" class="px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-lg text-xs font-bold transition shadow-lg w-full sm:w-auto"><i class="fas fa-cloud-upload-alt mr-1"></i> Save to Cloud</button>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -893,8 +911,11 @@
             if (!name) { alert("Patient Name is required!"); return; }
             
             const newId = Date.now();
+            const dateStr = new Date().toLocaleString('en-IN');
+            const defaultNote = "When and where was it diagnosed? Enter notes here...";
+
             let patients = JSON.parse(localStorage.getItem('cancerPatientsDB')) || [];
-            patients.unshift({ id: newId, name: name, type: ctype, phc: phc, notes: "When and where was it diagnosed? Enter notes here..." }); 
+            patients.unshift({ id: newId, name: name, type: ctype, phc: phc, notes: defaultNote }); 
             localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
             
             document.getElementById('cancerNewName').value = ''; 
@@ -902,7 +923,7 @@
             document.getElementById('cancerPhc').value = ''; 
             renderCancerNotes();
 
-            fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "add_record", sheetName: "CancerPatients", row_data: [newId, name, ctype, phc, "When and where was it diagnosed? Enter notes here...", new Date().toLocaleString('en-IN')] }) });
+            fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "add_record", sheetName: "CancerPatients", row_data: [newId, name, ctype, phc, defaultNote, dateStr] }) });
         }
 
         function editCancerPatient(id) {
@@ -937,9 +958,11 @@
         function toggleCancerNoteBody(id) {
             const body = document.getElementById('cancer_note_body_' + id);
             const icon = document.getElementById('cancer_note_icon_' + id);
+            const parentDiv = body.parentElement;
             if(body.classList.contains('hidden')) {
                 body.classList.remove('hidden');
                 icon.classList.remove('fa-chevron-down'); icon.classList.add('fa-chevron-up');
+                setTimeout(() => { parentDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 150);
             } else {
                 body.classList.add('hidden');
                 icon.classList.remove('fa-chevron-up'); icon.classList.add('fa-chevron-down');
@@ -956,15 +979,13 @@
                 localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
                 
                 const statusSpan = document.getElementById('can_save_status_'+id);
-                statusSpan.innerText = "Saving to Cloud...";
+                statusSpan.innerText = "Cloud Syncing...";
                 
                 fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: "CancerPatients", id: p.id, row_data: [p.id, p.name, p.type, p.phc, p.notes, new Date().toLocaleString('en-IN')] }) })
                 .then(() => {
-                    statusSpan.innerHTML = "Saved to Google Sheet <i class='fas fa-check'></i>";
+                    statusSpan.innerHTML = "Saved ✓";
                     setTimeout(() => statusSpan.innerText = "", 3000);
-                }).catch(() => {
-                    statusSpan.innerText = "Save Failed! Check internet.";
-                });
+                }).catch(() => { statusSpan.innerText = "Save Failed!"; });
             }
         }
 
@@ -986,9 +1007,9 @@
                     const div = document.createElement('div');
                     div.className = "bg-black/30 border border-white/10 rounded-xl overflow-hidden";
                     div.innerHTML = `
-                        <div class="p-4 flex justify-between items-start cursor-pointer hover:bg-white/5 transition" onclick="toggleCancerNoteBody(${p.id})">
+                        <div class="p-3 md:p-4 flex justify-between items-start cursor-pointer hover:bg-white/5 transition" onclick="toggleCancerNoteBody(${p.id})">
                             <div>
-                                <h4 class="font-bold text-pink-200 text-lg mb-1"><i class="fas fa-user-injured mr-2"></i>${p.name}</h4>
+                                <h4 class="font-bold text-pink-200 text-sm md:text-base mb-1"><i class="fas fa-user-injured mr-2"></i>${p.name}</h4>
                                 <div class="flex flex-wrap gap-2 mt-1">${typeHtml}${phcHtml}</div>
                             </div>
                             <div class="flex items-center gap-3 mt-1">
@@ -997,11 +1018,14 @@
                                 <i id="cancer_note_icon_${p.id}" class="fas fa-chevron-down text-slate-400"></i>
                             </div>
                         </div>
-                        <div id="cancer_note_body_${p.id}" class="hidden p-4 border-t border-white/10 bg-black/50">
-                            <div id="cancer_note_edit_${p.id}" contenteditable="true" class="rich-editor">${p.notes}</div>
-                            <div class="flex justify-between items-center mt-3">
-                                <span id="can_save_status_${p.id}" class="text-xs text-emerald-400 font-bold"></span>
-                                <button onclick="saveCancerNoteExplicit(${p.id})" class="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-xs font-bold transition shadow-lg"><i class="fas fa-cloud-upload-alt mr-1"></i> Save Notes to Cloud</button>
+                        <div id="cancer_note_body_${p.id}" class="hidden p-3 md:p-4 border-t border-white/10 bg-black/50">
+                            <div id="cancer_note_edit_${p.id}" contenteditable="true" class="rich-editor placeholder-slate-400">${p.notes}</div>
+                            <div class="flex flex-col sm:flex-row justify-between items-center mt-3 gap-3">
+                                <span id="can_save_status_${p.id}" class="text-xs text-emerald-400 font-bold w-full text-center sm:text-left"></span>
+                                <div class="flex gap-2 w-full sm:w-auto justify-end">
+                                    <button onclick="pasteContent('cancer_note_edit_${p.id}')" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition shadow-lg w-full sm:w-auto" title="Paste"><i class="fas fa-paste"></i></button>
+                                    <button onclick="saveCancerNoteExplicit(${p.id})" class="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-xs font-bold transition shadow-lg w-full sm:w-auto"><i class="fas fa-cloud-upload-alt mr-1"></i> Save to Cloud</button>
+                                </div>
                             </div>
                         </div>
                     `;
