@@ -342,23 +342,30 @@
         </div>
     </div>
 
-    <!-- QUICK NOTES MODAL -->
+    <!-- QUICK NOTES MODAL (UPDATED FOR CLOUD SYNC & TITLES) -->
     <div id="notesModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
-        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[550px] overflow-hidden">
-            <div class="bg-gradient-to-r from-slate-600/80 to-slate-800/80 p-5 flex justify-between items-center text-white border-b border-white/10">
-                <h3 class="text-xl font-bold"><i class="fas fa-edit mr-2"></i> Quick Notes</h3>
+        <div class="macos-modal-window rounded-3xl w-11/12 md:w-[650px] overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="bg-gradient-to-r from-slate-600/80 to-slate-800/80 p-5 flex justify-between items-center text-white border-b border-white/10 shrink-0">
+                <h3 class="text-xl font-bold"><i class="fas fa-edit mr-2"></i> Quick Notes Database</h3>
                 <button onclick="closeModalWithAnimation('notesModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
             </div>
-            <div class="p-6">
-                <textarea id="bmoNoteText" class="w-full h-48 bg-white/5 border border-white/20 rounded-xl p-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type or paste your notes here... Click Save to Cloud when done!"></textarea>
-                <div class="mt-4 flex flex-wrap justify-between gap-3">
-                    <button onclick="clearSimpleNote()" class="px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg text-sm font-bold transition">Clear All</button>
-                    <div class="flex gap-2">
-                        <button onclick="pasteSimpleNote()" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-bold transition shadow-lg"><i class="fas fa-paste"></i></button>
-                        <button onclick="copySimpleNote()" class="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-bold transition shadow-lg"><i class="fas fa-copy"></i></button>
-                        <button onclick="saveSimpleNoteCloud()" id="quickNoteSaveBtn" class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-sm font-bold transition shadow-lg"><i class="fas fa-cloud-upload-alt mr-1"></i> Save to Cloud</button>
+            
+            <div class="p-4 bg-white/5 shrink-0 border-b border-white/10">
+                <div class="bg-black/20 p-3 rounded-xl border border-white/10">
+                    <h4 class="text-xs font-bold text-blue-300 uppercase tracking-widest mb-2"><i class="fas fa-plus-circle mr-1"></i> Create New Quick Note</h4>
+                    <div class="flex gap-2 mb-2">
+                        <input type="text" id="qnTitle" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white focus:ring-2 focus:ring-blue-500" placeholder="Enter Note Title (e.g., Meeting Points)">
                     </div>
+                    <button onclick="addQuickNote()" class="w-full py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-bold transition shadow-lg">Add New Note</button>
                 </div>
+            </div>
+            
+            <div class="p-4 overflow-y-auto flex-1 space-y-3" id="qnNotesList">
+                <!-- Quick Notes Appears Here -->
+            </div>
+            
+            <div class="bg-black/20 p-3 text-center border-t border-white/10 shrink-0">
+                <button onclick="closeModalWithAnimation('notesModal')" class="text-sm font-semibold text-slate-300 hover:text-white"><i class="fas fa-home mr-1"></i> Back to Home Page</button>
             </div>
         </div>
     </div>
@@ -368,7 +375,10 @@
         <div class="macos-modal-window rounded-3xl w-11/12 md:w-[700px] overflow-hidden flex flex-col max-h-[85vh]">
             <div class="bg-gradient-to-r from-rose-600/80 to-red-700/80 p-5 flex justify-between items-center text-white border-b border-white/10 shrink-0">
                 <h3 class="text-xl font-bold"><i class="fas fa-heart-crack mr-2"></i> ANC Mother Notes Data</h3>
-                <button onclick="closeModalWithAnimation('ancModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+                <div class="flex items-center gap-3">
+                    <button onclick="testCloudConnection()" title="Check Cloud Sync" class="text-white/60 hover:text-white transition"><i class="fas fa-cloud-download-alt"></i></button>
+                    <button onclick="closeModalWithAnimation('ancModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+                </div>
             </div>
             
             <div class="p-4 bg-white/5 shrink-0 border-b border-white/10">
@@ -401,7 +411,10 @@
         <div class="macos-modal-window rounded-3xl w-11/12 md:w-[700px] overflow-hidden flex flex-col max-h-[85vh]">
             <div class="bg-gradient-to-r from-pink-600/80 to-purple-700/80 p-5 flex justify-between items-center text-white border-b border-white/10 shrink-0">
                 <h3 class="text-xl font-bold"><i class="fas fa-ribbon mr-2"></i> Cancer Patient Notes Data</h3>
-                <button onclick="closeModalWithAnimation('cancerNotesModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+                <div class="flex items-center gap-3">
+                    <button onclick="testCloudConnection()" title="Check Cloud Sync" class="text-white/60 hover:text-white transition"><i class="fas fa-cloud-download-alt"></i></button>
+                    <button onclick="closeModalWithAnimation('cancerNotesModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+                </div>
             </div>
             
             <div class="p-4 bg-white/5 shrink-0 border-b border-white/10">
@@ -445,12 +458,10 @@
         </div>
     </div>
 
-    <!-- ==================== CLOUD SYNC & DATA LOGIC ==================== -->
+    <!-- ==================== CLOUD SYNC & EXPLICIT SAVE LOGIC ==================== -->
     <script>
         const feverBaseID = '2PACX-1vQMGSgOe5uqsD2ZvLrYD7GpHB__igzb829w1p53ewmma-ImH031OyGKR8XvCZwm0RxRXwIrWwrOyfmX';
         const nksBaseID = '2PACX-1vQDv1q69_x5OV-lVwRRFJRlaDoZWnSqHbQVMpI8WNF_cViKuQ_lgyS3er4Bn52gsWS9XYlb4HYkuJrn';
-
-        // THE GOOGLE APPS SCRIPT CLOUD DATABASE URL
         const CLOUD_API_URL = "https://script.google.com/macros/s/AKfycbwxlVH_gojeZWqqiYd4Vn8gBIrlzKlWOUl9PQQhB6NqfbDWJi-FjRbi-oDFpdoYo6H7/exec";
 
         const sheetConfigs = {
@@ -483,30 +494,37 @@
         let currentActiveReport = 'mtm';
         let currentZoom = 1;
 
-        // Fetch everything silently from Cloud when portal loads
+        // Fetch data from Cloud on startup
         function initAllData() {
             if (sessionStorage.getItem('adminUnlocked') === 'true') {
                 document.getElementById('deoWrapper').classList.remove('hidden');
             }
 
-            // Fetch Quick Notes
+            // Quick Notes (Now a list)
             fetch(CLOUD_API_URL + "?sheetName=QuickNotes").then(r=>r.json()).then(res => {
-                if(res.data && res.data.length > 1) { document.getElementById('bmoNoteText').value = res.data[1][0] || ''; }
-            }).catch(e => console.log("QuickNotes sync error"));
+                if(res.data && res.data.length > 1) {
+                    let qnArr = [];
+                    for(let i=1; i<res.data.length; i++){
+                        qnArr.push({ id: res.data[i][0], title: res.data[i][1], notes: res.data[i][2] });
+                    }
+                    localStorage.setItem('quickNotesDB', JSON.stringify(qnArr.reverse()));
+                    renderQuickNotes();
+                }
+            }).catch(e => { renderQuickNotes(); });
             
-            // Fetch ANC Mothers
+            // ANC Mothers
             fetch(CLOUD_API_URL + "?sheetName=ANCMothers").then(r=>r.json()).then(res => {
                 if(res.data && res.data.length > 1) {
                     let ancArr = [];
                     for(let i=1; i<res.data.length; i++){
                         ancArr.push({ id: res.data[i][0], name: res.data[i][1], rch: res.data[i][2], phc: res.data[i][3], notes: res.data[i][4] });
                     }
-                    localStorage.setItem('ancMothersDB', JSON.stringify(ancArr.reverse())); // latest first
+                    localStorage.setItem('ancMothersDB', JSON.stringify(ancArr.reverse()));
                     renderAncNotes();
                 }
-            }).catch(e => { renderAncNotes(); }); // fallback to local on error
+            }).catch(e => { renderAncNotes(); });
 
-            // Fetch Cancer Patients
+            // Cancer Patients
             fetch(CLOUD_API_URL + "?sheetName=CancerPatients").then(r=>r.json()).then(res => {
                 if(res.data && res.data.length > 1) {
                     let canArr = [];
@@ -519,9 +537,16 @@
             }).catch(e => { renderCancerNotes(); });
         }
 
-        // Send Data to Cloud helper function
-        function syncToCloud(payload) {
-            fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify(payload) }).catch(err => console.error(err));
+        // Test Connection manually
+        function testCloudConnection() {
+            alert("Checking Cloud Connection... Please wait.");
+            fetch(CLOUD_API_URL + "?sheetName=QuickNotes")
+            .then(r => r.json())
+            .then(res => {
+                if(res.status === 'success') alert("✅ Google Sheet Cloud Database is CONNECTED and working perfectly!");
+                else alert("⚠️ Cloud responded, but there might be an issue. Status: " + res.status);
+            })
+            .catch(e => alert("❌ Cloud Connection Failed! Please check your internet or Google Sheet URL."));
         }
 
         function toggleSection(sectionId, iconId) {
@@ -623,39 +648,118 @@
             window.open(`https://docs.google.com/spreadsheets/d/e/${baseID}/pub?output=pdf&format=pdf&size=A3&portrait=false&gridlines=false`, '_blank');
         }
 
-        // ==================== QUICK NOTES (CLOUD) ====================
-        function clearSimpleNote() { 
-            if(confirm("Are you sure you want to clear all notes?")) {
-                document.getElementById('bmoNoteText').value = ''; 
-                saveSimpleNoteCloud(); // Clears in cloud too
+        // ==================== NEW QUICK NOTES SYSTEM (LIST BASED) ====================
+        function addQuickNote() {
+            const title = document.getElementById('qnTitle').value.trim();
+            if (!title) { alert("Note Title is required!"); return; }
+            
+            const newId = Date.now();
+            const dateStr = new Date().toLocaleString('en-IN');
+            const defaultNote = "Type notes or paste content here...";
+
+            let notes = JSON.parse(localStorage.getItem('quickNotesDB')) || [];
+            notes.unshift({ id: newId, title: title, notes: defaultNote }); 
+            localStorage.setItem('quickNotesDB', JSON.stringify(notes));
+            
+            document.getElementById('qnTitle').value = ''; 
+            renderQuickNotes();
+
+            fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "add_record", sheetName: "QuickNotes", row_data: [newId, title, defaultNote, dateStr] }) });
+        }
+
+        function deleteQuickNote(id) {
+            if(confirm("Delete this note?")) {
+                let notes = JSON.parse(localStorage.getItem('quickNotesDB')) || [];
+                notes = notes.filter(n => n.id !== id);
+                localStorage.setItem('quickNotesDB', JSON.stringify(notes));
+                renderQuickNotes();
+
+                fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "delete_record", sheetName: "QuickNotes", id: id }) });
             }
         }
-        function copySimpleNote() {
-            const text = document.getElementById('bmoNoteText');
-            text.select(); text.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(text.value).then(() => alert("Notes Copied to Clipboard!"));
+
+        function toggleQnBody(id) {
+            const body = document.getElementById('qn_body_' + id);
+            const icon = document.getElementById('qn_icon_' + id);
+            if(body.classList.contains('hidden')) {
+                body.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down'); icon.classList.add('fa-chevron-up');
+            } else {
+                body.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up'); icon.classList.add('fa-chevron-down');
+            }
         }
-        async function pasteSimpleNote() {
+
+        function saveQnExplicit(id) {
+            const editor = document.getElementById('qn_edit_' + id);
+            let notes = JSON.parse(localStorage.getItem('quickNotesDB')) || [];
+            let index = notes.findIndex(n => n.id === id);
+            if(index > -1) {
+                let n = notes[index];
+                n.notes = editor.innerHTML;
+                localStorage.setItem('quickNotesDB', JSON.stringify(notes));
+                
+                const statusSpan = document.getElementById('qn_save_status_'+id);
+                statusSpan.innerText = "Saving to Cloud...";
+                
+                fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: "QuickNotes", id: n.id, row_data: [n.id, n.title, n.notes, new Date().toLocaleString('en-IN')] }) })
+                .then(() => {
+                    statusSpan.innerHTML = "Saved to Google Sheet <i class='fas fa-check'></i>";
+                    setTimeout(() => statusSpan.innerText = "", 3000);
+                }).catch(() => {
+                    statusSpan.innerText = "Save Failed! Check internet.";
+                });
+            }
+        }
+
+        async function pasteContent(id) {
             try {
                 const text = await navigator.clipboard.readText();
-                const textarea = document.getElementById('bmoNoteText');
-                textarea.value += (textarea.value ? '\n' : '') + text;
-            } catch (err) { alert('Paste failed! Please press Ctrl+V manually.'); }
+                const editor = document.getElementById('qn_edit_' + id);
+                editor.innerHTML += (editor.innerHTML ? '<br>' : '') + text;
+            } catch (err) { alert('Paste failed! Please press Ctrl+V manually inside the box.'); }
         }
-        function saveSimpleNoteCloud() {
-            const btn = document.getElementById('quickNoteSaveBtn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Saving...';
-            const text = document.getElementById('bmoNoteText').value;
-            fetch(CLOUD_API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: "save_quick_note", sheetName: "QuickNotes", notes: text, date: new Date().toLocaleString('en-IN') })
-            }).then(()=> {
-                btn.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Saved!';
-                setTimeout(()=> { btn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-1"></i> Save to Cloud'; }, 2500);
+
+        function copyContent(id) {
+            const editor = document.getElementById('qn_edit_' + id);
+            navigator.clipboard.writeText(editor.innerText).then(() => alert("Copied to Clipboard!"));
+        }
+
+        function renderQuickNotes() {
+            const list = document.getElementById('qnNotesList');
+            let notes = JSON.parse(localStorage.getItem('quickNotesDB')) || [];
+            list.innerHTML = '';
+            
+            if (notes.length === 0) { list.innerHTML = '<p class="text-slate-400 text-center text-sm mt-4 italic">No notes found. Create one above.</p>'; return; }
+
+            notes.forEach(n => {
+                const div = document.createElement('div');
+                div.className = "bg-black/30 border border-white/10 rounded-xl overflow-hidden";
+                div.innerHTML = `
+                    <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-white/5 transition" onclick="toggleQnBody(${n.id})">
+                        <h4 class="font-bold text-blue-200 text-lg"><i class="fas fa-file-alt mr-2"></i>${n.title}</h4>
+                        <div class="flex items-center gap-4">
+                            <button onclick="event.stopPropagation(); deleteQuickNote(${n.id})" class="text-slate-500 hover:text-red-400 transition" title="Delete Note"><i class="fas fa-trash"></i></button>
+                            <i id="qn_icon_${n.id}" class="fas fa-chevron-down text-slate-400"></i>
+                        </div>
+                    </div>
+                    <div id="qn_body_${n.id}" class="hidden p-4 border-t border-white/10 bg-black/50">
+                        <div id="qn_edit_${n.id}" contenteditable="true" class="rich-editor">${n.notes}</div>
+                        <div class="flex justify-between items-center mt-3">
+                            <span id="qn_save_status_${n.id}" class="text-xs text-emerald-400 font-bold"></span>
+                            <div class="flex gap-2">
+                                <button onclick="pasteContent(${n.id})" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition shadow-lg" title="Paste"><i class="fas fa-paste"></i></button>
+                                <button onclick="copyContent(${n.id})" class="px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-xs font-bold transition shadow-lg" title="Copy"><i class="fas fa-copy"></i></button>
+                                <button onclick="saveQnExplicit(${n.id})" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs font-bold transition shadow-lg"><i class="fas fa-cloud-upload-alt mr-1"></i> Save to Cloud</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(div);
             });
         }
 
-        // ==================== ANC MOTHER NOTES (CLOUD) ====================
+        // ==================== ANC MOTHER NOTES SYSTEM ====================
         function addAncMother() {
             const name = document.getElementById('ancNewName').value.trim();
             const rch = document.getElementById('ancRchId').value.trim();
@@ -663,11 +767,8 @@
             if (!name) { alert("Mother Name is required!"); return; }
             
             const newId = Date.now();
-            const dateStr = new Date().toLocaleString('en-IN');
-            const defaultNote = "Type notes or paste images here...";
-
             let mothers = JSON.parse(localStorage.getItem('ancMothersDB')) || [];
-            mothers.unshift({ id: newId, name: name, rch: rch, phc: phc, notes: defaultNote }); 
+            mothers.unshift({ id: newId, name: name, rch: rch, phc: phc, notes: "Type notes or paste images here..." }); 
             localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
             
             document.getElementById('ancNewName').value = ''; 
@@ -675,8 +776,7 @@
             document.getElementById('ancPhc').value = ''; 
             renderAncNotes();
 
-            // Cloud Sync
-            syncToCloud({ action: "add_record", sheetName: "ANCMothers", row_data: [newId, name, rch, phc, defaultNote, dateStr] });
+            fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "add_record", sheetName: "ANCMothers", row_data: [newId, name, rch, phc, "Type notes or paste images here...", new Date().toLocaleString('en-IN')] }) });
         }
 
         function editAncMother(id) {
@@ -694,8 +794,7 @@
                 
                 localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
                 renderAncNotes();
-
-                syncToCloud({ action: "update_record", sheetName: "ANCMothers", id: m.id, row_data: [m.id, m.name, m.rch, m.phc, m.notes, new Date().toLocaleString('en-IN')] });
+                fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: "ANCMothers", id: m.id, row_data: [m.id, m.name, m.rch, m.phc, m.notes, new Date().toLocaleString('en-IN')] }) });
             }
         }
 
@@ -705,8 +804,7 @@
                 mothers = mothers.filter(m => m.id !== id);
                 localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
                 renderAncNotes();
-
-                syncToCloud({ action: "delete_record", sheetName: "ANCMothers", id: id });
+                fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "delete_record", sheetName: "ANCMothers", id: id }) });
             }
         }
 
@@ -722,23 +820,25 @@
             }
         }
 
-        function saveAncNoteData(id) {
+        function saveAncNoteExplicit(id) {
             const editor = document.getElementById('note_edit_' + id);
             let mothers = JSON.parse(localStorage.getItem('ancMothersDB')) || [];
             let index = mothers.findIndex(m => m.id === id);
             if(index > -1) {
                 let m = mothers[index];
-                if (m.notes !== editor.innerHTML) { // Only sync if changed
-                    m.notes = editor.innerHTML;
-                    localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
-                    
-                    document.getElementById('anc_save_status_'+id).innerText = "Syncing...";
-                    fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: "ANCMothers", id: m.id, row_data: [m.id, m.name, m.rch, m.phc, m.notes, new Date().toLocaleString('en-IN')] }) })
-                    .then(() => {
-                        document.getElementById('anc_save_status_'+id).innerText = "Cloud Saved ✓";
-                        setTimeout(() => document.getElementById('anc_save_status_'+id).innerText = "", 2000);
-                    });
-                }
+                m.notes = editor.innerHTML;
+                localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
+                
+                const statusSpan = document.getElementById('anc_save_status_'+id);
+                statusSpan.innerText = "Saving to Cloud...";
+                
+                fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: "ANCMothers", id: m.id, row_data: [m.id, m.name, m.rch, m.phc, m.notes, new Date().toLocaleString('en-IN')] }) })
+                .then(() => {
+                    statusSpan.innerHTML = "Saved to Google Sheet <i class='fas fa-check'></i>";
+                    setTimeout(() => statusSpan.innerText = "", 3000);
+                }).catch(() => {
+                    statusSpan.innerText = "Save Failed! Check internet.";
+                });
             }
         }
 
@@ -772,11 +872,11 @@
                             </div>
                         </div>
                         <div id="note_body_${m.id}" class="hidden p-4 border-t border-white/10 bg-black/50">
-                            <div class="flex justify-between items-center mb-2">
-                                <p class="text-[10px] text-slate-400">📝 Click inside the box below to edit. Auto-saves on click outside.</p>
-                                <span id="anc_save_status_${m.id}" class="text-[10px] text-emerald-400 font-bold"></span>
+                            <div id="note_edit_${m.id}" contenteditable="true" class="rich-editor">${m.notes}</div>
+                            <div class="flex justify-between items-center mt-3">
+                                <span id="anc_save_status_${m.id}" class="text-xs text-emerald-400 font-bold"></span>
+                                <button onclick="saveAncNoteExplicit(${m.id})" class="px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-lg text-xs font-bold transition shadow-lg"><i class="fas fa-cloud-upload-alt mr-1"></i> Save Notes to Cloud</button>
                             </div>
-                            <div id="note_edit_${m.id}" contenteditable="true" onblur="saveAncNoteData(${m.id})" class="rich-editor">${m.notes}</div>
                         </div>
                     `;
                     list.appendChild(div);
@@ -785,7 +885,7 @@
             if(found === 0) list.innerHTML = '<p class="text-slate-400 text-center text-sm mt-4 italic">No matching records found.</p>';
         }
 
-        // ==================== CANCER PATIENT NOTES SYSTEM (CLOUD) ====================
+        // ==================== CANCER PATIENT NOTES SYSTEM ====================
         function addCancerPatient() {
             const name = document.getElementById('cancerNewName').value.trim();
             const ctype = document.getElementById('cancerType').value.trim();
@@ -793,11 +893,8 @@
             if (!name) { alert("Patient Name is required!"); return; }
             
             const newId = Date.now();
-            const dateStr = new Date().toLocaleString('en-IN');
-            const defaultNote = "When and where was it diagnosed? Enter notes here...";
-
             let patients = JSON.parse(localStorage.getItem('cancerPatientsDB')) || [];
-            patients.unshift({ id: newId, name: name, type: ctype, phc: phc, notes: defaultNote }); 
+            patients.unshift({ id: newId, name: name, type: ctype, phc: phc, notes: "When and where was it diagnosed? Enter notes here..." }); 
             localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
             
             document.getElementById('cancerNewName').value = ''; 
@@ -805,7 +902,7 @@
             document.getElementById('cancerPhc').value = ''; 
             renderCancerNotes();
 
-            syncToCloud({ action: "add_record", sheetName: "CancerPatients", row_data: [newId, name, ctype, phc, defaultNote, dateStr] });
+            fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "add_record", sheetName: "CancerPatients", row_data: [newId, name, ctype, phc, "When and where was it diagnosed? Enter notes here...", new Date().toLocaleString('en-IN')] }) });
         }
 
         function editCancerPatient(id) {
@@ -823,8 +920,7 @@
                 
                 localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
                 renderCancerNotes();
-
-                syncToCloud({ action: "update_record", sheetName: "CancerPatients", id: p.id, row_data: [p.id, p.name, p.type, p.phc, p.notes, new Date().toLocaleString('en-IN')] });
+                fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: "CancerPatients", id: p.id, row_data: [p.id, p.name, p.type, p.phc, p.notes, new Date().toLocaleString('en-IN')] }) });
             }
         }
 
@@ -834,8 +930,7 @@
                 patients = patients.filter(p => p.id !== id);
                 localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
                 renderCancerNotes();
-
-                syncToCloud({ action: "delete_record", sheetName: "CancerPatients", id: id });
+                fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "delete_record", sheetName: "CancerPatients", id: id }) });
             }
         }
 
@@ -851,23 +946,25 @@
             }
         }
 
-        function saveCancerNoteData(id) {
+        function saveCancerNoteExplicit(id) {
             const editor = document.getElementById('cancer_note_edit_' + id);
             let patients = JSON.parse(localStorage.getItem('cancerPatientsDB')) || [];
             let index = patients.findIndex(p => p.id === id);
             if(index > -1) {
                 let p = patients[index];
-                if (p.notes !== editor.innerHTML) { // Only sync if changed
-                    p.notes = editor.innerHTML;
-                    localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
-                    
-                    document.getElementById('can_save_status_'+id).innerText = "Syncing...";
-                    fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: "CancerPatients", id: p.id, row_data: [p.id, p.name, p.type, p.phc, p.notes, new Date().toLocaleString('en-IN')] }) })
-                    .then(() => {
-                        document.getElementById('can_save_status_'+id).innerText = "Cloud Saved ✓";
-                        setTimeout(() => document.getElementById('can_save_status_'+id).innerText = "", 2000);
-                    });
-                }
+                p.notes = editor.innerHTML;
+                localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
+                
+                const statusSpan = document.getElementById('can_save_status_'+id);
+                statusSpan.innerText = "Saving to Cloud...";
+                
+                fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: "CancerPatients", id: p.id, row_data: [p.id, p.name, p.type, p.phc, p.notes, new Date().toLocaleString('en-IN')] }) })
+                .then(() => {
+                    statusSpan.innerHTML = "Saved to Google Sheet <i class='fas fa-check'></i>";
+                    setTimeout(() => statusSpan.innerText = "", 3000);
+                }).catch(() => {
+                    statusSpan.innerText = "Save Failed! Check internet.";
+                });
             }
         }
 
@@ -901,11 +998,11 @@
                             </div>
                         </div>
                         <div id="cancer_note_body_${p.id}" class="hidden p-4 border-t border-white/10 bg-black/50">
-                            <div class="flex justify-between items-center mb-2">
-                                <p class="text-[10px] text-slate-400">📝 Click inside the box below to edit. Auto-saves on click outside.</p>
-                                <span id="can_save_status_${p.id}" class="text-[10px] text-emerald-400 font-bold"></span>
+                            <div id="cancer_note_edit_${p.id}" contenteditable="true" class="rich-editor">${p.notes}</div>
+                            <div class="flex justify-between items-center mt-3">
+                                <span id="can_save_status_${p.id}" class="text-xs text-emerald-400 font-bold"></span>
+                                <button onclick="saveCancerNoteExplicit(${p.id})" class="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-xs font-bold transition shadow-lg"><i class="fas fa-cloud-upload-alt mr-1"></i> Save Notes to Cloud</button>
                             </div>
-                            <div id="cancer_note_edit_${p.id}" contenteditable="true" onblur="saveCancerNoteData(${p.id})" class="rich-editor">${p.notes}</div>
                         </div>
                     `;
                     list.appendChild(div);
