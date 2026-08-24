@@ -145,7 +145,7 @@
         }
         .rich-editor:focus { border-color: #f43f5e; box-shadow: 0 0 10px rgba(244, 63, 94, 0.3); }
 
-        /* The Magic Hover Logic */
+        /* Hover Reveal Logic */
         @media (min-width: 768px) {
             .hover-reveal-bottom { opacity: 0; transform: translateY(15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
             .hover-reveal-bottom::before { content: ''; position: absolute; top: -60px; left: -60px; right: -60px; bottom: -60px; z-index: -1; }
@@ -163,7 +163,7 @@
         }
     </style>
 </head>
-<body class="text-slate-100 pb-16" onload="initNotes()">
+<body class="text-slate-100 pb-16" onload="initAllData()">
 
     <div id="mainUI">
         <header class="macos-header text-white py-4 px-6 sticky top-0 z-40 shadow-2xl">
@@ -208,7 +208,6 @@
                     <a onclick="openModal('notesModal')" class="macos-card cursor-pointer"><div class="icon-box bg-bmo-icon"><i class="fas fa-edit"></i></div><div class="card-content"><h3>Quick Notes</h3><p>Draft & Copy Text easily</p></div></a>
                     
                     <a onclick="openModal('ancModal')" class="macos-card cursor-pointer ring-2 ring-rose-500/50"><div class="icon-box bg-pass-icon"><i class="fas fa-heart-crack"></i></div><div class="card-content"><h3 class="text-rose-300">ANC Heart Disease</h3><p>Mother Notes System</p></div></a>
-                    <!-- Cancer Patient Notes removed from here to MTM Modal -->
                 </div>
             </div>
 
@@ -256,7 +255,7 @@
         </main>
     </div>
 
-    <!-- MTM POPUP MODAL (WITH CANCER NOTES BUTTON ADDED) -->
+    <!-- MTM POPUP MODAL -->
     <div id="mtmModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-[100] hidden flex justify-center items-center">
         <div class="macos-modal-window rounded-3xl w-11/12 md:w-96 overflow-hidden">
             <div class="bg-gradient-to-r from-indigo-600/80 to-purple-600/80 p-5 flex justify-between items-center text-white border-b border-white/10">
@@ -272,7 +271,6 @@
                     <div class="w-12 h-12 rounded-xl bg-pink-500/20 text-pink-400 flex justify-center items-center text-xl"><i class="fas fa-ribbon"></i></div>
                     <div><h4 class="font-bold text-white">cancer report</h4><p class="text-xs text-slate-400">View Sheets & Download</p></div>
                 </a>
-                <!-- Moved Cancer Patient Notes here -->
                 <a onclick="closeModalInstant('mtmModal'); openModal('cancerNotesModal')" class="flex items-center gap-4 p-4 rounded-2xl jiggle-btn cursor-pointer border border-pink-500/30 bg-pink-500/5 hover:bg-pink-500/10">
                     <div class="w-12 h-12 rounded-xl bg-pink-500/20 text-pink-400 flex justify-center items-center text-xl"><i class="fas fa-user-injured"></i></div>
                     <div><h4 class="font-bold text-pink-200">Cancer Patient Notes</h4><p class="text-xs text-slate-400">Tracking & Details System</p></div>
@@ -352,11 +350,14 @@
                 <button onclick="closeModalWithAnimation('notesModal')" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
             </div>
             <div class="p-6">
-                <textarea id="bmoNoteText" onkeyup="saveSimpleNote()" class="w-full h-48 bg-white/5 border border-white/20 rounded-xl p-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type or paste your notes here... It saves automatically!"></textarea>
-                <div class="mt-4 flex flex-wrap justify-end gap-3">
+                <textarea id="bmoNoteText" class="w-full h-48 bg-white/5 border border-white/20 rounded-xl p-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type or paste your notes here... Click Save to Cloud when done!"></textarea>
+                <div class="mt-4 flex flex-wrap justify-between gap-3">
                     <button onclick="clearSimpleNote()" class="px-4 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg text-sm font-bold transition">Clear All</button>
-                    <button onclick="pasteSimpleNote()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-bold transition shadow-lg"><i class="fas fa-paste mr-1"></i> Paste Text</button>
-                    <button onclick="copySimpleNote()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-bold transition shadow-lg"><i class="fas fa-copy mr-1"></i> Copy Text</button>
+                    <div class="flex gap-2">
+                        <button onclick="pasteSimpleNote()" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-bold transition shadow-lg"><i class="fas fa-paste"></i></button>
+                        <button onclick="copySimpleNote()" class="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-bold transition shadow-lg"><i class="fas fa-copy"></i></button>
+                        <button onclick="saveSimpleNoteCloud()" id="quickNoteSaveBtn" class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-sm font-bold transition shadow-lg"><i class="fas fa-cloud-upload-alt mr-1"></i> Save to Cloud</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -436,11 +437,7 @@
             <button onclick="resetZoom()" class="zoom-btn" title="Reset Zoom"><i class="fas fa-expand"></i></button>
             <button onclick="changeZoom(-0.1)" class="zoom-btn" title="Zoom Out"><i class="fas fa-minus"></i></button>
         </div>
-
-        <div class="iframe-container">
-            <div id="sheetZoomWrapper"><iframe id="sheetIframe" src=""></iframe></div>
-        </div>
-        
+        <div class="iframe-container"><div id="sheetZoomWrapper"><iframe id="sheetIframe" src=""></iframe></div></div>
         <div class="floating-tabs-container hover-reveal-bottom" id="tabsContainer"></div>
         <div class="floating-action-btns hover-reveal-bottom">
             <button onclick="goBackToMenu()" class="btn-float btn-back"><i class="fas fa-home mr-1"></i> Back to Menu</button>
@@ -448,9 +445,13 @@
         </div>
     </div>
 
+    <!-- ==================== CLOUD SYNC & DATA LOGIC ==================== -->
     <script>
         const feverBaseID = '2PACX-1vQMGSgOe5uqsD2ZvLrYD7GpHB__igzb829w1p53ewmma-ImH031OyGKR8XvCZwm0RxRXwIrWwrOyfmX';
         const nksBaseID = '2PACX-1vQDv1q69_x5OV-lVwRRFJRlaDoZWnSqHbQVMpI8WNF_cViKuQ_lgyS3er4Bn52gsWS9XYlb4HYkuJrn';
+
+        // THE GOOGLE APPS SCRIPT CLOUD DATABASE URL
+        const CLOUD_API_URL = "https://script.google.com/macros/s/AKfycbwxlVH_gojeZWqqiYd4Vn8gBIrlzKlWOUl9PQQhB6NqfbDWJi-FjRbi-oDFpdoYo6H7/exec";
 
         const sheetConfigs = {
             'mtm': { baseID: '2PACX-1vSUeSBN-8JNGkvXdIuIKFH2poaqfoNWvC01MOQD18pXO5dPw6n0vImYxkb78eRjZmnKfLm4OgOeexPK', parentModal: 'mtmModal', tabs: [{ name: 'HT Report', gid: '0' }, { name: 'DM Report', gid: '1346772331' }, { name: 'HT & DM Report', gid: '2007453515' }] },
@@ -482,21 +483,52 @@
         let currentActiveReport = 'mtm';
         let currentZoom = 1;
 
+        // Fetch everything silently from Cloud when portal loads
+        function initAllData() {
+            if (sessionStorage.getItem('adminUnlocked') === 'true') {
+                document.getElementById('deoWrapper').classList.remove('hidden');
+            }
+
+            // Fetch Quick Notes
+            fetch(CLOUD_API_URL + "?sheetName=QuickNotes").then(r=>r.json()).then(res => {
+                if(res.data && res.data.length > 1) { document.getElementById('bmoNoteText').value = res.data[1][0] || ''; }
+            }).catch(e => console.log("QuickNotes sync error"));
+            
+            // Fetch ANC Mothers
+            fetch(CLOUD_API_URL + "?sheetName=ANCMothers").then(r=>r.json()).then(res => {
+                if(res.data && res.data.length > 1) {
+                    let ancArr = [];
+                    for(let i=1; i<res.data.length; i++){
+                        ancArr.push({ id: res.data[i][0], name: res.data[i][1], rch: res.data[i][2], phc: res.data[i][3], notes: res.data[i][4] });
+                    }
+                    localStorage.setItem('ancMothersDB', JSON.stringify(ancArr.reverse())); // latest first
+                    renderAncNotes();
+                }
+            }).catch(e => { renderAncNotes(); }); // fallback to local on error
+
+            // Fetch Cancer Patients
+            fetch(CLOUD_API_URL + "?sheetName=CancerPatients").then(r=>r.json()).then(res => {
+                if(res.data && res.data.length > 1) {
+                    let canArr = [];
+                    for(let i=1; i<res.data.length; i++){
+                        canArr.push({ id: res.data[i][0], name: res.data[i][1], type: res.data[i][2], phc: res.data[i][3], notes: res.data[i][4] });
+                    }
+                    localStorage.setItem('cancerPatientsDB', JSON.stringify(canArr.reverse()));
+                    renderCancerNotes();
+                }
+            }).catch(e => { renderCancerNotes(); });
+        }
+
+        // Send Data to Cloud helper function
+        function syncToCloud(payload) {
+            fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify(payload) }).catch(err => console.error(err));
+        }
+
         function toggleSection(sectionId, iconId) {
             const section = document.getElementById(sectionId);
             const icon = document.getElementById(iconId);
             if (section.classList.contains('hidden-section')) { section.classList.remove('hidden-section'); icon.classList.remove('rotate-icon'); } 
             else { section.classList.add('hidden-section'); icon.classList.add('rotate-icon'); }
-        }
-
-        // Keep Admin open if session is set
-        function initNotes() {
-            document.getElementById('bmoNoteText').value = localStorage.getItem('bmoSimpleNote') || '';
-            renderAncNotes();
-            renderCancerNotes();
-            if (sessionStorage.getItem('adminUnlocked') === 'true') {
-                document.getElementById('deoWrapper').classList.remove('hidden');
-            }
         }
 
         function promptSecretAdmin() {
@@ -520,14 +552,12 @@
         }
 
         function openModal(modalId) { document.getElementById(modalId).classList.remove('hidden'); }
-        
         function closeModalWithAnimation(modalId) {
             const modal = document.getElementById(modalId);
             const win = modal.querySelector('.macos-modal-window');
             win.classList.add('closing');
             setTimeout(() => { modal.classList.add('hidden'); win.classList.remove('closing'); }, 400);
         }
-
         function closeModalInstant(modalId) { document.getElementById(modalId).classList.add('hidden'); }
 
         function openSheetOverlay(reportType) {
@@ -562,8 +592,7 @@
         }
 
         function loadSheet(baseID, gid) {
-            const iframe = document.getElementById('sheetIframe');
-            iframe.src = `https://docs.google.com/spreadsheets/d/e/${baseID}/pubhtml?gid=${gid}&single=true&widget=false&headers=false&chrome=false`;
+            document.getElementById('sheetIframe').src = `https://docs.google.com/spreadsheets/d/e/${baseID}/pubhtml?gid=${gid}&single=true&widget=false&headers=false&chrome=false`;
         }
 
         function changeZoom(step) {
@@ -578,14 +607,12 @@
             const overlay = document.getElementById('sheetOverlay');
             overlay.classList.add('closing');
             document.getElementById('zoomControls').style.display = 'none';
-            
             document.getElementById('mainUI').style.display = 'block'; 
             
             setTimeout(() => {
                 overlay.classList.remove('active');
                 overlay.classList.remove('closing');
                 document.getElementById('sheetIframe').src = ""; 
-                
                 const config = sheetConfigs[currentActiveReport];
                 if (config && config.parentModal) { openModal(config.parentModal); } 
             }, 500);
@@ -596,11 +623,11 @@
             window.open(`https://docs.google.com/spreadsheets/d/e/${baseID}/pub?output=pdf&format=pdf&size=A3&portrait=false&gridlines=false`, '_blank');
         }
 
-        // ==================== QUICK NOTES LOGIC ====================
-        function saveSimpleNote() { localStorage.setItem('bmoSimpleNote', document.getElementById('bmoNoteText').value); }
+        // ==================== QUICK NOTES (CLOUD) ====================
         function clearSimpleNote() { 
             if(confirm("Are you sure you want to clear all notes?")) {
-                document.getElementById('bmoNoteText').value = ''; localStorage.removeItem('bmoSimpleNote');
+                document.getElementById('bmoNoteText').value = ''; 
+                saveSimpleNoteCloud(); // Clears in cloud too
             }
         }
         function copySimpleNote() {
@@ -613,26 +640,63 @@
                 const text = await navigator.clipboard.readText();
                 const textarea = document.getElementById('bmoNoteText');
                 textarea.value += (textarea.value ? '\n' : '') + text;
-                saveSimpleNote();
-            } catch (err) { alert('Paste failed! Please press Ctrl+V or Long-press to paste manually.'); }
+            } catch (err) { alert('Paste failed! Please press Ctrl+V manually.'); }
+        }
+        function saveSimpleNoteCloud() {
+            const btn = document.getElementById('quickNoteSaveBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Saving...';
+            const text = document.getElementById('bmoNoteText').value;
+            fetch(CLOUD_API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "save_quick_note", sheetName: "QuickNotes", notes: text, date: new Date().toLocaleString('en-IN') })
+            }).then(()=> {
+                btn.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Saved!';
+                setTimeout(()=> { btn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-1"></i> Save to Cloud'; }, 2500);
+            });
         }
 
-        // ==================== ANC MOTHER NOTES SYSTEM ====================
+        // ==================== ANC MOTHER NOTES (CLOUD) ====================
         function addAncMother() {
             const name = document.getElementById('ancNewName').value.trim();
             const rch = document.getElementById('ancRchId').value.trim();
             const phc = document.getElementById('ancPhc').value.trim();
-            
             if (!name) { alert("Mother Name is required!"); return; }
             
+            const newId = Date.now();
+            const dateStr = new Date().toLocaleString('en-IN');
+            const defaultNote = "Type notes or paste images here...";
+
             let mothers = JSON.parse(localStorage.getItem('ancMothersDB')) || [];
-            mothers.unshift({ id: Date.now(), name: name, rch: rch, phc: phc, notes: "Type notes or paste images here..." }); 
+            mothers.unshift({ id: newId, name: name, rch: rch, phc: phc, notes: defaultNote }); 
             localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
             
             document.getElementById('ancNewName').value = ''; 
             document.getElementById('ancRchId').value = ''; 
             document.getElementById('ancPhc').value = ''; 
             renderAncNotes();
+
+            // Cloud Sync
+            syncToCloud({ action: "add_record", sheetName: "ANCMothers", row_data: [newId, name, rch, phc, defaultNote, dateStr] });
+        }
+
+        function editAncMother(id) {
+            let mothers = JSON.parse(localStorage.getItem('ancMothersDB')) || [];
+            let index = mothers.findIndex(m => m.id === id);
+            if(index > -1) {
+                let m = mothers[index];
+                let newName = prompt("Edit Mother's Name:", m.name); if(newName === null) return;
+                let newRch = prompt("Edit RCH / PICME ID:", m.rch);
+                let newPhc = prompt("Edit PHC / HSC / Village:", m.phc);
+
+                m.name = newName.trim() || m.name;
+                m.rch = newRch !== null ? newRch.trim() : m.rch;
+                m.phc = newPhc !== null ? newPhc.trim() : m.phc;
+                
+                localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
+                renderAncNotes();
+
+                syncToCloud({ action: "update_record", sheetName: "ANCMothers", id: m.id, row_data: [m.id, m.name, m.rch, m.phc, m.notes, new Date().toLocaleString('en-IN')] });
+            }
         }
 
         function deleteAncMother(id) {
@@ -641,6 +705,8 @@
                 mothers = mothers.filter(m => m.id !== id);
                 localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
                 renderAncNotes();
+
+                syncToCloud({ action: "delete_record", sheetName: "ANCMothers", id: id });
             }
         }
 
@@ -661,8 +727,18 @@
             let mothers = JSON.parse(localStorage.getItem('ancMothersDB')) || [];
             let index = mothers.findIndex(m => m.id === id);
             if(index > -1) {
-                mothers[index].notes = editor.innerHTML;
-                localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
+                let m = mothers[index];
+                if (m.notes !== editor.innerHTML) { // Only sync if changed
+                    m.notes = editor.innerHTML;
+                    localStorage.setItem('ancMothersDB', JSON.stringify(mothers));
+                    
+                    document.getElementById('anc_save_status_'+id).innerText = "Syncing...";
+                    fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: "ANCMothers", id: m.id, row_data: [m.id, m.name, m.rch, m.phc, m.notes, new Date().toLocaleString('en-IN')] }) })
+                    .then(() => {
+                        document.getElementById('anc_save_status_'+id).innerText = "Cloud Saved ✓";
+                        setTimeout(() => document.getElementById('anc_save_status_'+id).innerText = "", 2000);
+                    });
+                }
             }
         }
 
@@ -678,7 +754,6 @@
             mothers.forEach(m => {
                 if(m.name.toLowerCase().includes(search) || (m.rch && m.rch.toLowerCase().includes(search))) {
                     found++;
-                    
                     let phcHtml = m.phc ? `<span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded text-[10px] uppercase tracking-wider"><i class="fas fa-hospital-alt mr-1"></i>${m.phc}</span>` : '';
                     let rchHtml = m.rch ? `<a href="https://picme3.tn.gov.in/reports/login/" target="_blank" onclick="event.stopPropagation()" class="bg-blue-500/20 hover:bg-blue-500/40 text-blue-300 hover:text-white px-2 py-0.5 rounded text-[10px] uppercase tracking-wider transition tooltip" title="Open PICME 3.0 Login"><i class="fas fa-id-card mr-1"></i>${m.rch} <i class="fas fa-external-link-alt ml-0.5 text-[8px]"></i></a>` : '';
 
@@ -690,13 +765,17 @@
                                 <h4 class="font-bold text-rose-200 text-lg mb-1"><i class="fas fa-user-nurse mr-2"></i>${m.name}</h4>
                                 <div class="flex flex-wrap gap-2 mt-1">${rchHtml}${phcHtml}</div>
                             </div>
-                            <div class="flex items-center gap-4 mt-1">
+                            <div class="flex items-center gap-3 mt-1">
+                                <button onclick="event.stopPropagation(); editAncMother(${m.id})" class="text-slate-500 hover:text-blue-400 transition" title="Edit Details"><i class="fas fa-edit"></i></button>
                                 <button onclick="event.stopPropagation(); deleteAncMother(${m.id})" class="text-slate-500 hover:text-red-400 transition" title="Delete Mother"><i class="fas fa-trash"></i></button>
                                 <i id="note_icon_${m.id}" class="fas fa-chevron-down text-slate-400"></i>
                             </div>
                         </div>
                         <div id="note_body_${m.id}" class="hidden p-4 border-t border-white/10 bg-black/50">
-                            <p class="text-[10px] text-slate-400 mb-2">📝 Click inside the box below to edit. You can type text or paste images directly.</p>
+                            <div class="flex justify-between items-center mb-2">
+                                <p class="text-[10px] text-slate-400">📝 Click inside the box below to edit. Auto-saves on click outside.</p>
+                                <span id="anc_save_status_${m.id}" class="text-[10px] text-emerald-400 font-bold"></span>
+                            </div>
                             <div id="note_edit_${m.id}" contenteditable="true" onblur="saveAncNoteData(${m.id})" class="rich-editor">${m.notes}</div>
                         </div>
                     `;
@@ -706,22 +785,47 @@
             if(found === 0) list.innerHTML = '<p class="text-slate-400 text-center text-sm mt-4 italic">No matching records found.</p>';
         }
 
-        // ==================== CANCER PATIENT NOTES SYSTEM ====================
+        // ==================== CANCER PATIENT NOTES SYSTEM (CLOUD) ====================
         function addCancerPatient() {
             const name = document.getElementById('cancerNewName').value.trim();
             const ctype = document.getElementById('cancerType').value.trim();
             const phc = document.getElementById('cancerPhc').value.trim();
-            
             if (!name) { alert("Patient Name is required!"); return; }
             
+            const newId = Date.now();
+            const dateStr = new Date().toLocaleString('en-IN');
+            const defaultNote = "When and where was it diagnosed? Enter notes here...";
+
             let patients = JSON.parse(localStorage.getItem('cancerPatientsDB')) || [];
-            patients.unshift({ id: Date.now(), name: name, type: ctype, phc: phc, notes: "When and where was it diagnosed? Enter notes here..." }); 
+            patients.unshift({ id: newId, name: name, type: ctype, phc: phc, notes: defaultNote }); 
             localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
             
             document.getElementById('cancerNewName').value = ''; 
             document.getElementById('cancerType').value = ''; 
             document.getElementById('cancerPhc').value = ''; 
             renderCancerNotes();
+
+            syncToCloud({ action: "add_record", sheetName: "CancerPatients", row_data: [newId, name, ctype, phc, defaultNote, dateStr] });
+        }
+
+        function editCancerPatient(id) {
+            let patients = JSON.parse(localStorage.getItem('cancerPatientsDB')) || [];
+            let index = patients.findIndex(p => p.id === id);
+            if(index > -1) {
+                let p = patients[index];
+                let newName = prompt("Edit Patient Name:", p.name); if(newName === null) return;
+                let newType = prompt("Edit Cancer Type:", p.type);
+                let newPhc = prompt("Edit PHC / HSC / Village:", p.phc);
+
+                p.name = newName.trim() || p.name;
+                p.type = newType !== null ? newType.trim() : p.type;
+                p.phc = newPhc !== null ? newPhc.trim() : p.phc;
+                
+                localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
+                renderCancerNotes();
+
+                syncToCloud({ action: "update_record", sheetName: "CancerPatients", id: p.id, row_data: [p.id, p.name, p.type, p.phc, p.notes, new Date().toLocaleString('en-IN')] });
+            }
         }
 
         function deleteCancerPatient(id) {
@@ -730,6 +834,8 @@
                 patients = patients.filter(p => p.id !== id);
                 localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
                 renderCancerNotes();
+
+                syncToCloud({ action: "delete_record", sheetName: "CancerPatients", id: id });
             }
         }
 
@@ -750,8 +856,18 @@
             let patients = JSON.parse(localStorage.getItem('cancerPatientsDB')) || [];
             let index = patients.findIndex(p => p.id === id);
             if(index > -1) {
-                patients[index].notes = editor.innerHTML;
-                localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
+                let p = patients[index];
+                if (p.notes !== editor.innerHTML) { // Only sync if changed
+                    p.notes = editor.innerHTML;
+                    localStorage.setItem('cancerPatientsDB', JSON.stringify(patients));
+                    
+                    document.getElementById('can_save_status_'+id).innerText = "Syncing...";
+                    fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: "CancerPatients", id: p.id, row_data: [p.id, p.name, p.type, p.phc, p.notes, new Date().toLocaleString('en-IN')] }) })
+                    .then(() => {
+                        document.getElementById('can_save_status_'+id).innerText = "Cloud Saved ✓";
+                        setTimeout(() => document.getElementById('can_save_status_'+id).innerText = "", 2000);
+                    });
+                }
             }
         }
 
@@ -778,13 +894,17 @@
                                 <h4 class="font-bold text-pink-200 text-lg mb-1"><i class="fas fa-user-injured mr-2"></i>${p.name}</h4>
                                 <div class="flex flex-wrap gap-2 mt-1">${typeHtml}${phcHtml}</div>
                             </div>
-                            <div class="flex items-center gap-4 mt-1">
+                            <div class="flex items-center gap-3 mt-1">
+                                <button onclick="event.stopPropagation(); editCancerPatient(${p.id})" class="text-slate-500 hover:text-blue-400 transition" title="Edit Details"><i class="fas fa-edit"></i></button>
                                 <button onclick="event.stopPropagation(); deleteCancerPatient(${p.id})" class="text-slate-500 hover:text-red-400 transition" title="Delete Patient"><i class="fas fa-trash"></i></button>
                                 <i id="cancer_note_icon_${p.id}" class="fas fa-chevron-down text-slate-400"></i>
                             </div>
                         </div>
                         <div id="cancer_note_body_${p.id}" class="hidden p-4 border-t border-white/10 bg-black/50">
-                            <p class="text-[10px] text-slate-400 mb-2">📝 Click inside the box below to edit. You can type text or paste images directly.</p>
+                            <div class="flex justify-between items-center mb-2">
+                                <p class="text-[10px] text-slate-400">📝 Click inside the box below to edit. Auto-saves on click outside.</p>
+                                <span id="can_save_status_${p.id}" class="text-[10px] text-emerald-400 font-bold"></span>
+                            </div>
                             <div id="cancer_note_edit_${p.id}" contenteditable="true" onblur="saveCancerNoteData(${p.id})" class="rich-editor">${p.notes}</div>
                         </div>
                     `;
