@@ -75,9 +75,7 @@
         #sheetOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0f172a; z-index: 9999; display: flex; transform-origin: center bottom; transform: scale(0.1, 0.1) translateY(100vh); opacity: 0; visibility: hidden; transition: transform 0.6s cubic-bezier(0.32, 1.25, 0.32, 1), opacity 0.4s ease, visibility 0.4s; }
         #sheetOverlay.active { transform: scale(1, 1) translateY(0); opacity: 1; visibility: visible; }
         .iframe-container { position: absolute; inset: 0; width: 100%; height: 100%; background-color: #ffffff; -webkit-overflow-scrolling: touch; overflow: hidden; }
-        
-        /* FIX: Apply smooth transition directly to the zoom wrapper for proper zoom animation */
-        #sheetZoomWrapper { width: 100%; height: 100%; background-color: #ffffff; transform-origin: top left; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s ease, height 0.3s ease; }
+        #sheetZoomWrapper { width: 100%; height: 100%; background-color: #ffffff; transform-origin: top left; transition: transform 0.3s ease; }
         #sheetZoomWrapper iframe { width: 100%; height: 100%; border: none; display: block; }
         
         .smart-controls { opacity: 1; transition: opacity 0.5s ease; pointer-events: auto; z-index: 10000; }
@@ -451,34 +449,22 @@
 
     <div id="notesModal" class="modal-wrapper"><div class="macos-modal-window p-0" style="max-width: 500px;"><div class="bg-gradient-to-r from-slate-600 to-slate-800 p-4 flex justify-between items-center text-white"><h3 class="text-lg font-bold"><i class="fas fa-edit mr-2"></i> Quick Notes</h3><button onclick="closeModalInstant('notesModal')" class="text-white/80 text-2xl">&times;</button></div><div class="p-4 bg-black/20 shrink-0 border-b border-white/10 space-y-3"><input type="text" id="qnSearch" onkeyup="renderQuickNotes()" class="w-full bg-black/40 border border-white/20 rounded-xl p-2.5 text-sm text-white" placeholder="Search Notes..."><div class="flex gap-2"><input type="text" id="qnTitle" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Enter Note Title"><button onclick="addQuickNote()" class="px-4 bg-blue-500 text-white rounded-lg text-sm font-bold">Add</button></div></div><div class="p-3 overflow-y-auto flex-1 space-y-2" id="qnNotesList" style="max-height: 50vh;"></div></div></div>
     
-    <div id="ancModal" class="modal-wrapper">
-      <div class="macos-modal-window p-0" style="max-width: 800px;">
-        <div class="bg-gradient-to-r from-rose-600 to-rose-800 p-4 flex justify-between items-center text-white">
-            <h3 class="text-lg font-bold"><i class="fas fa-heart-crack mr-2"></i> ANC Heart Disease Notes Tracking</h3>
-            <button onclick="closeModalInstant('ancModal')" class="text-white/80 text-2xl">&times;</button>
-        </div>
+    <div id="ancModal" class="modal-wrapper"><div class="macos-modal-window p-0" style="max-width: 800px;"><div class="bg-gradient-to-r from-rose-600 to-rose-800 p-4 flex justify-between items-center text-white"><h3 class="text-lg font-bold"><i class="fas fa-heart-crack mr-2"></i> ANC Heart Disease Notes Tracking</h3><button onclick="closeModalInstant('ancModal')" class="text-white/80 text-2xl">&times;</button></div>
         <div class="p-4 bg-black/20 shrink-0 border-b border-white/10 space-y-3">
             <div class="flex gap-2"><input type="text" id="ancSearch" onkeyup="renderAncNotes()" class="flex-1 bg-black/40 border border-white/20 rounded-xl p-2.5 text-sm text-white" placeholder="General Search..."><button onclick="renderAncNotes()" class="px-4 bg-blue-500 hover:bg-blue-600 rounded-lg text-sm font-bold text-white transition"><i class="fas fa-search"></i> General</button><input type="text" id="ancRchSearch" onkeyup="renderAncNotes()" class="flex-1 bg-black/40 border border-white/20 rounded-xl p-2.5 text-sm text-white" placeholder="RCH Search..."><button onclick="renderAncNotes()" class="px-4 bg-purple-500 hover:bg-purple-600 rounded-lg text-sm font-bold text-white transition"><i class="fas fa-search"></i> RCH</button></div>
             <div class="flex flex-wrap gap-2 mt-2"><input type="text" id="ancNewName" class="w-[18%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Name *"><input type="text" id="ancRchId" class="w-[18%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="RCH ID *"><input type="text" id="ancPHE" class="w-[14%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="PHE"><input type="text" id="ancHSC" class="w-[14%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="HSC"><input type="text" id="ancTitle" class="flex-1 bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Notes Title"><button onclick="addAncMother()" class="w-[15%] bg-rose-500 hover:bg-rose-600 text-white rounded-lg text-sm font-bold transition">Add Notes</button></div>
             <div class="flex items-center gap-2 mt-1"><i class="fas fa-bolt text-yellow-400"></i><h4 class="text-rose-200 text-xs font-bold uppercase tracking-wider">Quick Notes Section</h4></div>
         </div>
         <div class="p-3 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-3" id="ancNotesList" style="max-height: 50vh; align-content: start;"></div>
-      </div>
-    </div>
+    </div></div>
     
-    <div id="cancerNotesModal" class="modal-wrapper">
-      <div class="macos-modal-window p-0" style="max-width: 700px;">
-        <div class="bg-gradient-to-r from-pink-600 to-pink-800 p-4 flex justify-between items-center text-white">
-            <h3 class="text-lg font-bold"><i class="fas fa-ribbon mr-2"></i> Cancer Notes</h3>
-            <button onclick="closeModalInstant('cancerNotesModal')" class="text-white/80 text-2xl">&times;</button>
-        </div>
+    <div id="cancerNotesModal" class="modal-wrapper"><div class="macos-modal-window p-0" style="max-width: 700px;"><div class="bg-gradient-to-r from-pink-600 to-pink-800 p-4 flex justify-between items-center text-white"><h3 class="text-lg font-bold"><i class="fas fa-ribbon mr-2"></i> Cancer Notes</h3><button onclick="closeModalInstant('cancerNotesModal')" class="text-white/80 text-2xl">&times;</button></div>
         <div class="p-4 bg-black/20 shrink-0 border-b border-white/10 space-y-3">
             <input type="text" id="cancerSearch" onkeyup="renderCancerNotes()" class="w-full bg-black/40 border border-white/20 rounded-xl p-2.5 text-sm text-white" placeholder="Search Name...">
             <div class="flex flex-wrap gap-2"><input type="text" id="cancerNewName" class="w-[20%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Name *"><input type="text" id="cancerType" class="w-[20%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Type of Cancer"><input type="text" id="cancerPHE" class="w-[18%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="PHE"><input type="text" id="cancerHSC" class="flex-1 bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="HSC Name"><button onclick="addCancerPatient()" class="w-[15%] bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-sm font-bold transition">Add Notes</button></div>
         </div>
         <div class="p-3 overflow-y-auto space-y-2" id="cancerNotesList" style="max-height: 50vh;"></div>
-      </div>
-    </div>
+    </div></div>
 
     <!-- SIDE DRAWER -->
     <div id="sideDrawerOverlay" class="side-drawer-overlay" onclick="closeNoteDrawer()"></div>
@@ -846,17 +832,14 @@
         }
 
         function openModal(id) { 
-            try {
-                const modal = document.getElementById(id);
-                if(modal) {
-                    modal.classList.add('active');
-                    const windowEl = modal.querySelector('.macos-modal-window');
-                    if (windowEl) windowEl.classList.remove('closing');
-                    if(id === 'ancModal' && document.getElementById('ancNotesList').innerHTML === '') renderAncNotes();
-                    if(id === 'cancerNotesModal' && document.getElementById('cancerNotesList').innerHTML === '') renderCancerNotes();
-                    if(id === 'notesModal') renderQuickNotes();
-                }
-            } catch(e) { console.error("Error opening modal:", e); }
+            const modal = document.getElementById(id);
+            if(modal) {
+                modal.classList.add('active');
+                modal.querySelector('.macos-modal-window').classList.remove('closing');
+                if(id === 'ancModal' && document.getElementById('ancNotesList').innerHTML === '') renderAncNotes();
+                if(id === 'cancerNotesModal' && document.getElementById('cancerNotesList').innerHTML === '') renderCancerNotes();
+                if(id === 'notesModal') renderQuickNotes();
+            }
         }
         
         function closeModalInstant(id) { let m=document.getElementById(id); if(m) m.classList.remove('active'); }
@@ -879,18 +862,17 @@
             currentZoom = parseFloat((currentZoom + step).toFixed(1));
             if (currentZoom < 0.5) currentZoom = 0.5;
             if (currentZoom > 3.0) currentZoom = 3.0;
-            let wrapper = document.getElementById('sheetZoomWrapper');
-            wrapper.style.transform = `scale(${currentZoom})`;
-            wrapper.style.width = `${100 / currentZoom}%`;
-            wrapper.style.height = `${100 / currentZoom}vh`;
+            document.getElementById('sheetIframe').style.transform = `scale(${currentZoom})`;
+            document.getElementById('sheetIframe').style.transformOrigin = `top left`;
+            document.getElementById('sheetIframe').style.width = `${100 / currentZoom}%`;
+            document.getElementById('sheetIframe').style.height = `${100 / currentZoom}vh`;
             wakeUpControls();
         }
         function resetZoom() {
             currentZoom = 1;
-            let wrapper = document.getElementById('sheetZoomWrapper');
-            wrapper.style.transform = `scale(1)`;
-            wrapper.style.width = `100%`;
-            wrapper.style.height = `100vh`;
+            document.getElementById('sheetIframe').style.transform = `scale(1)`;
+            document.getElementById('sheetIframe').style.width = `100%`;
+            document.getElementById('sheetIframe').style.height = `100vh`;
             wakeUpControls();
         }
 
@@ -944,129 +926,6 @@
 
         function promptSecretAdmin(){if(!document.getElementById('deoWrapper').classList.contains('hidden')){alert('Admin Mode unlocked!');return;}if(prompt("Password:")==="admin123"){document.getElementById('deoWrapper').classList.remove('hidden');sessionStorage.setItem('adminUnlocked','true');}}
         function lockSecretDeo(){document.getElementById('deoWrapper').classList.add('hidden');sessionStorage.removeItem('adminUnlocked');alert('Locked.');}
-
-        // ==================== MAGIC SIDE DRAWER LOGIC ====================
-        let currentNoteContext = { type: null, id: null };
-        let autoSaveTimer = null;
-
-        function openNoteDrawer(type, id) {
-            currentNoteContext = { type, id }; let record = null; let badgeHtml = '';
-            if(type === 'quick') { record = JSON.parse(localStorage.getItem('quickNotesDB')).find(n => String(n.id) === String(id)); badgeHtml = `<span class="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-[10px] uppercase font-bold"><i class="fas fa-sticky-note mr-1"></i> Quick Note</span>`; }
-            else if(type === 'anc') { 
-                record = JSON.parse(localStorage.getItem('ancMothersDB')).find(n => String(n.id) === String(id)); 
-                if(record && record.rch) badgeHtml += `<a href="https://picme3.tn.gov.in/reports/dashboard/rch/${record.rch}/" target="_blank" onclick="event.stopPropagation();" class="bg-blue-500/20 hover:bg-blue-500/40 text-blue-400 hover:text-white border border-blue-500/30 px-2 py-1 rounded text-[10px] uppercase font-bold transition mr-2 inline-block"><i class="fas fa-id-card mr-1"></i> ${record.rch} <i class="fas fa-external-link-alt ml-1"></i></a>`;
-                if(record && record.phc) badgeHtml += `<span class="bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2 py-1 rounded text-[10px] uppercase font-bold"><i class="fas fa-hospital-alt mr-1"></i> ${record.phc}</span>`;
-            }
-            else if(type === 'cancer') { 
-                record = JSON.parse(localStorage.getItem('cancerPatientsDB')).find(n => String(n.id) === String(id));
-                if(record && record.type) badgeHtml += `<span class="bg-pink-500/20 text-pink-400 px-2 py-1 rounded text-[10px] uppercase font-bold mr-2"><i class="fas fa-viruses mr-1"></i> ${record.type}</span>`;
-                if(record && record.phc) badgeHtml += `<span class="bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2 py-1 rounded text-[10px] uppercase font-bold"><i class="fas fa-hospital-alt mr-1"></i> ${record.phc}</span>`;
-            }
-            if(!record) return;
-            document.getElementById('drawerSubInfo').innerHTML = badgeHtml; document.getElementById('drawerTitle').innerText = record.name || record.title; document.getElementById('drawerEditor').innerHTML = record.notes || ""; document.getElementById('drawerStatus').innerHTML = '<i class="fas fa-cloud text-slate-400"></i> <span class="text-slate-400">Cloud Synced</span>';
-            document.getElementById('sideDrawerOverlay').classList.add('active'); document.getElementById('sideDrawer').classList.add('open');
-        }
-
-        function closeNoteDrawer() {
-            if(autoSaveTimer) { clearTimeout(autoSaveTimer); executeAutoSave(); }
-            document.getElementById('sideDrawer').classList.remove('open'); document.getElementById('sideDrawerOverlay').classList.remove('active');
-            if(currentNoteContext.type === 'quick') renderQuickNotes(); else if(currentNoteContext.type === 'anc') renderAncNotes(); else if(currentNoteContext.type === 'cancer') renderCancerNotes();
-        }
-
-        function triggerAutoSave() { document.getElementById('drawerStatus').innerHTML = '<i class="fas fa-spinner fa-spin text-amber-400"></i> <span class="text-amber-400">Typing...</span>'; clearTimeout(autoSaveTimer); autoSaveTimer = setTimeout(() => { executeAutoSave(); }, 1500); }
-
-        function executeAutoSave() {
-            const content = document.getElementById('drawerEditor').innerHTML; const { type, id } = currentNoteContext; let dbName = '', sheetName = '';
-            if(type === 'quick') { dbName = 'quickNotesDB'; sheetName = 'QuickNotes'; } else if(type === 'anc') { dbName = 'ancMothersDB'; sheetName = 'ANCMothers'; } else if(type === 'cancer') { dbName = 'cancerPatientsDB'; sheetName = 'CancerPatients'; }
-            let list = JSON.parse(localStorage.getItem(dbName)) || []; let index = list.findIndex(item => String(item.id) === String(id));
-            if(index > -1) {
-                list[index].notes = content; localStorage.setItem(dbName, JSON.stringify(list)); document.getElementById('drawerStatus').innerHTML = '<i class="fas fa-sync fa-spin text-blue-400"></i> <span class="text-blue-400">Syncing...</span>';
-                let rowData = []; const d = list[index];
-                if(type === 'quick') rowData = [d.id, d.title, d.notes, new Date().toLocaleString('en-IN')]; else if(type === 'anc') rowData = [d.id, d.name, d.rch, d.phc, d.notes, new Date().toLocaleString('en-IN')]; else if(type === 'cancer') rowData = [d.id, d.name, d.type, d.phc, d.notes, new Date().toLocaleString('en-IN')];
-                fetch(CLOUD_API_URL, { method: "POST", body: JSON.stringify({ action: "update_record", sheetName: sheetName, id: d.id, row_data: rowData }) }).then(() => { document.getElementById('drawerStatus').innerHTML = '<i class="fas fa-check-circle text-emerald-500"></i> <span class="text-emerald-500">Auto-Saved</span>'; });
-            }
-        }
-        async function drawerPaste() { try { const text = await navigator.clipboard.readText(); document.getElementById('drawerEditor').innerHTML += (document.getElementById('drawerEditor').innerHTML ? '<br>' : '') + text; triggerAutoSave(); } catch (err) { alert('Paste failed!'); } }
-        function drawerCopy() { navigator.clipboard.writeText(document.getElementById('drawerEditor').innerText).then(() => alert("Copied!")); }
-
-        // ==================== RENDERING NOTES LISTS WITH SEARCH ====================
-        function renderQuickNotes() { 
-            const list = document.getElementById('qnNotesList'); 
-            const searchQuery = (document.getElementById('qnSearch')?.value || "").toLowerCase();
-            let notes = JSON.parse(localStorage.getItem('quickNotesDB')) || []; 
-            list.innerHTML = ''; 
-            
-            notes.filter(n => n.title.toLowerCase().includes(searchQuery)).forEach(n => { 
-                const div = document.createElement('div'); 
-                div.className = "bg-black/30 border border-white/10 rounded-xl overflow-hidden hover:bg-white/10 transition cursor-pointer"; 
-                div.innerHTML = `<div class="p-3 flex justify-between items-center" onclick="openNoteDrawer('quick', '${n.id}')"><h4 class="font-bold text-white text-sm"><i class="fas fa-file-alt mr-2 text-blue-400"></i>${n.title}</h4></div>`; 
-                list.appendChild(div); 
-            }); 
-        }
-        
-        function renderAncNotes() { 
-            const list = document.getElementById('ancNotesList'); 
-            const searchQuery = (document.getElementById('ancSearch')?.value || "").toLowerCase();
-            let mothers = JSON.parse(localStorage.getItem('ancMothersDB')) || []; 
-            list.innerHTML = ''; 
-            
-            mothers.filter(m => (m.name && m.name.toLowerCase().includes(searchQuery)) || (m.rch && m.rch.toLowerCase().includes(searchQuery))).forEach(m => { 
-                const div = document.createElement('div'); 
-                div.className = "bg-black/30 border border-white/10 rounded-xl overflow-hidden hover:bg-white/10 transition cursor-pointer"; 
-                div.innerHTML = `<div class="p-3 flex justify-between items-start" onclick="openNoteDrawer('anc', '${m.id}')"><div><h4 class="font-bold text-white text-sm mb-1"><i class="fas fa-user-nurse mr-2 text-rose-400"></i>${m.name}</h4><div class="text-[10px] text-blue-300 font-bold">${m.rch} | ${m.phc}</div></div></div>`; 
-                list.appendChild(div); 
-            }); 
-        }
-        
-        function renderCancerNotes() { 
-            const list = document.getElementById('cancerNotesList'); 
-            const searchQuery = (document.getElementById('cancerSearch')?.value || "").toLowerCase();
-            let patients = JSON.parse(localStorage.getItem('cancerPatientsDB')) || []; 
-            list.innerHTML = ''; 
-            
-            patients.filter(p => p.name && p.name.toLowerCase().includes(searchQuery)).forEach(p => { 
-                const div = document.createElement('div'); 
-                div.className = "bg-black/30 border border-white/10 rounded-xl overflow-hidden hover:bg-white/10 transition cursor-pointer"; 
-                div.innerHTML = `<div class="p-3 flex justify-between items-start" onclick="openNoteDrawer('cancer', '${p.id}')"><div><h4 class="font-bold text-white text-sm mb-1"><i class="fas fa-user-injured mr-2 text-pink-400"></i>${p.name}</h4><div class="text-[10px] text-pink-300 font-bold">${p.type}</div></div></div>`; 
-                list.appendChild(div); 
-            }); 
-        }
-        
-        function addQuickNote() { const t = document.getElementById('qnTitle').value; if(t) { let d = JSON.parse(localStorage.getItem('quickNotesDB'))||[]; d.unshift({id:Date.now(), title:t, notes:""}); localStorage.setItem('quickNotesDB', JSON.stringify(d)); renderQuickNotes(); document.getElementById('qnTitle').value = ''; } }
-        
-        function addAncMother() { 
-            const n = document.getElementById('ancNewName').value;
-            const r = document.getElementById('ancRchId').value;
-            const p = document.getElementById('ancPHE') ? document.getElementById('ancPHE').value : ''; 
-            
-            if(n && r && p) { 
-                let d = JSON.parse(localStorage.getItem('ancMothersDB'))||[]; 
-                const newId = Date.now();
-                d.unshift({id:newId, name:n, rch:r, phc:p, notes:""}); 
-                localStorage.setItem('ancMothersDB', JSON.stringify(d)); 
-                renderAncNotes(); 
-                document.getElementById('ancNewName').value = '';
-                document.getElementById('ancRchId').value = '';
-                if(document.getElementById('ancPHE')) document.getElementById('ancPHE').value = '';
-                openNoteDrawer('anc', newId);
-            } else {
-                alert("தயவுசெய்து Name, RCH ID மற்றும் PHC மூன்றையும் பதிவு செய்யவும்.");
-            }
-        }
-        
-        function addCancerPatient() { 
-            const n = document.getElementById('cancerNewName').value, t = document.getElementById('cancerType').value; 
-            if(n) { 
-                let d = JSON.parse(localStorage.getItem('cancerPatientsDB'))||[]; 
-                const newId = Date.now();
-                d.unshift({id:newId, name:n, type:t, phc:"", notes:""}); 
-                localStorage.setItem('cancerPatientsDB', JSON.stringify(d)); 
-                renderCancerNotes(); 
-                document.getElementById('cancerNewName').value = '';
-                document.getElementById('cancerType').value = '';
-                openNoteDrawer('cancer', newId);
-            } 
-        }
 
         // ==================== DASHBOARDS JS ====================
         async function fetchDashData(gid, overrideBase = null) {
@@ -1200,7 +1059,7 @@
             }catch(e){}
         }
 
-      /* 3. LIVE DELIVERY DASHBOARD */
+        /* 3. LIVE DELIVERY DASHBOARD */
         const DEL_OVERRIDE_BASE = "2PACX-1vQjfIgSogvl_U49pX6ZXVG0Kg4YXd6grE06xOX5aqtXyhka04iB9uuUs2nPpWPI7kJG6Jsj_JelouBe";
         function loadAndOpenDeliveryApp() {
             try {
