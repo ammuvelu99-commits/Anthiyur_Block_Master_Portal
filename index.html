@@ -596,7 +596,7 @@
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="dash-card bg-black/20"><h3 class="text-sm font-bold text-slate-300 mb-4">3-Year Split</h3><div class="chart-container"><canvas id="fdYearPieChart"></canvas></div></div>
-                <div class="dash-card bg-black/20"><h3 class="text-sm font-bold text-slate-300 mb-4">PHC Wise Cases</h3><div class="chart-container"><canvas id="fdPhcBarChart"></canvas></div></div>
+                <div class="dash-card bg-black/20"><h3 class="text-sm font-bold text-slate-300 mb-4">PHC Wise Cases</h3><div class="chart-container" id="fdPhcLiquidContainer"></div></div>
             </div>
             
             <div class="bottom-action-bar" id="fd_bottom_bar">
@@ -716,7 +716,7 @@
         
         <div id="nksContent" class="w-full max-w-6xl mx-auto hidden flex-col gap-6 z-10 pb-10">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" id="nks_top_cards"></div>
-            <div class="dash-card bg-black/20"><h3 class="text-sm font-bold text-slate-300 mb-4">Camp Department Referral & Follow-up</h3><div class="chart-container"><canvas id="nksBarChart"></canvas></div></div>
+            <div class="dash-card bg-black/20"><h3 class="text-sm font-bold text-slate-300 mb-4">Camp Department Referral & Follow-up</h3><div class="chart-container" id="nksLiquidContainer"></div></div>
             
             <div class="bottom-action-bar" id="nks_bottom_bar">
                 <div class="export-options-open hidden"><button onclick="window.print()" class="export-sub-btn bg-purple-600" title="Print/PDF"><i class="fas fa-print"></i></button><button onclick="exportToImage('glassyNksUI')" class="export-sub-btn bg-blue-600" title="Download Image"><i class="fas fa-image"></i></button></div>
@@ -744,12 +744,67 @@
                 return line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim());
             });
         }
+        
+        // Helper: Format Y-Axis Scale
+        function getNiceMax(val) {
+            if(val <= 10) return 10;
+            let digits = Math.floor(Math.log10(val));
+            let pow = Math.pow(10, digits);
+            let fraction = val / pow;
+            let nice = fraction <= 1 ? 1 : fraction <= 2 ? 2 : fraction <= 5 ? 5 : 10;
+            return nice * pow;
+        }
+
+        // Helper: Build Animated Bar Charts
+        function renderGroupedLiquidChart(containerId, labels, datasets) {
+            let maxVal = 10;
+            datasets.forEach(ds => ds.data.forEach(v => { if(v > maxVal) maxVal = v; }));
+            maxVal = getNiceMax(maxVal);
+
+            let html = '<div class="liquid-chart-wrapper">';
+            html += `<div class="liquid-axis-y"><span>${maxVal}</span><span>${maxVal/2}</span><span>0</span></div>`;
+            html += '<div class="liquid-chart-inner"><div class="liquid-bars-container" style="justify-content: space-around;">';
+
+            for(let i=0; i<labels.length; i++) {
+                html += `<div class="liquid-group" style="display:flex; gap:4px; height:100%; align-items:flex-end;">`;
+                datasets.forEach(ds => {
+                    let val = ds.data[i] || 0;
+                    let perc = (val / maxVal) * 85; 
+                    let color = ds.color || '#0ea5e9';
+                    
+                    html += `
+                    <div class="liquid-bar-col" style="width:16px; position:relative; height:100%; display:flex; flex-direction:column; justify-content:flex-end;">
+                        ${val > 0 ? `<div class="liquid-val pop-animate" style="font-size:8px; color:${color}; position:absolute; top:-15px; left:50%; transform:translateX(-50%);">${val}</div>` : ''}
+                        <div class="liquid-bar-bg" style="width:100%; height: ${val > 0 ? `calc(${perc}% + 5px)` : '5px'}; border: 1px solid ${color}40; background: ${color}10; border-radius:4px 4px 2px 2px; position:relative; overflow:hidden;">
+                            <div class="liquid-fill-level" style="position:absolute; bottom:0; width:100%; height: ${val > 0 ? '100%' : '0'};">
+                                ${val > 0 ? `<div class="wave-anim" style="background-image:url('data:image/svg+xml;utf8,<svg viewBox=\\'0 0 100 10\\' preserveAspectRatio=\\'none\\' xmlns=\\'http://www.w3.org/2000/svg\\'><path d=\\'M0 5 Q 25 10, 50 5 T 100 5 L 100 10 L 0 10 Z\\' fill=\\'${encodeURIComponent(color)}\\'/></svg>'); width:200%; height:5px; animation: wave-motion 2s linear infinite;"></div><div class="liquid-body" style="background: ${color}; width:100%; height:calc(100% - 4px);"></div>` : ''}
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                html += `</div>`;
+            }
+            html += '</div><div class="liquid-labels-container" style="display:flex; justify-content:space-around; margin-top:5px; height:auto;">';
+            labels.forEach(label => {
+                let displayLabel = label;
+                if(displayLabel.toUpperCase() === 'CHINNATHAMBIPALAYAM') displayLabel = 'CT Palayam';
+                html += `<div class="liquid-month text-center" style="font-size:9px; width:100%; word-break: break-word;">${displayLabel}</div>`;
+            });
+            html += '</div>';
+            
+            html += '<div style="display:flex; justify-content:center; gap:15px; margin-top:10px;">';
+            datasets.forEach(ds => {
+                html += `<div style="display:flex; align-items:center; gap:5px; font-size:10px; font-weight:bold; color:#cbd5e1;"><span style="width:12px; height:12px; background:${ds.color}; border-radius:3px;"></span>${ds.label}</div>`;
+            });
+            html += '</div>';
+            
+            html += '</div></div>';
+            document.getElementById(containerId).innerHTML = html;
+        }
 
         const pieCalloutPlugin = { color: '#fff', font: { weight: 'bold', size: 10 }, align: 'end', anchor: 'end', offset: 5, formatter: function(value, ctx) { if (!value || value === 0 || value === "0") return ''; let sum = 0; ctx.chart.data.datasets[0].data.forEach(function(d){ sum += Number(d); }); let percentage = sum > 0 ? (value * 100 / sum).toFixed(1) + "%" : ""; return ctx.chart.data.labels[ctx.dataIndex] + '\n' + percentage; } };
-        const chartDataLabelsBarPlugin = { color: '#fff', font: { weight: 'bold', size: 10 }, formatter: function(value) { return value > 0 ? value : ''; }, align: 'top', anchor: 'end' };
         let activeCharts = {};
 
-        // Export Actions Toggle & Image Generation
         function togglePrint(containerId) {
             const container = document.getElementById(containerId); if(!container) return;
             const options = container.querySelector('.export-options-open');
@@ -821,11 +876,6 @@
         function initAllData() {
             const savedTheme = localStorage.getItem('appTheme') || 'glass'; document.body.setAttribute('data-theme', savedTheme);
             if (sessionStorage.getItem('adminUnlocked') === 'true') { document.getElementById('deoWrapper').classList.remove('hidden'); }
-            
-            fetch(CLOUD_API_URL + "?sheetName=QuickNotes").then(r=>r.json()).then(res => { if(res.data) { let arr=[]; for(let i=1; i<res.data.length; i++) arr.push({id:res.data[i][0], title:res.data[i][1], notes:res.data[i][2]}); localStorage.setItem('quickNotesDB', JSON.stringify(arr.reverse())); } }).catch(e=>console.log(e));
-            fetch(CLOUD_API_URL + "?sheetName=ANCMothers").then(r=>r.json()).then(res => { if(res.data) { let arr=[]; for(let i=1; i<res.data.length; i++) arr.push({id:res.data[i][0], name:res.data[i][1], rch:res.data[i][2], phc:res.data[i][3], notes:res.data[i][4]}); localStorage.setItem('ancMothersDB', JSON.stringify(arr.reverse())); } }).catch(e=>console.log(e));
-            fetch(CLOUD_API_URL + "?sheetName=CancerPatients").then(r=>r.json()).then(res => { if(res.data) { let arr=[]; for(let i=1; i<res.data.length; i++) arr.push({id:res.data[i][0], name:res.data[i][1], type:res.data[i][2], phc:res.data[i][3], notes:res.data[i][4]}); localStorage.setItem('cancerPatientsDB', JSON.stringify(arr.reverse())); } }).catch(e=>console.log(e));
-            
             document.addEventListener('mousemove', wakeUpControls); document.addEventListener('touchstart', wakeUpControls);
         }
 
@@ -850,9 +900,6 @@
             if(modal) {
                 modal.classList.add('active');
                 modal.querySelector('.macos-modal-window').classList.remove('closing');
-                if(id === 'ancModal' && document.getElementById('ancNotesList').innerHTML === '') renderAncNotes();
-                if(id === 'cancerNotesModal' && document.getElementById('cancerNotesList').innerHTML === '') renderCancerNotes();
-                if(id === 'notesModal') renderQuickNotes();
             }
         }
         
@@ -943,8 +990,9 @@
 
         // ==================== DASHBOARDS JS ====================
         async function fetchDashData(gid, overrideBase = null) {
+            // Added &rnd= timestamp to force bypassing browser cache, but remember Google's native pub?csv server caches for 5 minutes.
             let base = overrideBase ? `https://docs.google.com/spreadsheets/d/e/${overrideBase}/pub?single=true&output=csv&gid=` : DASH_CSV_BASE;
-            try { let res = await fetch(base + gid + '&_t=' + new Date().getTime(), { cache: 'no-store' }); let text = await res.text(); if (text.includes("Error") || text.includes("<html")) throw new Error(); return text; } catch(e) { throw new Error(); }
+            try { let res = await fetch(base + gid + '&rnd=' + Date.now(), { cache: 'no-cache' }); let text = await res.text(); if (text.includes("Error") || text.includes("<html")) throw new Error(); return text; } catch(e) { throw new Error(); }
         }
 
         /* 1. FEVER CURRENT YEAR (2026) DASHBOARD */
@@ -958,9 +1006,11 @@
                     let fRows = parseCSVRobust(texts[0]);
                     let dRows = parseCSVRobust(texts[1]);
                     
-                    let fTotals = fRows.slice().reverse().find(function(r){ return r.join('').toUpperCase().includes('GRANDTOTAL') || r.join('').toUpperCase().includes('TOTAL'); });
-                    let dTotals = dRows.slice().reverse().find(function(r){ return r.join('').toUpperCase().includes('GRANDTOTAL') || r.join('').toUpperCase().includes('TOTAL'); });
+                    // Fixed Data Mismatch logic: Identify exact "Total" Row instead of relying blindly on fTotals[18]
+                    let fTotals = fRows.slice().reverse().find(r => r.join('').toUpperCase().includes('TOTAL') && !r.join('').toUpperCase().includes('SUB'));
+                    let dTotals = dRows.slice().reverse().find(r => r.join('').toUpperCase().includes('TOTAL') && !r.join('').toUpperCase().includes('SUB'));
                     
+                    // IF THE SCRIPT BREAKS AGAIN: Update the numbers (18, 3, 6, 9, 12, 15) below to match your exact CSV Columns
                     f26Data = { total: cleanNum(fTotals[18]), ath: cleanNum(fTotals[3]), bar: cleanNum(fTotals[6]), ctp: cleanNum(fTotals[9]), enna: cleanNum(fTotals[12]), osur: cleanNum(fTotals[15]), monthly: [cleanNum(fRows[1][18]), cleanNum(fRows[2][18]), cleanNum(fRows[3][18]), cleanNum(fRows[4][18]), cleanNum(fRows[5][18]), cleanNum(fRows[6][18]), cleanNum(fRows[7][18]), cleanNum(fRows[8][18]), cleanNum(fRows[9][18]), cleanNum(fRows[10][18]), cleanNum(fRows[11][18]), cleanNum(fRows[12][18])] };
                     d26Data = { total: cleanNum(dTotals[18]), ath: cleanNum(dTotals[3]), bar: cleanNum(dTotals[6]), ctp: cleanNum(dTotals[9]), enna: cleanNum(dTotals[12]), osur: cleanNum(dTotals[15]), monthly: [cleanNum(dRows[1][18]), cleanNum(dRows[2][18]), cleanNum(dRows[3][18]), cleanNum(dRows[4][18]), cleanNum(dRows[5][18]), cleanNum(dRows[6][18]), cleanNum(dRows[7][18]), cleanNum(dRows[8][18]), cleanNum(dRows[9][18]), cleanNum(dRows[10][18]), cleanNum(dRows[11][18]), cleanNum(dRows[12][18])] };
                     document.getElementById('feverCurrentContent').classList.remove('hidden'); document.getElementById('feverCurrentContent').classList.add('flex');
@@ -999,30 +1049,9 @@
                         plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } 
                     });
                     
-                    let maxVal = Math.max(...d.monthly, 10);
-                    let labels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-                    let html = '<div class="liquid-chart-wrapper">';
-                    html += `<div class="liquid-axis-y"><span>${Math.ceil(maxVal)}</span><span>${Math.ceil(maxVal/2)}</span><span>0</span></div>`;
-                    html += '<div class="liquid-chart-inner"><div class="liquid-bars-container">';
-                    for(let i=0; i<12; i++) {
-                        let val = d.monthly[i];
-                        let perc = (val / maxVal) * 85; 
-                        let typeClass = tabType === 'fever' ? 'fever' : 'dengue';
-                        html += `<div class="liquid-bar-col">
-                                        <div class="liquid-bar-bg" style="width:20px;">
-                                            ${val > 0 ? `<div class="liquid-val pop-animate">${val}</div>` : ''}
-                                            <div class="liquid-fill-level" style="height: ${val > 0 ? `calc(${perc}% + 10px)` : '0'};">
-                                                ${val > 0 ? `<div class="wave-anim wave-${typeClass}"></div><div class="liquid-body liquid-body-${typeClass}"></div>` : ''}
-                                            </div>
-                                        </div>
-                                 </div>`;
-                    }
-                    html += '</div><div class="liquid-labels-container">';
-                    for(let i=0; i<12; i++) {
-                        html += `<div class="liquid-month text-center" style="width:100%;">${labels[i]}</div>`;
-                    }
-                    html += '</div></div></div>';
-                    document.getElementById('fcMonthLiquidContainer').innerHTML = html;
+                    renderGroupedLiquidChart('fcMonthLiquidContainer', ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'], [
+                        { label: tabType === 'fever' ? 'Fever Trend' : 'Dengue Trend', data: d.monthly, color: tabType === 'fever' ? '#f97316' : '#f59e0b' }
+                    ]);
                 }, 200);
             } catch(e){}
         }
@@ -1038,8 +1067,8 @@
                     let fRows = parseCSVRobust(texts[0]);
                     let dRows = parseCSVRobust(texts[1]);
                     
-                    let fTotals = fRows.slice().reverse().find(function(r){ return r.join('').toUpperCase().includes('GRANDTOTAL') || r.join('').toUpperCase().includes('TOTAL');});
-                    let dTotals = dRows.slice().reverse().find(function(r){ return r.join('').toUpperCase().includes('GRANDTOTAL') || r.join('').toUpperCase().includes('TOTAL');});
+                    let fTotals = fRows.slice().reverse().find(r => r.join('').toUpperCase().includes('TOTAL') && !r.join('').toUpperCase().includes('SUB'));
+                    let dTotals = dRows.slice().reverse().find(r => r.join('').toUpperCase().includes('TOTAL') && !r.join('').toUpperCase().includes('SUB'));
                     const getVal = function(rowArr, idx) { return rowArr ? cleanNum(rowArr[idx]) : 0; };
                     globalFeverData = { y24: getVal(fTotals, 16), y25: getVal(fTotals, 17), y26: getVal(fTotals, 18), total: getVal(fTotals, 16) + getVal(fTotals, 17) + getVal(fTotals, 18), phc24: [getVal(fTotals, 1), getVal(fTotals, 4), getVal(fTotals, 7), getVal(fTotals, 10), getVal(fTotals, 13)], phc25: [getVal(fTotals, 2), getVal(fTotals, 5), getVal(fTotals, 8), getVal(fTotals, 11), getVal(fTotals, 14)], phc26: [getVal(fTotals, 3), getVal(fTotals, 6), getVal(fTotals, 9), getVal(fTotals, 12), getVal(fTotals, 15)] };
                     globalDengueData = { y24: getVal(dTotals, 16), y25: getVal(dTotals, 17), y26: getVal(dTotals, 18), total: getVal(dTotals, 16) + getVal(dTotals, 17) + getVal(dTotals, 18), phc24: [getVal(dTotals, 1), getVal(dTotals, 4), getVal(dTotals, 7), getVal(dTotals, 10), getVal(dTotals, 13)], phc25: [getVal(dTotals, 2), getVal(dTotals, 5), getVal(dTotals, 8), getVal(dTotals, 11), getVal(dTotals, 14)], phc26: [getVal(dTotals, 3), getVal(dTotals, 6), getVal(dTotals, 9), getVal(dTotals, 12), getVal(dTotals, 15)] };
@@ -1071,7 +1100,12 @@
                 setTimeout(function() {
                     let pieColors = tabType === 'fever' ? ['#3b82f6', '#f59e0b', '#10b981'] : ['#3b82f6', '#ef4444', '#f59e0b'];
                     createOrUpdateChart('fdYearPieChart', 'pie', { labels: ['2024', '2025', '2026'], datasets: [{ data: [dataObj.y24, dataObj.y25, dataObj.y26], backgroundColor: pieColors, borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
-                    createOrUpdateChart('fdPhcBarChart', 'bar', { labels: ['Athani', 'Bargur', 'CT Palayam', 'Ennamangalam', 'Hosur'], datasets: [{ label: '2024', data: dataObj.phc24, backgroundColor: pieColors[0] }, { label: '2025', data: dataObj.phc25, backgroundColor: pieColors[1] }, { label: '2026', data: dataObj.phc26, backgroundColor: pieColors[2] }] }, { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: '#cbd5e1' } }, datalabels: chartDataLabelsBarPlugin }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' }, color: '#cbd5e1' } } } });
+                    
+                    renderGroupedLiquidChart('fdPhcLiquidContainer', ['Athani', 'Bargur', 'CT Palayam', 'Ennamangalam', 'Hosur'], [
+                        { label: '2024', data: dataObj.phc24, color: pieColors[0] },
+                        { label: '2025', data: dataObj.phc25, color: pieColors[1] },
+                        { label: '2026', data: dataObj.phc26, color: pieColors[2] }
+                    ]);
                 }, 200);
             }catch(e){}
         }
@@ -1095,7 +1129,7 @@
                 fetchDashData(gid, DEL_OVERRIDE_BASE).then(function(csvText) {
                     let rows = parseCSVRobust(csvText);
                     
-                    let totalRow = rows.slice().reverse().find(function(r){ return r.join('').toUpperCase().includes('TOTAL'); }); 
+                    let totalRow = rows.slice().reverse().find(r => r.join('').toUpperCase().includes('TOTAL') && !r.join('').toUpperCase().includes('SUB')); 
                     let phcRows = rows.filter(function(r){ return r[0] && !isNaN(parseInt(r[0])) && parseInt(r[0]) <= 20; }).slice(0, 5);
                     
                     if(!totalRow) throw new Error(); 
@@ -1116,7 +1150,9 @@
 
                     document.getElementById('deliveryContent').classList.remove('hidden'); document.getElementById('deliveryContent').classList.add('flex');
 
-                    let chartPhcNames = []; let chartPhcNorms = []; let chartPhcLscs = []; let listContainer = document.getElementById('phc_list_container'); listContainer.innerHTML = '';
+                    let chartPhcNames = []; let chartPhcData = []; let chartGhData = []; let chartPvtData = [];
+                    let listContainer = document.getElementById('phc_list_container'); listContainer.innerHTML = '';
+                    
                     phcRows.forEach(function(r) { 
                         let n = r[1] ? String(r[1]).trim() : 'Unknown'; 
                         if(n !== 'Unknown') { 
@@ -1125,39 +1161,25 @@
                             if(cleanName.toUpperCase() === 'OSUR') cleanName = 'Hosur';
                             if(cleanName.toUpperCase() === 'ATHANI') cleanName = 'Athani';
                             
-                            chartPhcNames.push(cleanName); chartPhcNorms.push(cleanNum(r[7])+cleanNum(r[9])+cleanNum(r[11])); chartPhcLscs.push(cleanNum(r[8])+cleanNum(r[10])+cleanNum(r[12])); 
                             let t = cleanNum(r[2]); let p = cleanNum(r[7])+cleanNum(r[8]); let g = cleanNum(r[9])+cleanNum(r[10]); let v = cleanNum(r[11])+cleanNum(r[12]);
                             let fc = cleanNum(r[28]); let fu = cleanNum(r[34]);
+                            
+                            chartPhcNames.push(cleanName); chartPhcData.push(p); chartGhData.push(g); chartPvtData.push(v);
+                            
                             listContainer.innerHTML += `<div class="bg-white/5 border border-white/10 rounded-xl p-3"><div class="flex justify-between items-center border-b border-white/10 pb-2"><h5 class="text-sm text-white font-bold uppercase truncate" title="${n}">${cleanName}</h5><span class="bg-cyan-500/20 text-cyan-400 text-xs font-black px-2 py-1 rounded-lg">Tot: ${t}</span></div><div class="grid grid-cols-3 gap-1 text-center mt-2"><div class="bg-black/30 p-1.5 rounded-lg border border-white/5"><p class="text-[9px] text-emerald-400 mb-0.5">PHC</p><p class="text-sm font-bold text-white">${p} <span class="text-[8px] text-emerald-500/80">(${t>0?((p/t)*100).toFixed(0):0}%)</span></p></div><div class="bg-black/30 p-1.5 rounded-lg border border-white/5"><p class="text-[9px] text-amber-400 mb-0.5">GH</p><p class="text-sm font-bold text-white">${g} <span class="text-[8px] text-amber-500/80">(${t>0?((g/t)*100).toFixed(0):0}%)</span></p></div><div class="bg-black/30 p-1.5 rounded-lg border border-white/5"><p class="text-[9px] text-purple-400 mb-0.5">PVT</p><p class="text-sm font-bold text-white">${v} <span class="text-[8px] text-purple-500/80">(${t>0?((v/t)*100).toFixed(0):0}%)</span></p></div></div><div class="grid grid-cols-2 gap-1 text-center mt-1"><div class="bg-black/30 p-1.5 rounded-lg border border-white/5"><p class="text-[9px] text-blue-400 mb-0.5">FW Cov</p><p class="text-xs font-bold text-white">${fc} <span class="text-[8px] text-blue-500/80">(${t>0?((fc/t)*100).toFixed(0):0}%)</span></p></div><div class="bg-black/30 p-1.5 rounded-lg border border-white/5"><p class="text-[9px] text-rose-400 mb-0.5">Uncov</p><p class="text-xs font-bold text-white">${fu} <span class="text-[8px] text-rose-500/80">(${t>0?((fu/t)*100).toFixed(0):0}%)</span></p></div></div></div>`;
                         } 
                     });
                     
                     setTimeout(function() {
-                        createOrUpdateChart('delInstChart', 'doughnut', { labels: ['PHC', 'GH', 'Private'], datasets: [{ data: [phcTotal, ghTotal, pvtTotal], backgroundColor: ['#10b981', '#f59e0b', '#a855f7'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, cutout: '60%', layout: { padding: 20 }, plugins: { legend: { display: true, position: 'bottom', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
-                        createOrUpdateChart('delMethodChart', 'pie', { labels: ['Normal', 'LSCS / Others'], datasets: [{ data: [getVal(7)+getVal(9)+getVal(11), getVal(8)+getVal(10)+getVal(12)], backgroundColor: ['#0ea5e9', '#f43f5e'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'bottom', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
-                        createOrUpdateChart('fwStatusChart', 'pie', { labels: ['FW Covered', 'FW Uncovered'], datasets: [{ data: [fwCov, fwUncov], backgroundColor: ['#14b8a6', '#ef4444'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'bottom', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
+                        createOrUpdateChart('delInstChart', 'doughnut', { labels: ['PHC', 'GH', 'Private'], datasets: [{ data: [phcTotal, ghTotal, pvtTotal], backgroundColor: ['#10b981', '#f59e0b', '#8b5cf6'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, cutout: '60%', layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
+                        createOrUpdateChart('delMethodChart', 'pie', { labels: ['Normal', 'LSCS / Others'], datasets: [{ data: [getVal(7)+getVal(9)+getVal(11), getVal(8)+getVal(10)+getVal(12)], backgroundColor: ['#0ea5e9', '#f43f5e'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
+                        createOrUpdateChart('fwStatusChart', 'pie', { labels: ['FW Covered', 'FW Uncovered'], datasets: [{ data: [fwCov, fwUncov], backgroundColor: ['#14b8a6', '#ef4444'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
                         
-                        let maxDel = Math.max(...chartPhcNorms.map((v, i) => v + chartPhcLscs[i]), 10);
-                        let lHtml = '<div class="liquid-chart-wrapper">';
-                        lHtml += `<div class="liquid-axis-y"><span>${Math.ceil(maxDel)}</span><span>${Math.ceil(maxDel/2)}</span><span>0</span></div>`;
-                        lHtml += '<div class="liquid-chart-inner"><div class="liquid-bars-container">';
-                        for(let i=0; i<chartPhcNames.length; i++) {
-                            let val = chartPhcNorms[i] + chartPhcLscs[i];
-                            let perc = (val / maxDel) * 85; 
-                            lHtml += `<div class="liquid-bar-col"><div class="liquid-bar-bg" style="width:30px; max-width:100%;">
-                                            ${val > 0 ? `<div class="liquid-val pop-animate">${val}</div>` : ''}
-                                            <div class="liquid-fill-level" style="height: ${val > 0 ? `calc(${perc}% + 10px)` : '0'};">
-                                                ${val > 0 ? `<div class="wave-anim wave-fever" style="background-image:url('data:image/svg+xml;utf8,<svg viewBox=\\'0 0 100 10\\' preserveAspectRatio=\\'none\\' xmlns=\\'http://www.w3.org/2000/svg\\'><path d=\\'M0 5 Q 25 10, 50 5 T 100 5 L 100 10 L 0 10 Z\\' fill=\\'%230ea5e9\\'/></svg>');"></div><div class="liquid-body" style="background: linear-gradient(180deg, #0ea5e9 0%, #0284c7 100%);"></div>` : ''}
-                                            </div>
-                                        </div></div>`;
-                        }
-                        lHtml += '</div><div class="liquid-labels-container">';
-                        for(let i=0; i<chartPhcNames.length; i++) {
-                            let shortName = chartPhcNames[i];
-                            lHtml += `<div class="liquid-month text-center" style="width:100%; font-size:8px; overflow:hidden; text-overflow:ellipsis;" title="${chartPhcNames[i]}">${shortName}</div>`;
-                        }
-                        lHtml += '</div></div></div>';
-                        document.getElementById('delPhcLiquidContainer').innerHTML = lHtml;
+                        renderGroupedLiquidChart('delPhcLiquidContainer', chartPhcNames, [
+                            { label: 'PHC', data: chartPhcData, color: '#10b981' },
+                            { label: 'GH', data: chartGhData, color: '#f59e0b' },
+                            { label: 'Private', data: chartPvtData, color: '#8b5cf6' }
+                        ]);
                     }, 200);
                 }).catch(function(e) {
                     // Demo Fallback
@@ -1179,32 +1201,15 @@
                     document.getElementById('deliveryContent').classList.remove('hidden'); document.getElementById('deliveryContent').classList.add('flex');
                     
                     setTimeout(function(){
-                        createOrUpdateChart('delInstChart', 'doughnut', { labels: ['PHC', 'GH', 'Private'], datasets: [{ data: [d.phc, d.gh, d.pvt], backgroundColor: ['#10b981', '#f59e0b', '#a855f7'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, cutout: '60%', layout: { padding: 20 }, plugins: { legend: { display: true, position: 'bottom', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
-                        createOrUpdateChart('delMethodChart', 'pie', { labels: ['Normal Delivery', 'LSCS / Others'], datasets: [{ data: [d.phc + Math.round(d.gh*0.4) + Math.round(d.pvt*0.25), Math.round(d.gh*0.6) + Math.round(d.pvt*0.75)], backgroundColor: ['#0ea5e9', '#f43f5e'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'bottom', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
-                        createOrUpdateChart('fwStatusChart', 'pie', { labels: ['FW Covered', 'FW Uncovered'], datasets: [{ data: [d.fwCov, d.fwUncov], backgroundColor: ['#14b8a6', '#ef4444'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'bottom', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
+                        createOrUpdateChart('delInstChart', 'doughnut', { labels: ['PHC', 'GH', 'Private'], datasets: [{ data: [d.phc, d.gh, d.pvt], backgroundColor: ['#10b981', '#f59e0b', '#8b5cf6'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, cutout: '60%', layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
+                        createOrUpdateChart('delMethodChart', 'pie', { labels: ['Normal Delivery', 'LSCS / Others'], datasets: [{ data: [d.phc + Math.round(d.gh*0.4) + Math.round(d.pvt*0.25), Math.round(d.gh*0.6) + Math.round(d.pvt*0.75)], backgroundColor: ['#0ea5e9', '#f43f5e'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
+                        createOrUpdateChart('fwStatusChart', 'pie', { labels: ['FW Covered', 'FW Uncovered'], datasets: [{ data: [d.fwCov, d.fwUncov], backgroundColor: ['#14b8a6', '#ef4444'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
                         
-                        let maxDel = Math.max(...d.phcs.map(p => p.p + p.g + p.v), 10);
-                        let lHtml = '<div class="liquid-chart-wrapper">';
-                        lHtml += `<div class="liquid-axis-y"><span>${Math.ceil(maxDel)}</span><span>${Math.ceil(maxDel/2)}</span><span>0</span></div>`;
-                        lHtml += '<div class="liquid-chart-inner"><div class="liquid-bars-container">';
-                        for(let i=0; i<d.phcs.length; i++) {
-                            let val = d.phcs[i].p + d.phcs[i].g + d.phcs[i].v;
-                            let perc = (val / maxDel) * 85; 
-                            lHtml += `<div class="liquid-bar-col"><div class="liquid-bar-bg" style="width:30px; max-width:100%;">
-                                            ${val > 0 ? `<div class="liquid-val pop-animate">${val}</div>` : ''}
-                                            <div class="liquid-fill-level" style="height: ${val > 0 ? `calc(${perc}% + 10px)` : '0'};">
-                                                ${val > 0 ? `<div class="wave-anim wave-fever" style="background-image:url('data:image/svg+xml;utf8,<svg viewBox=\\'0 0 100 10\\' preserveAspectRatio=\\'none\\' xmlns=\\'http://www.w3.org/2000/svg\\'><path d=\\'M0 5 Q 25 10, 50 5 T 100 5 L 100 10 L 0 10 Z\\' fill=\\'%230ea5e9\\'/></svg>');"></div><div class="liquid-body" style="background: linear-gradient(180deg, #0ea5e9 0%, #0284c7 100%);"></div>` : ''}
-                                            </div>
-                                        </div></div>`;
-                        }
-                        lHtml += '</div><div class="liquid-labels-container">';
-                        for(let i=0; i<d.phcs.length; i++) {
-                            let shortName = d.phcs[i].n;
-                            if(shortName === 'Chinnathambipalayam') shortName = 'CT Palayam';
-                            lHtml += `<div class="liquid-month text-center" style="width:100%; font-size:8px; overflow:hidden; text-overflow:ellipsis;" title="${d.phcs[i].n}">${shortName}</div>`;
-                        }
-                        lHtml += '</div></div></div>';
-                        document.getElementById('delPhcLiquidContainer').innerHTML = lHtml;
+                        renderGroupedLiquidChart('delPhcLiquidContainer', d.phcs.map(p=>p.n), [
+                            { label: 'PHC', data: d.phcs.map(p=>p.p), color: '#10b981' },
+                            { label: 'GH', data: d.phcs.map(p=>p.g), color: '#f59e0b' },
+                            { label: 'Private', data: d.phcs.map(p=>p.v), color: '#8b5cf6' }
+                        ]);
                     }, 200);
                 });
             } catch(e){}
@@ -1251,37 +1256,12 @@
                         container.innerHTML += `<div class="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition flex flex-col gap-3"><div class="flex justify-between items-center border-b border-white/10 pb-2"><h5 class="text-sm text-white font-bold uppercase truncate">${cleanName}</h5><span class="text-xs text-fuchsia-400 font-bold bg-fuchsia-500/20 px-2 py-1 rounded">${perc}%</span></div><div class="grid grid-cols-3 gap-1 text-center mt-2"><div><p class="text-[9px] text-fuchsia-300">Target</p><p class="text-sm font-black text-white">${p.target}</p></div><div class="border-l border-r border-white/10"><p class="text-[9px] text-blue-300">Received</p><p class="text-sm font-black text-white">${p.received}</p></div><div><p class="text-[9px] text-emerald-400">Vaccinated</p><p class="text-sm font-black text-white">${p.doses}</p></div></div><div class="progress-bar-bg h-1.5 mt-2"><div class="progress-fill bg-fuchsia-500" style="width:${perc}%"></div></div></div>`;
                     });
                     setTimeout(function() {
-                        createOrUpdateChart('hpvOverallChart', 'doughnut', { labels: ['Vaccinated', 'Pending Target'], datasets: [{ data: [totalDoses, Math.max(0, totalTarget - totalDoses)], backgroundColor: ['#a855f7', 'rgba(255,255,255,0.1)'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, cutout: '60%', plugins: { legend: { display: true, position: 'bottom', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
+                        createOrUpdateChart('hpvOverallChart', 'doughnut', { labels: ['Vaccinated', 'Pending Target'], datasets: [{ data: [totalDoses, Math.max(0, totalTarget - totalDoses)], backgroundColor: ['#a855f7', 'rgba(255,255,255,0.1)'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, cutout: '60%', plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
                         
-                        let maxHpv = Math.max(...chartPhcTarget, 10);
-                        let hHtml = '<div class="liquid-chart-wrapper">';
-                        hHtml += `<div class="liquid-axis-y" style="width:30px;"><span>${Math.ceil(maxHpv)}</span><span>${Math.ceil(maxHpv/2)}</span><span>0</span></div>`;
-                        hHtml += '<div class="liquid-chart-inner"><div class="liquid-bars-container">';
-                        for(let i=0; i<chartPhcNames.length; i++) {
-                            let target = chartPhcTarget[i];
-                            let vac = chartPhcVaccinated[i];
-                            let glassHeightPerc = (target / maxHpv) * 85; 
-                            let fillPerc = target > 0 ? (vac / target) * 100 : 0; 
-                            if (fillPerc > 100) fillPerc = 100;
-                            
-                            hHtml += `<div class="liquid-bar-col">
-                                        <div style="position:relative; width:35px; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;">
-                                            <div class="liquid-val pop-animate" style="color:#d946ef; margin-bottom:2px; position:static; transform:none;">${vac}</div>
-                                            <div class="liquid-bar-bg" style="width:100%; height: ${target > 0 ? `calc(${glassHeightPerc}% + 10px)` : '10px'}; border-color:rgba(217, 70, 239, 0.3); background:rgba(217, 70, 239, 0.05);">
-                                                <div class="liquid-fill-level" style="height: ${vac > 0 ? `calc(${fillPerc}%)` : '0'};">
-                                                    ${vac > 0 ? `<div class="wave-anim wave-fever" style="background-image:url('data:image/svg+xml;utf8,<svg viewBox=\\'0 0 100 10\\' preserveAspectRatio=\\'none\\' xmlns=\\'http://www.w3.org/2000/svg\\'><path d=\\'M0 5 Q 25 10, 50 5 T 100 5 L 100 10 L 0 10 Z\\' fill=\\'%23d946ef\\'/></svg>');"></div><div class="liquid-body" style="background: linear-gradient(180deg, #d946ef 0%, #a21caf 100%);"></div>` : ''}
-                                                </div>
-                                            </div>
-                                        </div>
-                                      </div>`;
-                        }
-                        hHtml += '</div><div class="liquid-labels-container">';
-                        for(let i=0; i<chartPhcNames.length; i++) {
-                             let shortName = chartPhcNames[i];
-                             hHtml += `<div class="liquid-month text-center" style="width:100%; font-size:8px; overflow:hidden; text-overflow:ellipsis;" title="${chartPhcNames[i]}">${shortName}</div>`;
-                        }
-                        hHtml += '</div></div></div>';
-                        document.getElementById('hpvPhcLiquidContainer').innerHTML = hHtml;
+                        renderGroupedLiquidChart('hpvPhcLiquidContainer', chartPhcNames, [
+                            { label: 'Target', data: chartPhcTarget, color: 'rgba(255,255,255,0.2)' },
+                            { label: 'Vaccinated', data: chartPhcVaccinated, color: '#d946ef' }
+                        ]);
                     }, 200);
                 }).catch(function(e) { 
                     // Fallback Demo Data
@@ -1294,37 +1274,12 @@
                         container.innerHTML += `<div class="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition flex flex-col gap-3"><div class="flex justify-between items-center border-b border-white/10 pb-2"><h5 class="text-sm text-white font-bold uppercase truncate">${p.name}</h5><span class="text-xs text-fuchsia-400 font-bold bg-fuchsia-500/20 px-2 py-1 rounded">${perc}%</span></div><div class="grid grid-cols-3 gap-1 text-center mt-2"><div><p class="text-[9px] text-fuchsia-300">Target</p><p class="text-sm font-black text-white">${p.target}</p></div><div class="border-l border-r border-white/10"><p class="text-[9px] text-blue-300">Received</p><p class="text-sm font-black text-white">${p.received}</p></div><div><p class="text-[9px] text-emerald-400">Vaccinated</p><p class="text-sm font-black text-white">${p.doses}</p></div></div><div class="progress-bar-bg h-1.5 mt-2"><div class="progress-fill bg-fuchsia-500" style="width:${perc}%"></div></div></div>`;
                     });
                     setTimeout(function(){
-                        createOrUpdateChart('hpvOverallChart', 'doughnut', { labels: ['Vaccinated', 'Pending Target'], datasets: [{ data: [405, 1440-405], backgroundColor: ['#a855f7', 'rgba(255,255,255,0.1)'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, cutout: '60%', plugins: { legend: { display: true, position: 'bottom', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
+                        createOrUpdateChart('hpvOverallChart', 'doughnut', { labels: ['Vaccinated', 'Pending Target'], datasets: [{ data: [405, 1440-405], backgroundColor: ['#a855f7', 'rgba(255,255,255,0.1)'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, cutout: '60%', plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
                         
-                        let maxHpv = Math.max(...phcList.map(p => p.target), 10);
-                        let hHtml = '<div class="liquid-chart-wrapper">';
-                        hHtml += `<div class="liquid-axis-y" style="width:30px;"><span>${Math.ceil(maxHpv)}</span><span>${Math.ceil(maxHpv/2)}</span><span>0</span></div>`;
-                        hHtml += '<div class="liquid-chart-inner"><div class="liquid-bars-container">';
-                        for(let i=0; i<phcList.length; i++) {
-                            let target = phcList[i].target;
-                            let vac = phcList[i].doses;
-                            let glassHeightPerc = (target / maxHpv) * 85; 
-                            let fillPerc = target > 0 ? (vac / target) * 100 : 0; 
-                            if(fillPerc > 100) fillPerc = 100;
-                            
-                            hHtml += `<div class="liquid-bar-col">
-                                        <div style="position:relative; width:35px; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;">
-                                            <div class="liquid-val pop-animate" style="color:#d946ef; margin-bottom:2px; position:static; transform:none;">${vac}</div>
-                                            <div class="liquid-bar-bg" style="width:100%; height: ${target > 0 ? `calc(${glassHeightPerc}% + 10px)` : '10px'}; border-color:rgba(217, 70, 239, 0.3); background:rgba(217, 70, 239, 0.05);">
-                                                <div class="liquid-fill-level" style="height: ${vac > 0 ? `calc(${fillPerc}%)` : '0'};">
-                                                    ${vac > 0 ? `<div class="wave-anim wave-fever" style="background-image:url('data:image/svg+xml;utf8,<svg viewBox=\\'0 0 100 10\\' preserveAspectRatio=\\'none\\' xmlns=\\'http://www.w3.org/2000/svg\\'><path d=\\'M0 5 Q 25 10, 50 5 T 100 5 L 100 10 L 0 10 Z\\' fill=\\'%23d946ef\\'/></svg>');"></div><div class="liquid-body" style="background: linear-gradient(180deg, #d946ef 0%, #a21caf 100%);"></div>` : ''}
-                                                </div>
-                                            </div>
-                                        </div>
-                                      </div>`;
-                        }
-                        hHtml += '</div><div class="liquid-labels-container">';
-                        for(let i=0; i<phcList.length; i++) {
-                             let shortName = phcList[i].name;
-                             hHtml += `<div class="liquid-month text-center" style="width:100%; font-size:8px; overflow:hidden; text-overflow:ellipsis;" title="${phcList[i].name}">${shortName}</div>`;
-                        }
-                        hHtml += '</div></div></div>';
-                        document.getElementById('hpvPhcLiquidContainer').innerHTML = hHtml;
+                        renderGroupedLiquidChart('hpvPhcLiquidContainer', phcList.map(p=>p.name), [
+                            { label: 'Target', data: phcList.map(p=>p.target), color: 'rgba(255,255,255,0.2)' },
+                            { label: 'Vaccinated', data: phcList.map(p=>p.doses), color: '#d946ef' }
+                        ]);
                     }, 200);
                 });
             } catch(e){}
@@ -1339,7 +1294,7 @@
                 fetchDashData('1174046149').then(function(csvText){
                     let rows = parseCSVRobust(csvText);
                     
-                    let totalRow = rows.slice().reverse().find(function(r){ return r.join('').toUpperCase().includes('TOTAL'); });
+                    let totalRow = rows.slice().reverse().find(r => r.join('').toUpperCase().includes('TOTAL') && !r.join('').toUpperCase().includes('SUB'));
                     let totalCamps = 3; let totalScreened = 0, totalReferred = 0, totalTreated = 0, totalSurgery = 0;
                     let deptLabels = []; let referredData = []; let reachedData = []; let treatmentData = []; let surgeryData = [];
                     for(let i=1; i<rows.length; i++) {
@@ -1367,12 +1322,24 @@
                         <div class="dash-card bg-rose-500/10 border-rose-500/30 text-center"><h4 class="text-rose-300 mb-2">Surgery Done</h4><div class="text-3xl font-black text-white pop-animate">${totalSurgery}</div></div>
                     `;
                     setTimeout(function() {
-                        createOrUpdateChart('nksBarChart', 'bar', { labels: deptLabels, datasets: [{ label: 'Referred', data: referredData, backgroundColor: '#f59e0b' }, { label: 'Reached Facility', data: reachedData, backgroundColor: '#0ea5e9' }, { label: 'Treatment', data: treatmentData, backgroundColor: '#10b981' }, { label: 'Surgery', data: surgeryData, backgroundColor: '#f43f5e' }] }, { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: '#cbd5e1' } }, datalabels: chartDataLabelsBarPlugin }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' }, color: '#cbd5e1' } } } });
+                        renderGroupedLiquidChart('nksLiquidContainer', deptLabels, [
+                            { label: 'Referred', data: referredData, color: '#f59e0b' },
+                            { label: 'Reached Facility', data: reachedData, color: '#0ea5e9' },
+                            { label: 'Treatment', data: treatmentData, color: '#10b981' },
+                            { label: 'Surgery', data: surgeryData, color: '#f43f5e' }
+                        ]);
                     }, 200);
                 }).catch(function(e) {
                     document.getElementById('nksContent').classList.remove('hidden'); document.getElementById('nksContent').classList.add('flex');
                     document.getElementById('nks_top_cards').innerHTML = `<div class="dash-card bg-teal-500/10 border-teal-500/30 text-center"><h4 class="text-teal-300 mb-2">Total Camps</h4><div class="text-3xl font-black text-white pop-animate">3</div></div><div class="dash-card bg-amber-500/10 border-amber-500/30 text-center"><h4 class="text-amber-300 mb-2">Total Referred</h4><div class="text-3xl font-black text-white pop-animate">467</div></div><div class="dash-card bg-sky-500/10 border-sky-500/30 text-center"><h4 class="text-sky-300 mb-2">Reached Facility</h4><div class="text-3xl font-black text-white pop-animate">270</div></div><div class="dash-card bg-emerald-500/10 border-emerald-500/30 text-center"><h4 class="text-emerald-300 mb-2">Normal Treatment</h4><div class="text-3xl font-black text-white pop-animate">185</div></div><div class="dash-card bg-rose-500/10 border-rose-500/30 text-center"><h4 class="text-rose-300 mb-2">Surgery Done</h4><div class="text-3xl font-black text-white pop-animate">22</div></div>`;
-                    setTimeout(function() { createOrUpdateChart('nksBarChart', 'bar', { labels: ['VIA', 'CBE', 'ORAL', 'OPHTHAL', 'ORTHO', 'OG', 'PULMONO', 'SURGERY', 'ENT', 'CARDIO'], datasets: [{ label: 'Referred', data: [44, 39, 3, 101, 65, 9, 11, 35, 55, 31], backgroundColor: '#f59e0b' }, { label: 'Reached Facility', data: [21, 22, 2, 49, 53, 8, 9, 23, 19, 14], backgroundColor: '#0ea5e9' }, { label: 'Treatment', data: [5, 2, 0, 2, 0, 2, 3, 3, 2, 0], backgroundColor: '#10b981' }, { label: 'Surgery', data: [1, 1, 0, 18, 0, 0, 0, 0, 0, 2], backgroundColor: '#f43f5e' }] }, { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { color: '#cbd5e1' } }, datalabels: chartDataLabelsBarPlugin }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' }, color: '#cbd5e1' } } } }); }, 200);
+                    setTimeout(function() { 
+                        renderGroupedLiquidChart('nksLiquidContainer', ['VIA', 'CBE', 'ORAL', 'OPHTHAL', 'ORTHO', 'OG', 'PULMONO', 'SURGERY', 'ENT', 'CARDIO'], [
+                            { label: 'Referred', data: [44, 39, 3, 101, 65, 9, 11, 35, 55, 31], color: '#f59e0b' },
+                            { label: 'Reached Facility', data: [21, 22, 2, 49, 53, 8, 9, 23, 19, 14], color: '#0ea5e9' },
+                            { label: 'Treatment', data: [5, 2, 0, 2, 0, 2, 3, 3, 2, 0], color: '#10b981' },
+                            { label: 'Surgery', data: [1, 1, 0, 18, 0, 0, 0, 0, 0, 2], color: '#f43f5e' }
+                        ]); 
+                    }, 200);
                 });
             } catch(e){}
         }
