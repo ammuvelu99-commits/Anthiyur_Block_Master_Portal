@@ -445,26 +445,33 @@
 
     <!-- UPLOAD MODALS -->
     <div id="uploadModal" class="modal-wrapper"><div class="macos-modal-window p-0" style="max-width: 450px;"><div class="bg-gradient-to-r from-sky-600 to-blue-800 p-4 flex justify-between items-center text-white"><h3 class="text-lg font-bold"><i class="fas fa-cloud-upload-alt mr-2"></i> Patient Cloud</h3><button onclick="closeModalInstant('uploadModal')" class="text-white/80 text-2xl">&times;</button></div><div class="p-4 space-y-3 bg-black/20 shrink-0 border-b border-white/10"><input type="text" id="patientSearchInput" onkeyup="filterPatientCloud()" class="w-full bg-black/40 border border-white/20 rounded-xl p-2.5 text-sm text-white" placeholder="Search Patient Name..."><input type="text" id="upPatientName" class="w-full bg-black/40 border border-white/20 rounded-lg p-2 text-sm text-white" placeholder="Patient Name"><input type="file" id="upFile" class="w-full text-sm text-slate-300"><button onclick="uploadPatientReport()" class="w-full py-2 bg-sky-600 text-white rounded-lg text-sm font-bold">Upload</button></div><div class="p-3 overflow-y-auto flex-1 space-y-2" id="patientCloudList"></div></div></div>
+    
     <div id="letterUploadModal" class="modal-wrapper"><div class="macos-modal-window p-0" style="max-width: 450px;"><div class="bg-gradient-to-r from-amber-600 to-orange-800 p-4 flex justify-between items-center text-white"><h3 class="text-lg font-bold"><i class="fas fa-envelope-open-text mr-2"></i> Important Letters</h3><button onclick="closeModalInstant('letterUploadModal')" class="text-white/80 text-2xl">&times;</button></div><div class="p-4 space-y-3 bg-black/20 shrink-0 border-b border-white/10"><input type="text" id="letterSearchInput" onkeyup="filterLetters()" class="w-full bg-black/40 border border-white/20 rounded-xl p-2.5 text-sm text-white" placeholder="Search Letter Subject or PHC..."><div class="flex gap-2"><input type="text" id="upLetterTitle" class="w-1/2 bg-black/40 border border-white/20 rounded-lg p-2 text-sm text-white" placeholder="Letter Subject"><input type="text" id="upLetterPhc" class="w-1/2 bg-black/40 border border-white/20 rounded-lg p-2 text-sm text-white" placeholder="PHC Name"></div><input type="file" id="upLetterFile" class="w-full text-sm text-slate-300"><button onclick="uploadImportantLetter()" class="w-full py-2 bg-amber-600 text-white rounded-lg text-sm font-bold">Upload</button></div><div class="p-3 overflow-y-auto flex-1 space-y-2" id="lettersListContainer"></div></div></div>
 
     <div id="notesModal" class="modal-wrapper"><div class="macos-modal-window p-0" style="max-width: 500px;"><div class="bg-gradient-to-r from-slate-600 to-slate-800 p-4 flex justify-between items-center text-white"><h3 class="text-lg font-bold"><i class="fas fa-edit mr-2"></i> Quick Notes</h3><button onclick="closeModalInstant('notesModal')" class="text-white/80 text-2xl">&times;</button></div><div class="p-4 bg-black/20 shrink-0 border-b border-white/10 space-y-3"><input type="text" id="qnSearch" onkeyup="renderQuickNotes()" class="w-full bg-black/40 border border-white/20 rounded-xl p-2.5 text-sm text-white" placeholder="Search Notes..."><div class="flex gap-2"><input type="text" id="qnTitle" class="w-full bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Enter Note Title"><button onclick="addQuickNote()" class="px-4 bg-blue-500 text-white rounded-lg text-sm font-bold">Add</button></div></div><div class="p-3 overflow-y-auto flex-1 space-y-2" id="qnNotesList" style="max-height: 50vh;"></div></div></div>
     
-    <div id="ancModal" class="modal-wrapper"><div class="macos-modal-window p-0" style="max-width: 800px;"><div class="bg-gradient-to-r from-rose-600 to-rose-800 p-4 flex justify-between items-center text-white"><h3 class="text-lg font-bold"><i class="fas fa-heart-crack mr-2"></i> ANC Heart Disease Notes Tracking</h3><button onclick="closeModalInstant('ancModal')" class="text-white/80 text-2xl">&times;</button></div>
-        <div class="p-4 bg-black/20 shrink-0 border-b border-white/10 space-y-3">
-            <div class="flex gap-2"><input type="text" id="ancSearch" onkeyup="renderAncNotes()" class="flex-1 bg-black/40 border border-white/20 rounded-xl p-2.5 text-sm text-white" placeholder="General Search..."><button onclick="renderAncNotes()" class="px-4 bg-blue-500 hover:bg-blue-600 rounded-lg text-sm font-bold text-white transition"><i class="fas fa-search"></i> General</button><input type="text" id="ancRchSearch" onkeyup="renderAncNotes()" class="flex-1 bg-black/40 border border-white/20 rounded-xl p-2.5 text-sm text-white" placeholder="RCH Search..."><button onclick="renderAncNotes()" class="px-4 bg-purple-500 hover:bg-purple-600 rounded-lg text-sm font-bold text-white transition"><i class="fas fa-search"></i> RCH</button></div>
-            <div class="flex flex-wrap gap-2 mt-2"><input type="text" id="ancNewName" class="w-[18%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Name *"><input type="text" id="ancRchId" class="w-[18%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="RCH ID *"><input type="text" id="ancPHE" class="w-[14%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="PHE"><input type="text" id="ancHSC" class="w-[14%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="HSC"><input type="text" id="ancTitle" class="flex-1 bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Notes Title"><button onclick="addAncMother()" class="w-[15%] bg-rose-500 hover:bg-rose-600 text-white rounded-lg text-sm font-bold transition">Add Notes</button></div>
-            <div class="flex items-center gap-2 mt-1"><i class="fas fa-bolt text-yellow-400"></i><h4 class="text-rose-200 text-xs font-bold uppercase tracking-wider">Quick Notes Section</h4></div>
+    <div id="ancModal" class="modal-wrapper">
+        <div class="macos-modal-window p-0" style="max-width: 800px;">
+            <div class="bg-gradient-to-r from-rose-600 to-rose-800 p-4 flex justify-between items-center text-white"><h3 class="text-lg font-bold"><i class="fas fa-heart-crack mr-2"></i> ANC Heart Disease Notes Tracking</h3><button onclick="closeModalInstant('ancModal')" class="text-white/80 text-2xl">&times;</button></div>
+            <div class="p-4 bg-black/20 shrink-0 border-b border-white/10 space-y-3">
+                <div class="flex gap-2"><input type="text" id="ancSearch" onkeyup="renderAncNotes()" class="flex-1 bg-black/40 border border-white/20 rounded-xl p-2.5 text-sm text-white" placeholder="General Search..."><button onclick="renderAncNotes()" class="px-4 bg-blue-500 hover:bg-blue-600 rounded-lg text-sm font-bold text-white transition"><i class="fas fa-search"></i> General</button><input type="text" id="ancRchSearch" onkeyup="renderAncNotes()" class="flex-1 bg-black/40 border border-white/20 rounded-xl p-2.5 text-sm text-white" placeholder="RCH Search..."><button onclick="renderAncNotes()" class="px-4 bg-purple-500 hover:bg-purple-600 rounded-lg text-sm font-bold text-white transition"><i class="fas fa-search"></i> RCH</button></div>
+                <div class="flex flex-wrap gap-2 mt-2"><input type="text" id="ancNewName" class="w-[18%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Name *"><input type="text" id="ancRchId" class="w-[18%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="RCH ID *"><input type="text" id="ancPHE" class="w-[14%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="PHE"><input type="text" id="ancHSC" class="w-[14%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="HSC"><input type="text" id="ancTitle" class="flex-1 bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Notes Title"><button onclick="addAncMother()" class="w-[15%] bg-rose-500 hover:bg-rose-600 text-white rounded-lg text-sm font-bold transition">Add Notes</button></div>
+                <div class="flex items-center gap-2 mt-1"><i class="fas fa-bolt text-yellow-400"></i><h4 class="text-rose-200 text-xs font-bold uppercase tracking-wider">Quick Notes Section</h4></div>
+            </div>
+            <div class="p-3 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-3" id="ancNotesList" style="max-height: 50vh; align-content: start;"></div>
         </div>
-        <div class="p-3 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-3" id="ancNotesList" style="max-height: 50vh; align-content: start;"></div>
-    </div></div>
+    </div>
     
-    <div id="cancerNotesModal" class="modal-wrapper"><div class="macos-modal-window p-0" style="max-width: 700px;"><div class="bg-gradient-to-r from-pink-600 to-pink-800 p-4 flex justify-between items-center text-white"><h3 class="text-lg font-bold"><i class="fas fa-ribbon mr-2"></i> Cancer Notes</h3><button onclick="closeModalInstant('cancerNotesModal')" class="text-white/80 text-2xl">&times;</button></div>
-        <div class="p-4 bg-black/20 shrink-0 border-b border-white/10 space-y-3">
-            <input type="text" id="cancerSearch" onkeyup="renderCancerNotes()" class="w-full bg-black/40 border border-white/20 rounded-xl p-2.5 text-sm text-white" placeholder="Search Name...">
-            <div class="flex flex-wrap gap-2"><input type="text" id="cancerNewName" class="w-[20%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Name *"><input type="text" id="cancerType" class="w-[20%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Type of Cancer"><input type="text" id="cancerPHE" class="w-[18%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="PHE"><input type="text" id="cancerHSC" class="flex-1 bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="HSC Name"><button onclick="addCancerPatient()" class="w-[15%] bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-sm font-bold transition">Add Notes</button></div>
+    <div id="cancerNotesModal" class="modal-wrapper">
+        <div class="macos-modal-window p-0" style="max-width: 700px;">
+            <div class="bg-gradient-to-r from-pink-600 to-pink-800 p-4 flex justify-between items-center text-white"><h3 class="text-lg font-bold"><i class="fas fa-ribbon mr-2"></i> Cancer Notes</h3><button onclick="closeModalInstant('cancerNotesModal')" class="text-white/80 text-2xl">&times;</button></div>
+            <div class="p-4 bg-black/20 shrink-0 border-b border-white/10 space-y-3">
+                <input type="text" id="cancerSearch" onkeyup="renderCancerNotes()" class="w-full bg-black/40 border border-white/20 rounded-xl p-2.5 text-sm text-white" placeholder="Search Name...">
+                <div class="flex flex-wrap gap-2"><input type="text" id="cancerNewName" class="w-[20%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Name *"><input type="text" id="cancerType" class="w-[20%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="Type of Cancer"><input type="text" id="cancerPHE" class="w-[18%] bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="PHE"><input type="text" id="cancerHSC" class="flex-1 bg-black/40 border border-white/20 rounded-lg p-2.5 text-sm text-white" placeholder="HSC Name"><button onclick="addCancerPatient()" class="w-[15%] bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-sm font-bold transition">Add Notes</button></div>
+            </div>
+            <div class="p-3 overflow-y-auto space-y-2" id="cancerNotesList" style="max-height: 50vh;"></div>
         </div>
-        <div class="p-3 overflow-y-auto space-y-2" id="cancerNotesList" style="max-height: 50vh;"></div>
-    </div></div>
+    </div>
 
     <!-- SIDE DRAWER -->
     <div id="sideDrawerOverlay" class="side-drawer-overlay" onclick="closeNoteDrawer()"></div>
@@ -515,23 +522,23 @@
     
     <!-- FEVER CURRENT YEAR DASHBOARD -->
     <div id="glassyFeverCurrentUI" class="glassy-dash-container">
-        <div class="flex justify-between items-center w-full max-w-6xl mx-auto mb-6 mt-2 relative z-10">
-            <div class="w-1/3">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full max-w-6xl mx-auto mb-6 mt-2 relative z-10 gap-4">
+            <div class="flex-1 w-full min-w-0">
                 <h2 class="text-2xl font-black text-amber-300 mb-4"><i class="fas fa-calendar-check text-orange-400 mr-2"></i>Fever & Dengue 2026 Dashboard</h2>
-                <div class="flex gap-2">
-                    <button id="tab_fc_fever" onclick="switchFeverCurrentTab('fever')" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-orange-500 text-white border border-orange-400">Fever 2026 Dash</button>
-                    <button id="tab_fc_dengue" onclick="switchFeverCurrentTab('dengue')" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-white/10 text-slate-300 border border-white/10">Dengue 2026 Dash</button>
+                <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide w-full">
+                    <button id="tab_fc_fever" onclick="switchFeverCurrentTab('fever')" class="shrink-0 px-5 py-2.5 rounded-xl font-bold text-sm bg-orange-500 text-white border border-orange-400">Fever 2026 Dash</button>
+                    <button id="tab_fc_dengue" onclick="switchFeverCurrentTab('dengue')" class="shrink-0 px-5 py-2.5 rounded-xl font-bold text-sm bg-white/10 text-slate-300 border border-white/10">Dengue 2026 Dash</button>
                 </div>
             </div>
             
-            <div class="flex-grow flex justify-center items-center h-20 w-1/3 overflow-hidden relative" id="feverCurrentLoader">
+            <div class="flex-1 w-full flex justify-center items-center h-20 overflow-hidden relative" id="feverCurrentLoader">
                 <div class="centered-anim-container">
                     <i class="fas fa-hospital static-center-icon"></i>
                     <i id="anim_fc_icon" class="fas fa-person-walking anim-fever-person"></i>
                     <i id="anim_fc_tool" class="fas fa-syringe anim-fever-syringe"></i>
                 </div>
             </div>
-            <div class="w-1/3 text-right"></div>
+            <div class="flex-1 hidden md:block text-right"></div>
         </div>
         
         <div id="feverCurrentContent" class="w-full max-w-6xl mx-auto hidden flex-col gap-6 z-10 pb-10">
@@ -559,23 +566,23 @@
 
     <!-- 2. 3 YRS FEVER DASHBOARD -->
     <div id="glassyFeverUI" class="glassy-dash-container">
-        <div class="flex justify-between items-center w-full max-w-6xl mx-auto mb-6 mt-2 relative z-10">
-            <div class="w-1/3">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full max-w-6xl mx-auto mb-6 mt-2 relative z-10 gap-4">
+            <div class="flex-1 w-full min-w-0">
                 <h2 class="text-2xl font-black text-white mb-4"><i class="fas fa-notes-medical text-orange-400 mr-2"></i>3 Yrs Fever & Dengue Dash</h2>
-                <div class="flex gap-2">
-                    <button id="tab_fever" onclick="switchFeverDengueTab('fever')" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-orange-500 text-white border border-orange-400">Fever</button>
-                    <button id="tab_dengue" onclick="switchFeverDengueTab('dengue')" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-white/10 text-slate-300 border border-white/10">Dengue</button>
+                <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide w-full">
+                    <button id="tab_fever" onclick="switchFeverDengueTab('fever')" class="shrink-0 px-5 py-2.5 rounded-xl font-bold text-sm bg-orange-500 text-white border border-orange-400">Fever</button>
+                    <button id="tab_dengue" onclick="switchFeverDengueTab('dengue')" class="shrink-0 px-5 py-2.5 rounded-xl font-bold text-sm bg-white/10 text-slate-300 border border-white/10">Dengue</button>
                 </div>
             </div>
             
-            <div class="flex-grow flex justify-center items-center h-20 w-1/3 overflow-hidden relative" id="feverAnim">
+            <div class="flex-1 w-full flex justify-center items-center h-20 overflow-hidden relative" id="feverAnim">
                 <div class="centered-anim-container">
                     <i class="fas fa-hospital static-center-icon"></i>
                     <i id="anim_fever_icon" class="fas fa-person-walking anim-fever-person"></i>
                     <i id="anim_fever_tool" class="fas fa-syringe anim-fever-syringe"></i>
                 </div>
             </div>
-            <div class="w-1/3 text-right"></div>
+            <div class="flex-1 hidden md:block text-right"></div>
         </div>
         
         <div id="feverContent" class="w-full max-w-6xl mx-auto hidden flex-col gap-6 z-10 pb-10">
@@ -601,24 +608,24 @@
 
     <!-- 3. LIVE DELIVERY DASHBOARD -->
     <div id="glassyDeliveryUI" class="glassy-dash-container">
-        <div class="flex justify-between items-center w-full max-w-6xl mx-auto mb-6 mt-2 relative z-10">
-            <div class="w-1/3">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full max-w-6xl mx-auto mb-6 mt-2 relative z-10 gap-4">
+            <div class="flex-1 w-full min-w-0">
                 <h2 class="text-2xl font-black text-white mb-4"><i class="fas fa-baby-carriage text-cyan-400 mr-2"></i>Live Delivery Dashboard</h2>
-                <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide w-full">
                     <button id="tab_uptodate" onclick="fetchDeliveryTab('1867654531', 'uptodate', 'April 2026 to Up to Date')" class="del-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm shrink-0 bg-cyan-500 text-white border border-cyan-400">Up to Date</button>
                     <button id="tab_current" onclick="fetchDeliveryTab('2036942363', 'current', 'August 1 to Current Date')" class="del-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm shrink-0 bg-white/10 text-slate-300">Current Month</button>
                     <button id="tab_prev" onclick="fetchDeliveryTab('370926509', 'prev', 'July 1 to July 31')" class="del-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm shrink-0 bg-white/10 text-slate-300">Previous Month</button>
                 </div>
             </div>
             
-            <div class="flex-grow flex justify-center items-center h-20 w-1/3 overflow-hidden relative" id="deliveryLoader">
+            <div class="flex-1 w-full flex justify-center items-center h-20 overflow-hidden relative" id="deliveryLoader">
                 <div class="centered-anim-container">
                     <i class="fas fa-hospital static-center-icon text-[3.5rem] bottom-1"></i>
                     <i class="fas fa-truck-medical anim-ambulance"></i>
                     <i class="fas fa-person-pregnant anim-mother"></i>
                 </div>
             </div>
-            <div class="w-1/3 text-right"></div>
+            <div class="flex-1 hidden md:block text-right"></div>
         </div>
         
         <div id="deliveryContent" class="w-full max-w-6xl mx-auto hidden flex-col gap-6 relative z-10 pb-10">
@@ -654,19 +661,19 @@
 
     <!-- 4. LIVE HPV DASHBOARD -->
     <div id="glassyHpvUI" class="glassy-dash-container">
-        <div class="flex justify-between items-center w-full max-w-6xl mx-auto mb-6 mt-2 relative z-10">
-            <div class="w-1/3">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full max-w-6xl mx-auto mb-6 mt-2 relative z-10 gap-4">
+            <div class="flex-1 w-full min-w-0">
                 <h2 class="text-2xl font-black text-white mb-4"><i class="fas fa-syringe text-fuchsia-400 mr-2"></i>Live HPV Dashboard</h2>
             </div>
             
-            <div class="flex-grow flex justify-center items-center h-20 w-1/3 overflow-hidden relative" id="hpvLoader">
+            <div class="flex-1 w-full flex justify-center items-center h-20 overflow-hidden relative" id="hpvLoader">
                 <div class="centered-anim-container">
                     <i class="fas fa-hospital static-center-icon"></i>
                     <i class="fas fa-child-dress anim-hpv-girl"></i>
                     <i class="fas fa-syringe anim-hpv-syringe"></i>
                 </div>
             </div>
-            <div class="w-1/3 text-right"></div>
+            <div class="flex-1 hidden md:block text-right"></div>
         </div>
         
         <div id="hpvContent" class="w-full max-w-6xl mx-auto hidden flex-col gap-6 relative z-10 pb-10">
@@ -690,12 +697,12 @@
 
     <!-- 5. NKS LIVE DASHBOARD -->
     <div id="glassyNksUI" class="glassy-dash-container">
-        <div class="flex justify-between items-center w-full max-w-6xl mx-auto mb-6 mt-2 relative z-10">
-            <div class="w-1/3">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full max-w-6xl mx-auto mb-6 mt-2 relative z-10 gap-4">
+            <div class="flex-1 w-full min-w-0">
                 <h2 class="text-2xl font-black text-white mb-4"><i class="fas fa-campground text-teal-400 mr-2"></i>NKS 3 Camp Dashboard</h2>
             </div>
             
-            <div class="flex-grow flex justify-center items-center h-20 w-1/3 overflow-hidden relative" id="nksLoader">
+            <div class="flex-1 w-full flex justify-center items-center h-20 overflow-hidden relative" id="nksLoader">
                 <div class="centered-anim-container">
                     <i class="fas fa-campground static-center-icon"></i>
                     <i class="fas fa-person anim-nks-person" style="animation-delay: 0s;"></i>
@@ -704,7 +711,7 @@
                     <i class="fas fa-person anim-nks-person" style="animation-delay: 6.8s;"></i>
                 </div>
             </div>
-            <div class="w-1/3 text-right"></div>
+            <div class="flex-1 hidden md:block text-right"></div>
         </div>
         
         <div id="nksContent" class="w-full max-w-6xl mx-auto hidden flex-col gap-6 z-10 pb-10">
@@ -801,7 +808,7 @@
             try {
                 if(typeof Chart !== 'undefined' && typeof ChartDataLabels !== 'undefined') { Chart.register(ChartDataLabels); }
                 if(typeof Chart !== 'undefined') { Chart.defaults.color = '#94a3b8'; Chart.defaults.font.family = '-apple-system, sans-serif'; }
-            } catch(e){}
+            } catch(e) {}
         });
 
         function initAllData() {
@@ -943,8 +950,10 @@
                 Promise.all([fetchDashData('209823527'), fetchDashData('551117387')]).then(function(texts) {
                     let fRows = texts[0].split('\n').map(function(l){ return l.split(',').map(function(c){ return c.replace(/"/g, '').trim(); }); });
                     let dRows = texts[1].split('\n').map(function(l){ return l.split(',').map(function(c){ return c.replace(/"/g, '').trim(); }); });
-                    let fTotals = fRows.find(function(r){ return r[0] && r[0].replace(/\s/g,'').toUpperCase().includes('GRANDTOTAL'); });
-                    let dTotals = dRows.find(function(r){ return r[0] && r[0].replace(/\s/g,'').toUpperCase().includes('GRANDTOTAL'); });
+                    
+                    let fTotals = fRows.slice().reverse().find(function(r){ return r[0] && r[0].replace(/\s/g,'').toUpperCase().includes('GRANDTOTAL'); });
+                    let dTotals = dRows.slice().reverse().find(function(r){ return r[0] && r[0].replace(/\s/g,'').toUpperCase().includes('GRANDTOTAL'); });
+                    
                     f26Data = { total: cleanNum(fTotals[18]), ath: cleanNum(fTotals[3]), bar: cleanNum(fTotals[6]), ctp: cleanNum(fTotals[9]), enna: cleanNum(fTotals[12]), osur: cleanNum(fTotals[15]), monthly: [cleanNum(fRows[1][18]), cleanNum(fRows[2][18]), cleanNum(fRows[3][18]), cleanNum(fRows[4][18]), cleanNum(fRows[5][18]), cleanNum(fRows[6][18]), cleanNum(fRows[7][18]), cleanNum(fRows[8][18]), cleanNum(fRows[9][18]), cleanNum(fRows[10][18]), cleanNum(fRows[11][18]), cleanNum(fRows[12][18])] };
                     d26Data = { total: cleanNum(dTotals[18]), ath: cleanNum(dTotals[3]), bar: cleanNum(dTotals[6]), ctp: cleanNum(dTotals[9]), enna: cleanNum(dTotals[12]), osur: cleanNum(dTotals[15]), monthly: [cleanNum(dRows[1][18]), cleanNum(dRows[2][18]), cleanNum(dRows[3][18]), cleanNum(dRows[4][18]), cleanNum(dRows[5][18]), cleanNum(dRows[6][18]), cleanNum(dRows[7][18]), cleanNum(dRows[8][18]), cleanNum(dRows[9][18]), cleanNum(dRows[10][18]), cleanNum(dRows[11][18]), cleanNum(dRows[12][18])] };
                     document.getElementById('feverCurrentContent').classList.remove('hidden'); document.getElementById('feverCurrentContent').classList.add('flex');
@@ -1021,8 +1030,8 @@
                 Promise.all([ fetchDashData('209823527'), fetchDashData('551117387') ]).then(function(texts) {
                     let fRows = texts[0].split('\n').map(function(l){ return l.split(',').map(function(c){ return c.replace(/"/g, '').trim();});});
                     let dRows = texts[1].split('\n').map(function(l){ return l.split(',').map(function(c){ return c.replace(/"/g, '').trim();});});
-                    let fTotals = fRows.find(function(r){ return r[0] && r[0].replace(/\s/g,'').toUpperCase().includes('GRANDTOTAL');});
-                    let dTotals = dRows.find(function(r){ return r[0] && r[0].replace(/\s/g,'').toUpperCase().includes('GRANDTOTAL');});
+                    let fTotals = fRows.slice().reverse().find(function(r){ return r[0] && r[0].replace(/\s/g,'').toUpperCase().includes('GRANDTOTAL');});
+                    let dTotals = dRows.slice().reverse().find(function(r){ return r[0] && r[0].replace(/\s/g,'').toUpperCase().includes('GRANDTOTAL');});
                     const getVal = function(rowArr, idx) { return rowArr ? cleanNum(rowArr[idx]) : 0; };
                     globalFeverData = { y24: getVal(fTotals, 16), y25: getVal(fTotals, 17), y26: getVal(fTotals, 18), total: getVal(fTotals, 16) + getVal(fTotals, 17) + getVal(fTotals, 18), phc24: [getVal(fTotals, 1), getVal(fTotals, 4), getVal(fTotals, 7), getVal(fTotals, 10), getVal(fTotals, 13)], phc25: [getVal(fTotals, 2), getVal(fTotals, 5), getVal(fTotals, 8), getVal(fTotals, 11), getVal(fTotals, 14)], phc26: [getVal(fTotals, 3), getVal(fTotals, 6), getVal(fTotals, 9), getVal(fTotals, 12), getVal(fTotals, 15)] };
                     globalDengueData = { y24: getVal(dTotals, 16), y25: getVal(dTotals, 17), y26: getVal(dTotals, 18), total: getVal(dTotals, 16) + getVal(dTotals, 17) + getVal(dTotals, 18), phc24: [getVal(dTotals, 1), getVal(dTotals, 4), getVal(dTotals, 7), getVal(dTotals, 10), getVal(dTotals, 13)], phc25: [getVal(dTotals, 2), getVal(dTotals, 5), getVal(dTotals, 8), getVal(dTotals, 11), getVal(dTotals, 14)], phc26: [getVal(dTotals, 3), getVal(dTotals, 6), getVal(dTotals, 9), getVal(dTotals, 12), getVal(dTotals, 15)] };
@@ -1077,7 +1086,13 @@
                 
                 fetchDashData(gid, DEL_OVERRIDE_BASE).then(function(csvText) {
                     let rows = csvText.split('\n').map(function(r){ return r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(function(c){ return c.replace(/"/g, '').trim(); }); }); 
-                    let totalRow = rows.find(function(r){ return r.join('').toUpperCase().includes('TOTAL'); }); let phcRows = rows.filter(function(r){ return r[0] && !isNaN(parseInt(r[0])) && parseInt(r[0]) <= 20; });
+                    
+                    // Fixed: Search from bottom to bypass potential header duplicates that contain "Total"
+                    let totalRow = rows.slice().reverse().find(function(r){ return r.join('').toUpperCase().includes('TOTAL'); }); 
+                    
+                    // Fixed: strictly slice to the first 5 records to prevent layout bug via duplicated PHC tables
+                    let phcRows = rows.filter(function(r){ return r[0] && !isNaN(parseInt(r[0])) && parseInt(r[0]) <= 20; }).slice(0, 5);
+                    
                     if(!totalRow) throw new Error(); 
                     const getVal = function(idx){ return cleanNum(totalRow[idx]); };
                     
@@ -1200,12 +1215,21 @@
                 fetchDashData('415123119').then(function(csvText) {
                     let rows = []; let lines = csvText.split('\n'); for(let line of lines) rows.push(line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(function(c){return c.replace(/"/g, '').trim()})); 
                     let totalTarget = 0, totalReceived = 0, totalDoses = 0; let phcList = [];
+                    let seenPhcs = new Set(); // Prevent Duplicates 
+                    
                     for(let i=1; i<rows.length; i++) {
                         if(!rows[i] || rows[i].length < 3) continue;
                         let sno = rows[i][0]; let phcName = rows[i][2] || rows[i][1]; if (!phcName) continue;
                         let target = cleanNum(rows[i][4]); let received = cleanNum(rows[i][5]); let doses = cleanNum(rows[i][8]); 
+                        
                         if(phcName.toUpperCase().includes('TOTAL')) { totalTarget = target; totalReceived = received; totalDoses = doses; } 
-                        else if(sno && !isNaN(parseInt(sno))) { phcList.push({ name: phcName.replace("Upgraded PHC", "").replace("APHC", "").trim(), target: target, received: received, doses: doses }); }
+                        else if(sno && !isNaN(parseInt(sno))) { 
+                            let cName = phcName.replace("Upgraded PHC", "").replace("APHC", "").trim();
+                            if(!seenPhcs.has(cName)) {
+                                seenPhcs.add(cName);
+                                phcList.push({ name: cName, target: target, received: received, doses: doses }); 
+                            }
+                        }
                     }
                     if(totalTarget === 0 && phcList.length > 0) { phcList.forEach(function(p){ totalTarget+=p.target; totalReceived+=p.received; totalDoses+=p.doses; }); }
                     
@@ -1312,7 +1336,8 @@
                 document.getElementById('nksContent').classList.add('hidden');
                 fetchDashData('1174046149').then(function(csvText){
                     let rows = csvText.split('\n').map(function(line){ return line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(function(c){return c.replace(/"/g, '').trim()}); });
-                    let totalRow = rows.find(function(r){ return r.join('').toUpperCase().includes('TOTAL'); });
+                    
+                    let totalRow = rows.slice().reverse().find(function(r){ return r.join('').toUpperCase().includes('TOTAL'); });
                     let totalCamps = 3; let totalScreened = 0, totalReferred = 0, totalTreated = 0, totalSurgery = 0;
                     let deptLabels = []; let referredData = []; let reachedData = []; let treatmentData = []; let surgeryData = [];
                     for(let i=1; i<rows.length; i++) {
@@ -1323,8 +1348,11 @@
                         else {
                             let name = String(rows[i][1]).trim();
                             if(name && isNaN(name) && name.length > 2) {
-                                deptLabels.push(name); referredData.push(valReferred); reachedData.push(valReached); treatmentData.push(valTreatment); surgeryData.push(valSurgery);
-                                if(!totalRow) { totalReferred += valReferred; totalScreened += valReached; totalTreated += valTreatment; totalSurgery += valSurgery; }
+                                // Deduplicate to avoid bar chart bugs
+                                if(!deptLabels.includes(name)) {
+                                    deptLabels.push(name); referredData.push(valReferred); reachedData.push(valReached); treatmentData.push(valTreatment); surgeryData.push(valSurgery);
+                                    if(!totalRow) { totalReferred += valReferred; totalScreened += valReached; totalTreated += valTreatment; totalSurgery += valSurgery; }
+                                }
                             }
                         }
                     }
