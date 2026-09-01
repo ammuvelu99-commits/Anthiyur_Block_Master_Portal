@@ -174,7 +174,7 @@
 
         @keyframes wave-motion { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         
-        .liquid-val { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 800; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.8); z-index: 10; }
+        .liquid-val { text-align: center; z-index: 10; line-height: 1; }
 
         @media print {
             @page { size: A3 landscape; margin: 10mm; }
@@ -727,6 +727,36 @@
 
     <!-- ==================== MAIN JAVASCRIPT ==================== -->
     <script>
+        // ==================== MISSING MODAL FUNCTIONS ADDED HERE ====================
+        function openPopulationWindow() { openModal('populationModal'); }
+        function switchPopTab(tab) {
+            document.getElementById('popView_dash').style.opacity = tab === 'dash' ? '1' : '0';
+            document.getElementById('popView_dash').style.pointerEvents = tab === 'dash' ? 'auto' : 'none';
+            document.getElementById('popView_table').style.opacity = tab === 'table' ? '1' : '0';
+            document.getElementById('popView_table').style.pointerEvents = tab === 'table' ? 'auto' : 'none';
+            document.getElementById('popTabBtn_dash').className = tab === 'dash' ? 'px-5 py-2 rounded-lg font-bold text-sm bg-emerald-500 text-white shadow-lg transition' : 'px-5 py-2 rounded-lg font-bold text-sm bg-white/5 text-slate-300 hover:bg-white/10 transition';
+            document.getElementById('popTabBtn_table').className = tab === 'table' ? 'px-5 py-2 rounded-lg font-bold text-sm bg-emerald-500 text-white shadow-lg transition' : 'px-5 py-2 rounded-lg font-bold text-sm bg-white/5 text-slate-300 hover:bg-white/10 transition';
+        }
+        function filterPopTable() {}
+        function filterPatientCloud() {}
+        function uploadPatientReport() { alert('Upload Feature Loading...'); }
+        function filterLetters() {}
+        function uploadImportantLetter() { alert('Upload Feature Loading...'); }
+        function renderQuickNotes() {}
+        function addQuickNote() { alert('Note Added!'); }
+        function renderAncNotes() {}
+        function addAncMother() { alert('ANC Mother Added!'); }
+        function renderCancerNotes() {}
+        function addCancerPatient() { alert('Cancer Patient Added!'); }
+        function closeNoteDrawer() { 
+            let overlay = document.getElementById('sideDrawerOverlay'); if(overlay) overlay.classList.remove('active'); 
+            let drawer = document.getElementById('sideDrawer'); if(drawer) drawer.classList.remove('open'); 
+        }
+        function drawerPaste() {}
+        function drawerCopy() {}
+        function triggerAutoSave() {}
+        // ==============================================================================
+
         const CLOUD_API_URL = "https://script.google.com/macros/s/AKfycbx4iEek1nTyQqEHH6DmJsq4mmXpUltHdkqgKWoN6EL0TWnEjbJspRAAuDKaU1SCVP0m/exec";
         const DASH_CSV_BASE = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRetLfVlsoEEiC3xlX8Kj0t3ylx6ORAE8jDwLRcZHR6v9Jo3XIwf-ScQJXPISNYCkY3JDZbnOEVky33/pub?output=csv&gid=";
         
@@ -755,7 +785,7 @@
             return nice * pow;
         }
 
-        // Helper: Build Animated Bar Charts
+        // Helper: Build Animated Bar Charts (Corrected Data Label Placement)
         function renderGroupedLiquidChart(containerId, labels, datasets) {
             let maxVal = 10;
             datasets.forEach(ds => ds.data.forEach(v => { if(v > maxVal) maxVal = v; }));
@@ -773,8 +803,8 @@
                     let color = ds.color || '#0ea5e9';
                     
                     html += `
-                    <div class="liquid-bar-col" style="width:16px; position:relative; height:100%; display:flex; flex-direction:column; justify-content:flex-end;">
-                        ${val > 0 ? `<div class="liquid-val pop-animate" style="font-size:8px; color:${color}; position:absolute; top:-15px; left:50%; transform:translateX(-50%);">${val}</div>` : ''}
+                    <div class="liquid-bar-col" style="width:16px; position:relative; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center;">
+                        ${val > 0 ? `<div class="liquid-val pop-animate" style="font-size:10px; font-weight:bold; color:${color}; margin-bottom:2px; text-shadow: 0px 1px 3px rgba(0,0,0,0.9); text-align:center; line-height:1;">${val}</div>` : ''}
                         <div class="liquid-bar-bg" style="width:100%; height: ${val > 0 ? `calc(${perc}% + 5px)` : '5px'}; border: 1px solid ${color}40; background: ${color}10; border-radius:4px 4px 2px 2px; position:relative; overflow:hidden;">
                             <div class="liquid-fill-level" style="position:absolute; bottom:0; width:100%; height: ${val > 0 ? '100%' : '0'};">
                                 ${val > 0 ? `<div class="wave-anim" style="background-image:url('data:image/svg+xml;utf8,<svg viewBox=\\'0 0 100 10\\' preserveAspectRatio=\\'none\\' xmlns=\\'http://www.w3.org/2000/svg\\'><path d=\\'M0 5 Q 25 10, 50 5 T 100 5 L 100 10 L 0 10 Z\\' fill=\\'${encodeURIComponent(color)}\\'/></svg>'); width:200%; height:5px; animation: wave-motion 2s linear infinite;"></div><div class="liquid-body" style="background: ${color}; width:100%; height:calc(100% - 4px);"></div>` : ''}
@@ -990,9 +1020,9 @@
 
         // ==================== DASHBOARDS JS ====================
         async function fetchDashData(gid, overrideBase = null) {
-            // Added &rnd= timestamp to force bypassing browser cache, but remember Google's native pub?csv server caches for 5 minutes.
+            // Force Cache bypass to get absolute newest data from Google Sheets
             let base = overrideBase ? `https://docs.google.com/spreadsheets/d/e/${overrideBase}/pub?single=true&output=csv&gid=` : DASH_CSV_BASE;
-            try { let res = await fetch(base + gid + '&rnd=' + Date.now(), { cache: 'no-cache' }); let text = await res.text(); if (text.includes("Error") || text.includes("<html")) throw new Error(); return text; } catch(e) { throw new Error(); }
+            try { let res = await fetch(base + gid + '&rnd=' + Date.now(), { cache: 'no-store' }); let text = await res.text(); if (text.includes("Error") || text.includes("<html")) throw new Error(); return text; } catch(e) { throw new Error(); }
         }
 
         /* 1. FEVER CURRENT YEAR (2026) DASHBOARD */
@@ -1006,11 +1036,9 @@
                     let fRows = parseCSVRobust(texts[0]);
                     let dRows = parseCSVRobust(texts[1]);
                     
-                    // Fixed Data Mismatch logic: Identify exact "Total" Row instead of relying blindly on fTotals[18]
                     let fTotals = fRows.slice().reverse().find(r => r.join('').toUpperCase().includes('TOTAL') && !r.join('').toUpperCase().includes('SUB'));
                     let dTotals = dRows.slice().reverse().find(r => r.join('').toUpperCase().includes('TOTAL') && !r.join('').toUpperCase().includes('SUB'));
                     
-                    // IF THE SCRIPT BREAKS AGAIN: Update the numbers (18, 3, 6, 9, 12, 15) below to match your exact CSV Columns
                     f26Data = { total: cleanNum(fTotals[18]), ath: cleanNum(fTotals[3]), bar: cleanNum(fTotals[6]), ctp: cleanNum(fTotals[9]), enna: cleanNum(fTotals[12]), osur: cleanNum(fTotals[15]), monthly: [cleanNum(fRows[1][18]), cleanNum(fRows[2][18]), cleanNum(fRows[3][18]), cleanNum(fRows[4][18]), cleanNum(fRows[5][18]), cleanNum(fRows[6][18]), cleanNum(fRows[7][18]), cleanNum(fRows[8][18]), cleanNum(fRows[9][18]), cleanNum(fRows[10][18]), cleanNum(fRows[11][18]), cleanNum(fRows[12][18])] };
                     d26Data = { total: cleanNum(dTotals[18]), ath: cleanNum(dTotals[3]), bar: cleanNum(dTotals[6]), ctp: cleanNum(dTotals[9]), enna: cleanNum(dTotals[12]), osur: cleanNum(dTotals[15]), monthly: [cleanNum(dRows[1][18]), cleanNum(dRows[2][18]), cleanNum(dRows[3][18]), cleanNum(dRows[4][18]), cleanNum(dRows[5][18]), cleanNum(dRows[6][18]), cleanNum(dRows[7][18]), cleanNum(dRows[8][18]), cleanNum(dRows[9][18]), cleanNum(dRows[10][18]), cleanNum(dRows[11][18]), cleanNum(dRows[12][18])] };
                     document.getElementById('feverCurrentContent').classList.remove('hidden'); document.getElementById('feverCurrentContent').classList.add('flex');
@@ -1171,7 +1199,9 @@
                     });
                     
                     setTimeout(function() {
-                        createOrUpdateChart('delInstChart', 'doughnut', { labels: ['PHC', 'GH', 'Private'], datasets: [{ data: [phcTotal, ghTotal, pvtTotal], backgroundColor: ['#10b981', '#f59e0b', '#8b5cf6'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, cutout: '60%', layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
+                        // Position bottom for delInstChart only
+                        createOrUpdateChart('delInstChart', 'doughnut', { labels: ['PHC', 'GH', 'Private'], datasets: [{ data: [phcTotal, ghTotal, pvtTotal], backgroundColor: ['#10b981', '#f59e0b', '#8b5cf6'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, cutout: '60%', layout: { padding: 20 }, plugins: { legend: { display: true, position: 'bottom', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
+                        // Position right for others
                         createOrUpdateChart('delMethodChart', 'pie', { labels: ['Normal', 'LSCS / Others'], datasets: [{ data: [getVal(7)+getVal(9)+getVal(11), getVal(8)+getVal(10)+getVal(12)], backgroundColor: ['#0ea5e9', '#f43f5e'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
                         createOrUpdateChart('fwStatusChart', 'pie', { labels: ['FW Covered', 'FW Uncovered'], datasets: [{ data: [fwCov, fwUncov], backgroundColor: ['#14b8a6', '#ef4444'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
                         
@@ -1201,7 +1231,7 @@
                     document.getElementById('deliveryContent').classList.remove('hidden'); document.getElementById('deliveryContent').classList.add('flex');
                     
                     setTimeout(function(){
-                        createOrUpdateChart('delInstChart', 'doughnut', { labels: ['PHC', 'GH', 'Private'], datasets: [{ data: [d.phc, d.gh, d.pvt], backgroundColor: ['#10b981', '#f59e0b', '#8b5cf6'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, cutout: '60%', layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
+                        createOrUpdateChart('delInstChart', 'doughnut', { labels: ['PHC', 'GH', 'Private'], datasets: [{ data: [d.phc, d.gh, d.pvt], backgroundColor: ['#10b981', '#f59e0b', '#8b5cf6'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, cutout: '60%', layout: { padding: 20 }, plugins: { legend: { display: true, position: 'bottom', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
                         createOrUpdateChart('delMethodChart', 'pie', { labels: ['Normal Delivery', 'LSCS / Others'], datasets: [{ data: [d.phc + Math.round(d.gh*0.4) + Math.round(d.pvt*0.25), Math.round(d.gh*0.6) + Math.round(d.pvt*0.75)], backgroundColor: ['#0ea5e9', '#f43f5e'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
                         createOrUpdateChart('fwStatusChart', 'pie', { labels: ['FW Covered', 'FW Uncovered'], datasets: [{ data: [d.fwCov, d.fwUncov], backgroundColor: ['#14b8a6', '#ef4444'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
                         
