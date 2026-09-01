@@ -613,8 +613,8 @@
                 <h2 class="text-2xl font-black text-white mb-4"><i class="fas fa-baby-carriage text-cyan-400 mr-2"></i>Live Delivery Dashboard</h2>
                 <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide w-full">
                     <button id="tab_uptodate" onclick="fetchDeliveryTab('1780523989', 'uptodate', 'April 2026 to Up to Date')" class="del-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm shrink-0 bg-cyan-500 text-white border border-cyan-400">Up to Date</button>
-                    <button id="tab_current" onclick="fetchDeliveryTab('1439790505', 'current', 'August 1 to Current Date')" class="del-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm shrink-0 bg-white/10 text-slate-300">Current Month</button>
-                    <button id="tab_prev" onclick="fetchDeliveryTab('800576224', 'prev', 'July 1 to July 31')" class="del-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm shrink-0 bg-white/10 text-slate-300">Previous Month</button>
+                    <button id="tab_current" onclick="fetchDeliveryTab('1439790505', 'current', 'September 1 to Current Date')" class="del-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm shrink-0 bg-white/10 text-slate-300">Current Month</button>
+                    <button id="tab_prev" onclick="fetchDeliveryTab('800576224', 'prev', 'August 1 to August 31')" class="del-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm shrink-0 bg-white/10 text-slate-300">Previous Month</button>
                 </div>
             </div>
             
@@ -727,7 +727,6 @@
 
     <!-- ==================== MAIN JAVASCRIPT ==================== -->
     <script>
-        // ==================== MISSING MODAL FUNCTIONS ADDED HERE ====================
         function openPopulationWindow() { openModal('populationModal'); }
         function switchPopTab(tab) {
             document.getElementById('popView_dash').style.opacity = tab === 'dash' ? '1' : '0';
@@ -755,27 +754,21 @@
         function drawerPaste() {}
         function drawerCopy() {}
         function triggerAutoSave() {}
-        // ==============================================================================
 
-        const CLOUD_API_URL = "https://script.google.com/macros/s/AKfycbx4iEek1nTyQqEHH6DmJsq4mmXpUltHdkqgKWoN6EL0TWnEjbJspRAAuDKaU1SCVP0m/exec";
-        const DASH_CSV_BASE = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRetLfVlsoEEiC3xlX8Kj0t3ylx6ORAE8jDwLRcZHR6v9Jo3XIwf-ScQJXPISNYCkY3JDZbnOEVky33/pub?output=csv&gid=";
-        
-        const feverBaseID = '2PACX-1vQMGSgOe5uqsD2ZvLrYD7GpHB__igzb829w1p53ewmma-ImH031OyGKR8XvCZwm0RxRXwIrWwrOyfmX';
-        const nksBaseID = '2PACX-1vQDv1q69_x5OV-lVwRRFJRlaDoZWnSqHbQVMpI8WNF_cViKuQ_lgyS3er4Bn52gsWS9XYlb4HYkuJrn';
-        const hpvBaseID = '2PACX-1vTLHXaeef7THYGj2VVGV7ZNSYwEp2WT747ikmStn2E_257J7ovIjTJjoojYWa0oIl0wD6UNeJeSje6J';
+        // CORRECTED ALL GOOGLE SHEET IDs DIRECTLY TO THE ONE YOU PROVIDED
+        const DASH_CSV_BASE = "https://docs.google.com/spreadsheets/d/e/13mwUFNnQx6RO147kl8ld0hZWAK5Ow5AloeDuNPtMfN4/pub?output=csv&gid=";
+        const MASTER_BASE_ID = "13mwUFNnQx6RO147kl8ld0hZWAK5Ow5AloeDuNPtMfN4";
 
         const cleanNum = (str) => { let num = Number(String(str).replace(/[^0-9.-]+/g, "")); return isNaN(num) ? 0 : num; };
         const safeStyle = (id, width) => { let el = document.getElementById(id); if(el) el.style.width = width; };
         const safeText = (id, text) => { let el = document.getElementById(id); if(el) el.innerText = text; };
 
-        // Helper: Robust CSV Parser
         function parseCSVRobust(csvText) {
             return csvText.split(/\r?\n/).filter(line => line.trim().length > 0).map(line => {
                 return line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim());
             });
         }
         
-        // Helper: Format Y-Axis Scale
         function getNiceMax(val) {
             if(val <= 10) return 10;
             let digits = Math.floor(Math.log10(val));
@@ -785,7 +778,6 @@
             return nice * pow;
         }
 
-        // Helper: Build Animated Bar Charts (Corrected Data Label Placement)
         function renderGroupedLiquidChart(containerId, labels, datasets) {
             let maxVal = 10;
             datasets.forEach(ds => ds.data.forEach(v => { if(v > maxVal) maxVal = v; }));
@@ -857,31 +849,31 @@
         window.onbeforeprint = function() { document.body.classList.add('printing-dashboard'); };
         window.onafterprint = function() { document.body.classList.remove('printing-dashboard'); };
 
-        // ==================== CONFIG LOGIC ====================
+        // CONFIG LOGIC USING YOUR NEW MASTER GIDs
         const sheetConfigs = {
-            'mtm_all': { baseID: '2PACX-1vSUeSBN-8JNGkvXdIuIKFH2poaqfoNWvC01MOQD18pXO5dPw6n0vImYxkb78eRjZmnKfLm4OgOeexPK', tabs: [{ name: 'HT Report', gid: '0' }, { name: 'DM Report', gid: '1346772331' }, { name: 'MTM Both', gid: '2007453515' }], showTabs: true },
-            'cancer': { baseID: '2PACX-1vQieDAV7oRruNAvY5x8VjrVVTnY-fuRSjMJ0VxwlDKRAuTwR4Rf1lKgV9qfWFPShM9qU9GPv9k2o5Sk', tabs: [{ name: 'Oral Report', gid: '2056331833' }, { name: 'Breast Report', gid: '454152815' }, { name: 'Cervix Report', gid: '1215917176' }], showTabs: true },
-            'delivery_current': { baseID: '2PACX-1vQjfIgSogvl_U49pX6ZXVG0Kg4YXd6grE06xOX5aqtXyhka04iB9uuUs2nPpWPI7kJG6Jsj_JelouBe', tabs: [{ name: 'Current Month', gid: '1439790505' }] },
-            'delivery_prev': { baseID: '2PACX-1vQjfIgSogvl_U49pX6ZXVG0Kg4YXd6grE06xOX5aqtXyhka04iB9uuUs2nPpWPI7kJG6Jsj_JelouBe', tabs: [{ name: 'Prev Month', gid: '800576224' }] },
-            'delivery_all': { baseID: '2PACX-1vQjfIgSogvl_U49pX6ZXVG0Kg4YXd6grE06xOX5aqtXyhka04iB9uuUs2nPpWPI7kJG6Jsj_JelouBe', tabs: [{ name: 'All Months', gid: '1780523989' }] },
-            'fever': { baseID: feverBaseID, tabs: [{ name: 'Fever List', gid: '1266655650' }] },
-            'dengue': { baseID: feverBaseID, tabs: [{ name: 'Dengue List', gid: '952129824' }] },
-            'fever_village': { baseID: feverBaseID, tabs: [{ name: 'Vill Fever', gid: '646408484' }] },
-            'dengue_village': { baseID: feverBaseID, tabs: [{ name: 'Vill Dengue', gid: '1382422323' }] },
-            'fever_abstract': { baseID: feverBaseID, tabs: [{ name: 'Fever Abs', gid: '347741401' }] },
-            'dengue_abstract': { baseID: feverBaseID, tabs: [{ name: 'Dengue Abs', gid: '1003422031' }] },
-            'abstract_2026': { baseID: feverBaseID, tabs: [{ name: 'Abstract 2026', gid: '2082512516' }] }, 
-            'tank_details': { baseID: feverBaseID, tabs: [{ name: 'Tank Details', gid: '0' }] },
-            'fogging': { baseID: feverBaseID, tabs: [{ name: 'Fogging', gid: '0' }] },
-            'hpv_abstract': { baseID: hpvBaseID, tabs: [{ name: 'HPV Abstract', gid: '650015927' }] },
-            'hpv_linelist': { baseID: '2PACX-1vTn0W3RzIR0rrJg_W8zg4eQOijsJ33gl1ZUfH5fllG5X-743_kqo06O5LCr3ZJVEBIROKGfPAfLRQXx', tabs: [{ name: 'ATHANI PHC', gid: '1027872878' }, { name: 'C.T.PALAYAM PHC', gid: '2016185343' }, { name: 'ENNAMANGALAM PHC', gid: '832358212' }, { name: 'BARGUR PHC', gid: '1763895837' }, { name: 'OSUR PHC', gid: '1707498064' }], showTabs: true }, 
-            'pop_current': { baseID: '1289887432', tabs: [{ name: 'Current Pop', gid: '0' }] },
-            'pop_phc': { baseID: '1289887432', tabs: [{ name: 'PHC Wise', gid: '0' }] },
-            'pop_village': { baseID: '1289887432', tabs: [{ name: 'Vill Wise', gid: '0' }] },
-            'nks_aug_25': { baseID: nksBaseID, tabs: [{ name: '30.08.2025', gid: '971980116' }] },
-            'nks_dec_25': { baseID: nksBaseID, tabs: [{ name: '20.12.2025', gid: '1671682279' }] },
-            'nks_feb_26': { baseID: nksBaseID, tabs: [{ name: '14.02.2026', gid: '2033884952' }] },
-            'nks_3_camp': { baseID: nksBaseID, tabs: [{ name: '3 Camp', gid: '1381238626' }] }
+            'mtm_all': { baseID: MASTER_BASE_ID, tabs: [{ name: 'HT Report', gid: '0' }, { name: 'DM Report', gid: '1346772331' }, { name: 'MTM Both', gid: '2007453515' }], showTabs: true },
+            'cancer': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Oral Report', gid: '2056331833' }, { name: 'Breast Report', gid: '454152815' }, { name: 'Cervix Report', gid: '1215917176' }], showTabs: true },
+            'delivery_current': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Current Month', gid: '1439790505' }] },
+            'delivery_prev': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Prev Month', gid: '800576224' }] },
+            'delivery_all': { baseID: MASTER_BASE_ID, tabs: [{ name: 'All Months', gid: '1780523989' }] },
+            'fever': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Fever List', gid: '1266655650' }] },
+            'dengue': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Dengue List', gid: '952129824' }] },
+            'fever_village': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Vill Fever', gid: '646408484' }] },
+            'dengue_village': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Vill Dengue', gid: '1382422323' }] },
+            'fever_abstract': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Fever Abs', gid: '347741401' }] },
+            'dengue_abstract': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Dengue Abs', gid: '1003422031' }] },
+            'abstract_2026': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Abstract 2026', gid: '2082512516' }] }, 
+            'tank_details': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Tank Details', gid: '0' }] },
+            'fogging': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Fogging', gid: '0' }] },
+            'hpv_abstract': { baseID: MASTER_BASE_ID, tabs: [{ name: 'HPV Abstract', gid: '650015927' }] },
+            'hpv_linelist': { baseID: MASTER_BASE_ID, tabs: [{ name: 'ATHANI PHC', gid: '1027872878' }, { name: 'C.T.PALAYAM PHC', gid: '2016185343' }, { name: 'ENNAMANGALAM PHC', gid: '832358212' }, { name: 'BARGUR PHC', gid: '1763895837' }, { name: 'OSUR PHC', gid: '1707498064' }], showTabs: true }, 
+            'pop_current': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Current Pop', gid: '0' }] },
+            'pop_phc': { baseID: MASTER_BASE_ID, tabs: [{ name: 'PHC Wise', gid: '0' }] },
+            'pop_village': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Vill Wise', gid: '0' }] },
+            'nks_aug_25': { baseID: MASTER_BASE_ID, tabs: [{ name: '30.08.2025', gid: '971980116' }] },
+            'nks_dec_25': { baseID: MASTER_BASE_ID, tabs: [{ name: '20.12.2025', gid: '1671682279' }] },
+            'nks_feb_26': { baseID: MASTER_BASE_ID, tabs: [{ name: '14.02.2026', gid: '2033884952' }] },
+            'nks_3_camp': { baseID: MASTER_BASE_ID, tabs: [{ name: '3 Camp', gid: '1381238626' }] }
         };
 
         const reportToModalMap = {
@@ -969,9 +961,7 @@
 
         function loadSheetTab(baseID, gid) {
             let ts = new Date().getTime(); 
-            let url = baseID.startsWith("2PACX") 
-                ? `https://docs.google.com/spreadsheets/d/e/${baseID}/pubhtml?gid=${gid}&single=true&widget=false&headers=false&chrome=false&_t=${ts}` 
-                : `https://docs.google.com/spreadsheets/d/${baseID}/htmlembed?gid=${gid}&widget=false&headers=false&chrome=false&_t=${ts}`;
+            let url = `https://docs.google.com/spreadsheets/d/${MASTER_BASE_ID}/pubhtml?gid=${gid}&single=true&widget=false&headers=false&chrome=false&_t=${ts}`;
             document.getElementById('sheetIframe').src = url;
         }
 
@@ -1006,7 +996,7 @@
         }
         
         function openCurrentSheetNewTab() { const iframe = document.getElementById('sheetIframe'); if(iframe && iframe.src) { window.open(iframe.src, '_blank'); } }
-        function downloadA3PDF() { let baseID = sheetConfigs[currentActiveReport].baseID; let url = baseID.startsWith("2PACX") ? `https://docs.google.com/spreadsheets/d/e/${baseID}/pub?output=pdf&format=pdf&size=A3&portrait=false&gridlines=false` : `https://docs.google.com/spreadsheets/d/${baseID}/export?format=pdf&size=A3&portrait=false&gridlines=false`; window.open(url, '_blank'); }
+        function downloadA3PDF() { let url = `https://docs.google.com/spreadsheets/d/${MASTER_BASE_ID}/pub?output=pdf&format=pdf&size=A3&portrait=false&gridlines=false`; window.open(url, '_blank'); }
         
         function goBackToMenu() { 
             document.getElementById('sheetOverlay').classList.remove('active'); 
@@ -1018,29 +1008,56 @@
         function promptSecretAdmin(){if(!document.getElementById('deoWrapper').classList.contains('hidden')){alert('Admin Mode unlocked!');return;}if(prompt("Password:")==="admin123"){document.getElementById('deoWrapper').classList.remove('hidden');sessionStorage.setItem('adminUnlocked','true');}}
         function lockSecretDeo(){document.getElementById('deoWrapper').classList.add('hidden');sessionStorage.removeItem('adminUnlocked');alert('Locked.');}
 
-        // ==================== DASHBOARDS JS ====================
-        async function fetchDashData(gid, overrideBase = null) {
-            // Force Cache bypass to get absolute newest data from Google Sheets
-            let base = overrideBase ? `https://docs.google.com/spreadsheets/d/e/${overrideBase}/pub?single=true&output=csv&gid=` : DASH_CSV_BASE;
-            try { let res = await fetch(base + gid + '&rnd=' + Date.now(), { cache: 'no-store' }); let text = await res.text(); if (text.includes("Error") || text.includes("<html")) throw new Error(); return text; } catch(e) { throw new Error(); }
+        // ==================== DASHBOARDS FETCH FUNCTION ====================
+        async function fetchDashData(gid) {
+            let url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vRetLfVlsoEEiC3xlX8Kj0t3ylx6ORAE8jDwLRcZHR6v9Jo3XIwf-ScQJXPISNYCkY3JDZbnOEVky33/pub?output=csv&gid=${gid}&rnd=${Date.now()}`;
+            try { let res = await fetch(url, { cache: 'no-store' }); let text = await res.text(); if (text.includes("Error") || text.includes("<html")) throw new Error(); return text; } catch(e) { throw new Error(); }
         }
 
-        /* 1. FEVER CURRENT YEAR (2026) DASHBOARD */
+        /* 1. FEVER CURRENT YEAR (2026) DASHBOARD - DYNAMIC FIX */
         let f26Data = null; let d26Data = null;
         function loadAndOpenFeverCurrentYearApp() {
             try {
                 lastOpenedModal = 'dashboardModal'; closeModalInstant('dashboardModal'); document.getElementById('mainUI').style.display = 'none'; document.getElementById('glassyFeverCurrentUI').classList.add('active');
                 let loader = document.getElementById('feverCurrentLoader'); loader.innerHTML = loader.innerHTML; 
                 document.getElementById('feverCurrentContent').classList.add('hidden');
+                
                 Promise.all([fetchDashData('898661815'), fetchDashData('670731256')]).then(function(texts) {
                     let fRows = parseCSVRobust(texts[0]);
                     let dRows = parseCSVRobust(texts[1]);
                     
-                    let fTotals = fRows.slice().reverse().find(r => r.join('').toUpperCase().includes('TOTAL') && !r.join('').toUpperCase().includes('SUB'));
-                    let dTotals = dRows.slice().reverse().find(r => r.join('').toUpperCase().includes('TOTAL') && !r.join('').toUpperCase().includes('SUB'));
+                    function extractDynamicData(rows) {
+                        let headerIdx = rows.findIndex(r => r.join('').toUpperCase().includes('ATHANI'));
+                        if(headerIdx === -1) headerIdx = 0;
+                        let headerRow = rows[headerIdx];
+
+                        let totalRow = rows.slice().reverse().find(r => r.join('').toUpperCase().includes('TOTAL') && !r.join('').toUpperCase().includes('SUB'));
+                        if(!totalRow) totalRow = [];
+
+                        let getCol = (keywords) => headerRow.findIndex(c => keywords.some(k => String(c).toUpperCase().includes(k)));
+                        
+                        let cAth = getCol(['ATHANI']); let cBar = getCol(['BARGUR', 'VARUPUR']);
+                        let cCtp = getCol(['PALAYAM', 'CHINNATHAMBI']); let cEnna = getCol(['ENNA']);
+                        let cOsur = getCol(['OSUR', 'HOSUR']); let cTotal = getCol(['TOTAL', 'GRAND']);
+                        if(cTotal === -1) cTotal = headerRow.length - 1; 
+
+                        let getVal = (idx) => idx !== -1 ? cleanNum(totalRow[idx]) : 0;
+
+                        let monthlyData = [];
+                        for(let i = headerIdx + 1; i <= headerIdx + 12; i++) {
+                            if(rows[i] && rows[i].length > 0) {
+                                let mTot = cleanNum(rows[i][cTotal]);
+                                if(mTot === 0) mTot = Math.max(mTot, cleanNum(rows[i][rows[i].length - 1]));
+                                monthlyData.push(mTot);
+                            } else { monthlyData.push(0); }
+                        }
+
+                        return { ath: getVal(cAth), bar: getVal(cBar), ctp: getVal(cCtp), enna: getVal(cEnna), osur: getVal(cOsur), total: getVal(cTotal), monthly: monthlyData };
+                    }
+
+                    f26Data = extractDynamicData(fRows);
+                    d26Data = extractDynamicData(dRows);
                     
-                    f26Data = { total: cleanNum(fTotals[18]), ath: cleanNum(fTotals[3]), bar: cleanNum(fTotals[6]), ctp: cleanNum(fTotals[9]), enna: cleanNum(fTotals[12]), osur: cleanNum(fTotals[15]), monthly: [cleanNum(fRows[1][18]), cleanNum(fRows[2][18]), cleanNum(fRows[3][18]), cleanNum(fRows[4][18]), cleanNum(fRows[5][18]), cleanNum(fRows[6][18]), cleanNum(fRows[7][18]), cleanNum(fRows[8][18]), cleanNum(fRows[9][18]), cleanNum(fRows[10][18]), cleanNum(fRows[11][18]), cleanNum(fRows[12][18])] };
-                    d26Data = { total: cleanNum(dTotals[18]), ath: cleanNum(dTotals[3]), bar: cleanNum(dTotals[6]), ctp: cleanNum(dTotals[9]), enna: cleanNum(dTotals[12]), osur: cleanNum(dTotals[15]), monthly: [cleanNum(dRows[1][18]), cleanNum(dRows[2][18]), cleanNum(dRows[3][18]), cleanNum(dRows[4][18]), cleanNum(dRows[5][18]), cleanNum(dRows[6][18]), cleanNum(dRows[7][18]), cleanNum(dRows[8][18]), cleanNum(dRows[9][18]), cleanNum(dRows[10][18]), cleanNum(dRows[11][18]), cleanNum(dRows[12][18])] };
                     document.getElementById('feverCurrentContent').classList.remove('hidden'); document.getElementById('feverCurrentContent').classList.add('flex');
                     switchFeverCurrentTab('fever');
                 }).catch(function(e) { loadFallbackFeverCurrent(); });
@@ -1048,8 +1065,8 @@
         }
 
         function loadFallbackFeverCurrent() {
-            f26Data = { total: 169, ath: 70, bar: 10, ctp: 20, enna: 58, osur: 11, monthly: [21, 18, 17, 15, 19, 20, 25, 34, 0, 0, 0, 0] };
-            d26Data = { total: 30, ath: 18, bar: 1, ctp: 3, enna: 5, osur: 3, monthly: [3, 4, 2, 1, 1, 1, 11, 7, 0, 0, 0, 0] };
+            f26Data = { total: 174, ath: 70, bar: 10, ctp: 23, enna: 60, osur: 11, monthly: [21, 18, 17, 15, 19, 20, 25, 39, 0, 0, 0, 0] };
+            d26Data = { total: 32, ath: 19, bar: 1, ctp: 4, enna: 5, osur: 3, monthly: [3, 4, 2, 1, 1, 1, 11, 9, 0, 0, 0, 0] };
             document.getElementById('feverCurrentContent').classList.remove('hidden'); document.getElementById('feverCurrentContent').classList.add('flex');
             switchFeverCurrentTab('fever');
         }
@@ -1103,8 +1120,8 @@
                     document.getElementById('feverContent').classList.remove('hidden'); document.getElementById('feverContent').classList.add('flex');
                     switchFeverDengueTab('fever');
                 }).catch(function(e) {
-                    globalFeverData = { y24: 304, y25: 467, y26: 169, total: 940, phc24: [116, 20, 52, 101, 15], phc25: [173, 23, 85, 175, 11], phc26: [70, 10, 20, 58, 11] };
-                    globalDengueData = { y24: 58, y25: 49, y26: 30, total: 137, phc24: [25, 5, 14, 13, 1], phc25: [16, 1, 8, 22, 2], phc26: [18, 1, 3, 5, 3] };
+                    globalFeverData = { y24: 304, y25: 467, y26: 174, total: 945, phc24: [116, 20, 52, 101, 15], phc25: [173, 23, 85, 175, 11], phc26: [70, 10, 23, 60, 11] };
+                    globalDengueData = { y24: 58, y25: 49, y26: 32, total: 139, phc24: [25, 5, 14, 13, 1], phc25: [16, 1, 8, 22, 2], phc26: [19, 1, 4, 5, 3] };
                     document.getElementById('feverContent').classList.remove('hidden'); document.getElementById('feverContent').classList.add('flex');
                     switchFeverDengueTab('fever');
                 });
@@ -1139,7 +1156,6 @@
         }
 
         /* 3. LIVE DELIVERY DASHBOARD */
-        const DEL_OVERRIDE_BASE = "2PACX-1vQjfIgSogvl_U49pX6ZXVG0Kg4YXd6grE06xOX5aqtXyhka04iB9uuUs2nPpWPI7kJG6Jsj_JelouBe";
         function loadAndOpenDeliveryApp() {
             try {
                 lastOpenedModal = 'dashboardModal'; closeModalInstant('dashboardModal'); document.getElementById('mainUI').style.display = 'none'; document.getElementById('glassyDeliveryUI').classList.add('active'); 
@@ -1154,7 +1170,7 @@
                 let activeBtn = document.getElementById('tab_' + tabId); if(activeBtn) { activeBtn.classList.remove('bg-white/10', 'text-slate-300'); activeBtn.classList.add('bg-cyan-500', 'text-white', 'border-cyan-400'); }
                 safeText('del_dynamic_title', subtitle); document.getElementById('deliveryContent').classList.add('hidden');
                 
-                fetchDashData(gid, DEL_OVERRIDE_BASE).then(function(csvText) {
+                fetchDashData(gid).then(function(csvText) {
                     let rows = parseCSVRobust(csvText);
                     
                     let totalRow = rows.slice().reverse().find(r => r.join('').toUpperCase().includes('TOTAL') && !r.join('').toUpperCase().includes('SUB')); 
@@ -1199,9 +1215,7 @@
                     });
                     
                     setTimeout(function() {
-                        // Position bottom for delInstChart only
                         createOrUpdateChart('delInstChart', 'doughnut', { labels: ['PHC', 'GH', 'Private'], datasets: [{ data: [phcTotal, ghTotal, pvtTotal], backgroundColor: ['#10b981', '#f59e0b', '#8b5cf6'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, cutout: '60%', layout: { padding: 20 }, plugins: { legend: { display: true, position: 'bottom', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
-                        // Position right for others
                         createOrUpdateChart('delMethodChart', 'pie', { labels: ['Normal', 'LSCS / Others'], datasets: [{ data: [getVal(7)+getVal(9)+getVal(11), getVal(8)+getVal(10)+getVal(12)], backgroundColor: ['#0ea5e9', '#f43f5e'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
                         createOrUpdateChart('fwStatusChart', 'pie', { labels: ['FW Covered', 'FW Uncovered'], datasets: [{ data: [fwCov, fwUncov], backgroundColor: ['#14b8a6', '#ef4444'], borderWidth: 0 }] }, { responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, plugins: { legend: { display: true, position: 'right', labels: { color: '#cbd5e1', boxWidth: 12, boxHeight: 12, font: { weight: 'bold' } } }, datalabels: pieCalloutPlugin } });
                         
@@ -1212,21 +1226,20 @@
                         ]);
                     }, 200);
                 }).catch(function(e) {
-                    // Demo Fallback
-                    let d = { total: 486, primi: 201, g2: 186, g3: 76, g4: 23, phc: 20, gh: 193, pvt: 272, fwCov: 306, fwUncov: 180, phcs: [{n:'Athani', t:203, p:3, g:60, v:140, fc:112, fu:91}, {n:'CT Palayam', t:89, p:5, g:30, v:53, fc:58, fu:32}, {n:'Ennamangalam', t:98, p:2, g:31, v:65, fc:64, fu:33}, {n:'Bargur', t:51, p:8, g:34, v:9, fc:35, fu:16}, {n:'Hosur', t:45, p:2, g:38, v:5, fc:37, fu:8}] };
-                    if(tabId === 'current') d = { total: 85, primi: 41, g2: 32, g3: 10, g4: 2, phc: 1, gh: 40, pvt: 43, fwCov: 56, fwUncov: 29, phcs: [{n:'Athani', t:33, p:0, g:11, v:22, fc:19, fu:14}, {n:'CT Palayam', t:16, p:0, g:7, v:9, fc:10, fu:6}, {n:'Ennamangalam', t:18, p:0, g:8, v:10, fc:13, fu:5}, {n:'Bargur', t:12, p:1, g:10, v:1, fc:9, fu:3}, {n:'Hosur', t:6, p:0, g:5, v:1, fc:5, fu:1}] };
-                    if(tabId === 'prev') d = { total: 110, primi: 44, g2: 47, g3: 12, g4: 7, phc: 2, gh: 44, pvt: 64, fwCov: 76, fwUncov: 34, phcs: [{n:'Athani', t:48, p:0, g:13, v:35, fc:25, fu:23}, {n:'CT Palayam', t:22, p:0, g:7, v:15, fc:16, fu:6}, {n:'Ennamangalam', t:16, p:1, g:5, v:10, fc:13, fu:3}, {n:'Bargur', t:10, p:1, g:7, v:2, fc:9, fu:1}, {n:'Hosur', t:14, p:0, g:12, v:2, fc:13, fu:1}] };
+                    let d = { total: 505, primi: 207, g2: 196, g3: 78, g4: 23, phc: 20, gh: 203, pvt: 282, fwCov: 316, fwUncov: 188, phcs: [{n:'Athani', t:210, p:3, g:62, v:145, fc:114, fu:95}, {n:'CT Palayam', t:96, p:5, g:34, v:57, fc:61, fu:35}, {n:'Ennamangalam', t:102, p:2, g:34, v:66, fc:67, fu:34}, {n:'Bargur', t:51, p:8, g:34, v:9, fc:35, fu:16}, {n:'Hosur', t:47, p:2, g:40, v:5, fc:39, fu:8}] };
+                    if(tabId === 'current') d = { total: 0, primi: 0, g2: 0, g3: 0, g4: 0, phc: 0, gh: 0, pvt: 0, fwCov: 0, fwUncov: 0, phcs: [{n:'Athani', t:0, p:0, g:0, v:0, fc:0, fu:0}, {n:'CT Palayam', t:0, p:0, g:0, v:0, fc:0, fu:0}, {n:'Ennamangalam', t:0, p:0, g:0, v:0, fc:0, fu:0}, {n:'Bargur', t:0, p:0, g:0, v:0, fc:0, fu:0}, {n:'Hosur', t:0, p:0, g:0, v:0, fc:0, fu:0}] };
+                    if(tabId === 'prev') d = { total: 104, primi: 47, g2: 42, g3: 12, g4: 2, phc: 1, gh: 50, pvt: 53, fwCov: 66, fwUncov: 37, phcs: [{n:'Athani', t:40, p:0, g:13, v:27, fc:21, fu:18}, {n:'CT Palayam', t:22, p:0, g:9, v:13, fc:13, fu:9}, {n:'Ennamangalam', t:22, p:0, g:11, v:11, fc:16, fu:6}, {n:'Bargur', t:12, p:1, g:10, v:1, fc:9, fu:3}, {n:'Hosur', t:8, p:0, g:7, v:1, fc:7, fu:1}] };
 
                     safeText('del_total', d.total); safeText('del_p1', d.primi); safeText('del_p2', d.g2); safeText('del_p3', d.g3); safeText('del_p4', d.g4);
-                    safeText('del_phc_total', d.phc); safeText('del_phc_perc', ((d.phc/d.total)*100).toFixed(1) + '%'); safeStyle('bar_phc', ((d.phc/d.total)*100) + '%');
-                    safeText('del_gh_total', d.gh); safeText('del_gh_perc', ((d.gh/d.total)*100).toFixed(1) + '%'); safeStyle('bar_gh', ((d.gh/d.total)*100) + '%');
-                    safeText('del_pvt_total', d.pvt); safeText('del_pvt_perc', ((d.pvt/d.total)*100).toFixed(1) + '%'); safeStyle('bar_pvt', ((d.pvt/d.total)*100) + '%');
-                    safeText('fw_cov', d.fwCov); safeText('fw_cov_perc', ((d.fwCov/d.total)*100).toFixed(1) + '%'); safeStyle('bar_fw_cov', ((d.fwCov/d.total)*100) + '%');
-                    safeText('fw_uncov', d.fwUncov); safeText('fw_uncov_perc', ((d.fwUncov/d.total)*100).toFixed(1) + '%'); safeStyle('bar_fw_uncov', ((d.fwUncov/d.total)*100) + '%');
+                    safeText('del_phc_total', d.phc); safeText('del_phc_perc', d.total>0 ? ((d.phc/d.total)*100).toFixed(1) + '%' : '0%'); safeStyle('bar_phc', d.total>0 ? ((d.phc/d.total)*100) + '%' : '0%');
+                    safeText('del_gh_total', d.gh); safeText('del_gh_perc', d.total>0 ? ((d.gh/d.total)*100).toFixed(1) + '%' : '0%'); safeStyle('bar_gh', d.total>0 ? ((d.gh/d.total)*100) + '%' : '0%');
+                    safeText('del_pvt_total', d.pvt); safeText('del_pvt_perc', d.total>0 ? ((d.pvt/d.total)*100).toFixed(1) + '%' : '0%'); safeStyle('bar_pvt', d.total>0 ? ((d.pvt/d.total)*100) + '%' : '0%');
+                    safeText('fw_cov', d.fwCov); safeText('fw_cov_perc', d.total>0 ? ((d.fwCov/d.total)*100).toFixed(1) + '%' : '0%'); safeStyle('bar_fw_cov', d.total>0 ? ((d.fwCov/d.total)*100) + '%' : '0%');
+                    safeText('fw_uncov', d.fwUncov); safeText('fw_uncov_perc', d.total>0 ? ((d.fwUncov/d.total)*100).toFixed(1) + '%' : '0%'); safeStyle('bar_fw_uncov', d.total>0 ? ((d.fwUncov/d.total)*100) + '%' : '0%');
 
                     let listContainer = document.getElementById('phc_list_container'); listContainer.innerHTML = '';
                     d.phcs.forEach(function(r){
-                        listContainer.innerHTML += `<div class="bg-white/5 border border-white/10 rounded-xl p-3"><div class="flex justify-between items-center border-b border-white/10 pb-2"><h5 class="text-xs text-white font-bold uppercase truncate">${r.n}</h5><span class="bg-cyan-500/20 text-cyan-400 text-xs font-black px-2 py-0.5 rounded">Tot: ${r.t}</span></div><div class="grid grid-cols-3 gap-1 text-center mt-2"><div class="bg-black/30 p-1 rounded"><p class="text-[9px] text-emerald-400">PHC</p><p class="text-xs font-bold text-white">${r.p} <span class="text-[8px] text-emerald-500/80">(${((r.p/r.t)*100).toFixed(0)}%)</span></p></div><div class="bg-black/30 p-1 rounded"><p class="text-[9px] text-amber-400">GH</p><p class="text-xs font-bold text-white">${r.g} <span class="text-[8px] text-amber-500/80">(${((r.g/r.t)*100).toFixed(0)}%)</span></p></div><div class="bg-black/30 p-1 rounded"><p class="text-[9px] text-purple-400">PVT</p><p class="text-xs font-bold text-white">${r.v} <span class="text-[8px] text-purple-500/80">(${((r.v/r.t)*100).toFixed(0)}%)</span></p></div></div><div class="grid grid-cols-2 gap-1 text-center mt-1"><div class="bg-black/30 p-1 rounded"><p class="text-[9px] text-blue-400">FW Cov</p><p class="text-xs font-bold text-white">${r.fc} <span class="text-[8px] text-blue-500/80">(${r.t>0?((r.fc/r.t)*100).toFixed(0):0}%)</span></p></div><div class="bg-black/30 p-1 rounded"><p class="text-[9px] text-rose-400">Uncov</p><p class="text-xs font-bold text-white">${r.fu} <span class="text-[8px] text-rose-500/80">(${r.t>0?((r.fu/r.t)*100).toFixed(0):0}%)</span></p></div></div></div>`;
+                        listContainer.innerHTML += `<div class="bg-white/5 border border-white/10 rounded-xl p-3"><div class="flex justify-between items-center border-b border-white/10 pb-2"><h5 class="text-xs text-white font-bold uppercase truncate">${r.n}</h5><span class="bg-cyan-500/20 text-cyan-400 text-xs font-black px-2 py-0.5 rounded">Tot: ${r.t}</span></div><div class="grid grid-cols-3 gap-1 text-center mt-2"><div class="bg-black/30 p-1 rounded"><p class="text-[9px] text-emerald-400">PHC</p><p class="text-xs font-bold text-white">${r.p} <span class="text-[8px] text-emerald-500/80">(${r.t>0?((r.p/r.t)*100).toFixed(0):0}%)</span></p></div><div class="bg-black/30 p-1 rounded"><p class="text-[9px] text-amber-400">GH</p><p class="text-xs font-bold text-white">${r.g} <span class="text-[8px] text-amber-500/80">(${r.t>0?((r.g/r.t)*100).toFixed(0):0}%)</span></p></div><div class="bg-black/30 p-1 rounded"><p class="text-[9px] text-purple-400">PVT</p><p class="text-xs font-bold text-white">${r.v} <span class="text-[8px] text-purple-500/80">(${r.t>0?((r.v/r.t)*100).toFixed(0):0}%)</span></p></div></div><div class="grid grid-cols-2 gap-1 text-center mt-1"><div class="bg-black/30 p-1 rounded"><p class="text-[9px] text-blue-400">FW Cov</p><p class="text-xs font-bold text-white">${r.fc} <span class="text-[8px] text-blue-500/80">(${r.t>0?((r.fc/r.t)*100).toFixed(0):0}%)</span></p></div><div class="bg-black/30 p-1 rounded"><p class="text-[9px] text-rose-400">Uncov</p><p class="text-xs font-bold text-white">${r.fu} <span class="text-[8px] text-rose-500/80">(${r.t>0?((r.fu/r.t)*100).toFixed(0):0}%)</span></p></div></div></div>`;
                     });
                     document.getElementById('deliveryContent').classList.remove('hidden'); document.getElementById('deliveryContent').classList.add('flex');
                     
@@ -1294,7 +1307,6 @@
                         ]);
                     }, 200);
                 }).catch(function(e) { 
-                    // Fallback Demo Data
                     document.getElementById('hpvContent').classList.remove('hidden'); document.getElementById('hpvContent').classList.add('flex');
                     safeText('hpv_target', 1440); safeText('hpv_received', 424); safeText('hpv_doses', 405); safeText('hpv_coverage_perc', '28.1%'); safeStyle('hpv_bar', '28.1%');
                     let phcList = [{name: 'Athani', target: 610, received: 204, doses: 185}, {name: 'CT Palayam', target: 286, received: 80, doses: 80}, {name: 'Ennamangalam', target: 297, received: 70, doses: 70}, {name: 'Bargur', target: 130, received: 40, doses: 40}, {name: 'Hosur', target: 117, received: 30, doses: 30}];
@@ -1335,7 +1347,6 @@
                         else {
                             let name = String(rows[i][1]).trim();
                             if(name && isNaN(name) && name.length > 2) {
-                                // Deduplicate to avoid bar chart bugs
                                 if(!deptLabels.includes(name)) {
                                     deptLabels.push(name); referredData.push(valReferred); reachedData.push(valReached); treatmentData.push(valTreatment); surgeryData.push(valSurgery);
                                     if(!totalRow) { totalReferred += valReferred; totalScreened += valReached; totalTreated += valTreatment; totalSurgery += valSurgery; }
