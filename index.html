@@ -348,6 +348,10 @@
             <div class="p-4 grid grid-cols-2 gap-3 overflow-y-auto" style="max-height: 70vh;">
                 <div onclick="openSheetOverlay('fever')" class="p-3 rounded-xl jiggle-btn text-center bg-white/5 border border-white/10"><h4 class="font-bold text-white text-sm">Fever Line List 2026</h4></div>
                 <div onclick="openSheetOverlay('dengue')" class="p-3 rounded-xl jiggle-btn text-center bg-white/5 border border-white/10"><h4 class="font-bold text-white text-sm">Dengue Line List 2026</h4></div>
+                
+                <div onclick="openSheetOverlay('fever_abstract')" class="p-3 rounded-xl jiggle-btn text-center bg-orange-500/10 border border-orange-500/30"><h4 class="font-bold text-orange-300 text-sm">Fever Abstract 26</h4></div>
+                <div onclick="openSheetOverlay('dengue_abstract')" class="p-3 rounded-xl jiggle-btn text-center bg-amber-500/10 border border-amber-500/30"><h4 class="font-bold text-amber-300 text-sm">Dengue Abstract 26</h4></div>
+                
                 <div onclick="openSheetOverlay('fever_village')" class="p-3 rounded-xl jiggle-btn text-center bg-white/5 border border-white/10"><h4 class="font-bold text-white text-sm">Village Wise Fever 2026</h4></div>
                 <div onclick="openSheetOverlay('dengue_village')" class="p-3 rounded-xl jiggle-btn text-center bg-white/5 border border-white/10"><h4 class="font-bold text-white text-sm">Village Wise Dengue 2026</h4></div>
                 <div onclick="openSheetOverlay('tank_details')" class="p-3 rounded-xl jiggle-btn text-center bg-blue-500/10 border border-blue-500/30"><div class="text-blue-400 text-xl mb-1"><i class="fas fa-water"></i></div><h4 class="font-bold text-blue-100 text-sm">Tank Details</h4></div>
@@ -755,9 +759,14 @@
         function drawerCopy() {}
         function triggerAutoSave() {}
 
-        // CORRECTED ALL GOOGLE SHEET IDs DIRECTLY TO THE ONE YOU PROVIDED
-        const DASH_CSV_BASE = "https://docs.google.com/spreadsheets/d/e/13mwUFNnQx6RO147kl8ld0hZWAK5Ow5AloeDuNPtMfN4/pub?output=csv&gid=";
-        const MASTER_BASE_ID = "13mwUFNnQx6RO147kl8ld0hZWAK5Ow5AloeDuNPtMfN4";
+        // ==========================================
+        // 1. UPDATED BASE IDs (COMBINED & DELIVERY)
+        // ==========================================
+        const COMBINED_BASE_ID = '2PACX-1vSUeSBN-8JNGkvXdIuIKFH2poaqfoNWvC01MOQD18pXO5dPw6n0vImYxkb78eRjZmnKfLm4OgOeexPK';
+        const DELIVERY_BASE_ID = '13mwUFNnQx6RO147kl8ld0hZWAK5Ow5AloeDuNPtMfN4';
+        const HPV_BASE_ID = '2PACX-1vTLHXaeef7THYGj2VVGV7ZNSYwEp2WT747ikmStn2E_257J7ovIjTJjoojYWa0oIl0wD6UNeJeSje6J'; 
+        const NKS_BASE_ID = '2PACX-1vQDv1q69_x5OV-lVwRRFJRlaDoZWnSqHbQVMpI8WNF_cViKuQ_lgyS3er4Bn52gsWS9XYlb4HYkuJrn'; 
+        const POP_BASE_ID = '1289887432';
 
         const cleanNum = (str) => { let num = Number(String(str).replace(/[^0-9.-]+/g, "")); return isNaN(num) ? 0 : num; };
         const safeStyle = (id, width) => { let el = document.getElementById(id); if(el) el.style.width = width; };
@@ -849,31 +858,39 @@
         window.onbeforeprint = function() { document.body.classList.add('printing-dashboard'); };
         window.onafterprint = function() { document.body.classList.remove('printing-dashboard'); };
 
-        // CONFIG LOGIC USING YOUR NEW MASTER GIDs
+        // ==========================================
+        // 2. UPDATED SHEET CONFIGS WITH NEW GIDs
+        // ==========================================
         const sheetConfigs = {
-            'mtm_all': { baseID: MASTER_BASE_ID, tabs: [{ name: 'HT Report', gid: '0' }, { name: 'DM Report', gid: '1346772331' }, { name: 'MTM Both', gid: '2007453515' }], showTabs: true },
-            'cancer': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Oral Report', gid: '2056331833' }, { name: 'Breast Report', gid: '454152815' }, { name: 'Cervix Report', gid: '1215917176' }], showTabs: true },
-            'delivery_current': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Current Month', gid: '1439790505' }] },
-            'delivery_prev': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Prev Month', gid: '800576224' }] },
-            'delivery_all': { baseID: MASTER_BASE_ID, tabs: [{ name: 'All Months', gid: '1780523989' }] },
-            'fever': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Fever List', gid: '1266655650' }] },
-            'dengue': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Dengue List', gid: '952129824' }] },
-            'fever_village': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Vill Fever', gid: '646408484' }] },
-            'dengue_village': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Vill Dengue', gid: '1382422323' }] },
-            'fever_abstract': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Fever Abs', gid: '347741401' }] },
-            'dengue_abstract': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Dengue Abs', gid: '1003422031' }] },
-            'abstract_2026': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Abstract 2026', gid: '2082512516' }] }, 
-            'tank_details': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Tank Details', gid: '0' }] },
-            'fogging': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Fogging', gid: '0' }] },
-            'hpv_abstract': { baseID: MASTER_BASE_ID, tabs: [{ name: 'HPV Abstract', gid: '650015927' }] },
-            'hpv_linelist': { baseID: MASTER_BASE_ID, tabs: [{ name: 'ATHANI PHC', gid: '1027872878' }, { name: 'C.T.PALAYAM PHC', gid: '2016185343' }, { name: 'ENNAMANGALAM PHC', gid: '832358212' }, { name: 'BARGUR PHC', gid: '1763895837' }, { name: 'OSUR PHC', gid: '1707498064' }], showTabs: true }, 
-            'pop_current': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Current Pop', gid: '0' }] },
-            'pop_phc': { baseID: MASTER_BASE_ID, tabs: [{ name: 'PHC Wise', gid: '0' }] },
-            'pop_village': { baseID: MASTER_BASE_ID, tabs: [{ name: 'Vill Wise', gid: '0' }] },
-            'nks_aug_25': { baseID: MASTER_BASE_ID, tabs: [{ name: '30.08.2025', gid: '971980116' }] },
-            'nks_dec_25': { baseID: MASTER_BASE_ID, tabs: [{ name: '20.12.2025', gid: '1671682279' }] },
-            'nks_feb_26': { baseID: MASTER_BASE_ID, tabs: [{ name: '14.02.2026', gid: '2033884952' }] },
-            'nks_3_camp': { baseID: MASTER_BASE_ID, tabs: [{ name: '3 Camp', gid: '1381238626' }] }
+            'mtm_all': { baseID: COMBINED_BASE_ID, tabs: [{ name: 'HT Report', gid: '972590351' }, { name: 'DM Report', gid: '1346772331' }, { name: 'MTM Both', gid: '2007453515' }], showTabs: true },
+            'cancer': { baseID: COMBINED_BASE_ID, tabs: [{ name: 'Oral Report', gid: '932204363' }, { name: 'Breast Report', gid: '1722437751' }, { name: 'Cervix Report', gid: '1791666340' }], showTabs: true },
+            
+            'delivery_current': { baseID: DELIVERY_BASE_ID, tabs: [{ name: 'Current Month', gid: '1439790505' }] },
+            'delivery_prev': { baseID: DELIVERY_BASE_ID, tabs: [{ name: 'Prev Month', gid: '800576224' }] },
+            'delivery_all': { baseID: DELIVERY_BASE_ID, tabs: [{ name: 'All Months', gid: '1780523989' }] },
+            
+            'fever': { baseID: COMBINED_BASE_ID, tabs: [{ name: 'Fever List', gid: '2050722751' }] },
+            'dengue': { baseID: COMBINED_BASE_ID, tabs: [{ name: 'Dengue List', gid: '804329726' }] },
+            'fever_village': { baseID: COMBINED_BASE_ID, tabs: [{ name: 'Vill Fever', gid: '1447444171' }] },
+            'dengue_village': { baseID: COMBINED_BASE_ID, tabs: [{ name: 'Vill Dengue', gid: '250359446' }] },
+            
+            'fever_abstract': { baseID: COMBINED_BASE_ID, tabs: [{ name: 'Fever Abs 2026', gid: '922332044' }] },
+            'dengue_abstract': { baseID: COMBINED_BASE_ID, tabs: [{ name: 'Dengue Abs 2026', gid: '686507455' }] },
+            
+            'tank_details': { baseID: COMBINED_BASE_ID, tabs: [{ name: 'Tank Details', gid: '302806430' }] },
+            'fogging': { baseID: COMBINED_BASE_ID, tabs: [{ name: 'Fogging', gid: '2056313767' }] },
+            
+            'hpv_abstract': { baseID: HPV_BASE_ID, tabs: [{ name: 'HPV Abstract', gid: '650015927' }] },
+            'hpv_linelist': { baseID: '2PACX-1vTn0W3RzIR0rrJg_W8zg4eQOijsJ33gl1ZUfH5fllG5X-743_kqo06O5LCr3ZJVEBIROKGfPAfLRQXx', tabs: [{ name: 'ATHANI PHC', gid: '1027872878' }, { name: 'C.T.PALAYAM PHC', gid: '2016185343' }, { name: 'ENNAMANGALAM PHC', gid: '832358212' }, { name: 'BARGUR PHC', gid: '1763895837' }, { name: 'OSUR PHC', gid: '1707498064' }], showTabs: true }, 
+            
+            'pop_current': { baseID: POP_BASE_ID, tabs: [{ name: 'Current Pop', gid: '0' }] },
+            'pop_phc': { baseID: POP_BASE_ID, tabs: [{ name: 'PHC Wise', gid: '0' }] },
+            'pop_village': { baseID: POP_BASE_ID, tabs: [{ name: 'Vill Wise', gid: '0' }] },
+            
+            'nks_aug_25': { baseID: NKS_BASE_ID, tabs: [{ name: '30.08.2025', gid: '971980116' }] },
+            'nks_dec_25': { baseID: NKS_BASE_ID, tabs: [{ name: '20.12.2025', gid: '1671682279' }] },
+            'nks_feb_26': { baseID: NKS_BASE_ID, tabs: [{ name: '14.02.2026', gid: '2033884952' }] },
+            'nks_3_camp': { baseID: NKS_BASE_ID, tabs: [{ name: '3 Camp', gid: '1381238626' }] }
         };
 
         const reportToModalMap = {
@@ -959,9 +976,14 @@
             wakeUpControls();
         }
 
+        // ==========================================
+        // 3. CORRECTED IFRAME LINK LOGIC
+        // ==========================================
         function loadSheetTab(baseID, gid) {
             let ts = new Date().getTime(); 
-            let url = `https://docs.google.com/spreadsheets/d/${MASTER_BASE_ID}/pubhtml?gid=${gid}&single=true&widget=false&headers=false&chrome=false&_t=${ts}`;
+            let url = baseID.startsWith("2PACX") 
+                ? `https://docs.google.com/spreadsheets/d/e/${baseID}/pubhtml?gid=${gid}&single=true&widget=false&headers=false&chrome=false&_t=${ts}` 
+                : `https://docs.google.com/spreadsheets/d/${baseID}/htmlembed?gid=${gid}&widget=false&headers=false&chrome=false&_t=${ts}`;
             document.getElementById('sheetIframe').src = url;
         }
 
@@ -996,7 +1018,11 @@
         }
         
         function openCurrentSheetNewTab() { const iframe = document.getElementById('sheetIframe'); if(iframe && iframe.src) { window.open(iframe.src, '_blank'); } }
-        function downloadA3PDF() { let url = `https://docs.google.com/spreadsheets/d/${MASTER_BASE_ID}/pub?output=pdf&format=pdf&size=A3&portrait=false&gridlines=false`; window.open(url, '_blank'); }
+        function downloadA3PDF() { 
+            let baseID = sheetConfigs[currentActiveReport].baseID; 
+            let url = baseID.startsWith("2PACX") ? `https://docs.google.com/spreadsheets/d/e/${baseID}/pub?output=pdf&format=pdf&size=A3&portrait=false&gridlines=false` : `https://docs.google.com/spreadsheets/d/${baseID}/export?format=pdf&size=A3&portrait=false&gridlines=false`; 
+            window.open(url, '_blank'); 
+        }
         
         function goBackToMenu() { 
             document.getElementById('sheetOverlay').classList.remove('active'); 
@@ -1008,9 +1034,12 @@
         function promptSecretAdmin(){if(!document.getElementById('deoWrapper').classList.contains('hidden')){alert('Admin Mode unlocked!');return;}if(prompt("Password:")==="admin123"){document.getElementById('deoWrapper').classList.remove('hidden');sessionStorage.setItem('adminUnlocked','true');}}
         function lockSecretDeo(){document.getElementById('deoWrapper').classList.add('hidden');sessionStorage.removeItem('adminUnlocked');alert('Locked.');}
 
-        // ==================== DASHBOARDS FETCH FUNCTION ====================
+        // ==========================================
+        // 4. CORRECTED LIVE DATA FETCH FOR DASHBOARDS
+        // ==========================================
         async function fetchDashData(gid) {
-            let url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vRetLfVlsoEEiC3xlX8Kj0t3ylx6ORAE8jDwLRcZHR6v9Jo3XIwf-ScQJXPISNYCkY3JDZbnOEVky33/pub?output=csv&gid=${gid}&rnd=${Date.now()}`;
+            // Using direct export link from the Master Editable ID for instant Sync
+            let url = `https://docs.google.com/spreadsheets/d/13mwUFNnQx6RO147kl8ld0hZWAK5Ow5AloeDuNPtMfN4/export?format=csv&gid=${gid}&rnd=${Date.now()}`;
             try { let res = await fetch(url, { cache: 'no-store' }); let text = await res.text(); if (text.includes("Error") || text.includes("<html")) throw new Error(); return text; } catch(e) { throw new Error(); }
         }
 
